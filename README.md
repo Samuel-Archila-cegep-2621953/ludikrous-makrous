@@ -1,2 +1,2 @@
 # ludikrous-makrous
-Excellent game.
+Excellent jeu.
