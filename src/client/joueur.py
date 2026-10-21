@@ -1,12 +1,20 @@
-class Joueur:
-    def __init__(self):
-        self.id = self.obtenir_id
-        self.nom = self.obtenir_nom
-        self.score = 0
-        self.position = (0,0)
-        self.vie = 100
-        self.en_vie = True
-        pass
+from ursina import *
+
+class Joueur(Entity):
+    def __init__(self, id, nom, position: tuple[float,float,float], **kwargs):
+        super().__init__(kwargs)
+        self.__ID = id
+        self.__nom = nom
+        self.__score = 0
+        self.position = position
+        self.__vie = 100
+        self.__en_vie = True
+
+    def nom(self) -> str:
+        return self.__nom
+
+    def nom(self, nouveau_nom):
+        self.__nom = nouveau_nom
 
     def mise_a_jour(self, temps_entre_update):
 
@@ -19,17 +27,3 @@ class Joueur:
         if self.en_vie == True:
 
             self.vie += 10 * temps_entre_update # regénération passive des vies
-
-
-
-    def obtenir_id(self):
-        """
-        Demande au serveur un id unique
-        """
-        pass
-
-    def obtenir_nom(self):
-        """
-        Cherche le nom déjà demandé à l'utilisateur et sauvegardé dans la configuration de l'utilisateur
-        """
-        pass

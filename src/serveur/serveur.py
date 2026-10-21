@@ -2,6 +2,7 @@ import socket
 import threading
 import time
 import monde_serveur
+import json
 
 """
 TODO: Changer le serveur pour qu'il soit async
@@ -26,9 +27,18 @@ class Serveur:
         requete = socket_client.recv(1024)
         print(f"[+] Reçu: {requete}")
 
-        self.__monde_serveur.recevoir_client(requete)
+        #self.__monde_serveur.recevoir_client(requete)
 
-        socket_client.send("Ping received".encode())
+        socket_client.send(json.dumps({
+            "Joueurs": [
+                {
+                    "Position": [-1, 0, -2]
+                },
+                {
+                    "Position": [-3, 1, 2]
+                }
+            ]
+        }).encode())
         socket_client.close()
 
     def boucle_principale(self):

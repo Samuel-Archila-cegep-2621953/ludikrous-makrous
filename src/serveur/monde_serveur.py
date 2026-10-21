@@ -19,7 +19,7 @@ class MondeServeur:
         self.__temps_de_jeu = 0.0
         self.__partie_en_cours = False
 
-        self.__liste_message = []
+        self.__liste_messages = []
 
         self.__liste_obstacle = []
         
@@ -29,24 +29,24 @@ class MondeServeur:
         Formatte le monde du serveur en json pour l'envoyer au client.
         Style:
             {
-                "general": {
-                    "temps_de_jeu": <__temps_de_jeu>,
-                    "liste_message": <SignalServeurClient> 
+                "Général": {
+                    "Temps de jeu": <__temps_de_jeu>,
+                    "Liste messages": <SignalServeurClient> 
                 },
 
-                "nouveaux_obstacles": [
+                "Nouveaux Obstacles": [
                     {
-                        "type": <type>
-                        "position": <position>
+                        "Type": <type>
+                        "Position": <position>
                     }
                 ],
 
-                "joueurs": [ # Envoyer en ordre de leur classement selon leur score
+                "Joueurs": [ # Envoyer en ordre de leur classement selon leur score
                     {
-                        "position": <position>,
-                        "nom": <nom>,
-                        "vie": <vie>,
-                        "animation": <animation>
+                        "Position": <[x, y, x]>,
+                        "Nom": <nom>,
+                        "Vie": <vie>,
+                        "Animation": <animation>
                     }
                 ]
             }
@@ -54,42 +54,40 @@ class MondeServeur:
         """
         fichier_json = {}
 
-        fichier_json["general"] = {}
+        fichier_json["Général"] = {}
 
-        fichier_json["general"]["temps_de_jeu"] = self.__temps_de_jeu
+        fichier_json["Général"]["Temps de jeu"] = self.__temps_de_jeu
 
         liste_message = []
         for m in self.__liste_message:
 
             liste_message.append(m)
 
-            fichier_json["general"]["liste_message"] = liste_message
+            fichier_json["Général"]["Liste messages"] = self.__liste_messages
 
 
-        fichier_json["nouveaux_obstacles"] = []
+        fichier_json["Nouveaux obstacles"] = []
 
         for o in self.__liste_obstacle:
 
             nouveau_obstacle = {}
 
-            nouveau_obstacle["type"] = o.__type_obstacle
-            nouveau_obstacle["position"] = o.__position
+            nouveau_obstacle["Type"] = o.__type_obstacle
+            nouveau_obstacle["Position"] = [o.__position[0], o.__position[1], o.__position[2]]
 
-            fichier_json["nouveaux_obstacles"].append(nouveau_obstacle)
+            fichier_json["Nouveaux obstacles"].append(nouveau_obstacle)
 
 
-        fichier_json["joueurs"] = joueur_abstrait.formatter_json(self.joueurs_ordonnes())
+        fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.joueurs_ordonnes())
 
 
 
         
-        return {
-            fichier_json
-        }
+        return fichier_json
 
     def demarrer_nouvelle_partie(self):
         """
-        commencer une nouvelle partie
+        Commencer une nouvelle partie
         """
 
         self.__difficulte_globale = 0.0
@@ -100,16 +98,14 @@ class MondeServeur:
         self.__liste_message.append("partie_commence")
 
 
-    def recevoir_client(self, requete):
+    def recevoir_client(self, requete) -> str:
         """
         accepter les données du client
+        Args:
+            requete (str): l'entrée
+        Returns:
+            str: la sortie du serveur
         """
-
-
-
-
-
-
 
     
     def terminer_partie(self):
