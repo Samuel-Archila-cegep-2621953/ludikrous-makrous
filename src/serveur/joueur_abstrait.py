@@ -29,10 +29,10 @@ def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:
 
     for j in liste_joueurs:
         json_joueurs.append({
-            "position":  j.position,
-            "nom":       j.nom,
-            "vie":       j.vie,
-            "animation": j.animation
+            "Position":  j.position,
+            "Nom":       j.nom,
+            "Vie":       j.vie,
+            "Animation": j.animation
         })
 
     return json_joueurs
