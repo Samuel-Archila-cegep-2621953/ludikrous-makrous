@@ -1,23 +1,10 @@
 class JoueurAbstrait:
     def __init__(self):
-        self.id = self.obtenir_id
-        self.nom = self.obtenir_nom
+        self.id = 0
+        self.nom = ''
         self.score = 0
         self.position = (0,0,0)
         self.vie = True
-
-    def obtenir_id(self):
-        """
-        Demande au serveur un id unique
-        """
-        return self.id
-
-    def obtenir_nom(self):
-        """
-        Cherche le nom déjà demandé à l'utilisateur et sauvegardé dans la configuration de l'utilisateur
-        """
-        return self.nom
-
 
 
 def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:
@@ -29,10 +16,10 @@ def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:
 
     for j in liste_joueurs:
         json_joueurs.append({
-            "Position":  j.position,
+            "Position":  [j.position[0], j.position[1], j.position[2]],
             "Nom":       j.nom,
-            "Vie":       j.vie,
-            "Animation": j.animation
+            "Vie":       j.vie #,
+            #"Animation": j.animation
         })
 
     return json_joueurs

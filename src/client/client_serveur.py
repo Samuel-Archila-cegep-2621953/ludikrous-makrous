@@ -8,7 +8,7 @@ CONFIGURATION_CLIENT = {
 class Client:
     def __init__(self):
         pass
-    async def gerer_envoyer_message(self, message: str) -> str:
+    async def __gerer_envoyer_message(self, message: str) -> str:
         _message = await self.__envoyer_message(message)
         await self.__fermer()
         return _message
@@ -27,4 +27,4 @@ class Client:
         await self.__ecrire.wait_closed()
 
     def envoyer_message(self, message: str) -> str:
-        return asyncio.run(self.gerer_envoyer_message(message))
+        return asyncio.run(self.__gerer_envoyer_message(message))
