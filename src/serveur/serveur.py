@@ -9,7 +9,7 @@ TODO: Changer le serveur pour qu'il soit async
 """
 
 CONFIGURATION_SERVEUR = {
-    "IP": '10.70.60.14',
+    "IP": '127.0.0.1',
     "Port": 24113
 }
 
