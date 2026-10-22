@@ -22,9 +22,14 @@ class MondeServeur:
         self.__liste_messages = []
 
         self.__liste_obstacle = []
+
+        self.__REQUETES = {
+            'CREER ID': self.__recevoir_creer_id,
+            'MAJ': self.__recevoir_maj
+        }
         
 
-    def formatter_json(self):
+    def __formatter_dict(self):
         """
         Formatte le monde du serveur en json pour l'envoyer au client.
         Style:
@@ -59,7 +64,7 @@ class MondeServeur:
         fichier_json["Général"]["Temps de jeu"] = self.__temps_de_jeu
 
         liste_message = []
-        for m in self.__liste_message:
+        for m in self.__liste_messages:
 
             liste_message.append(m)
 
@@ -78,11 +83,8 @@ class MondeServeur:
             fichier_json["Nouveaux obstacles"].append(nouveau_obstacle)
 
 
-        fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.joueurs_ordonnes())
+        fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
 
-
-
-        
         return fichier_json
 
     def demarrer_nouvelle_partie(self):
@@ -97,8 +99,22 @@ class MondeServeur:
 
         self.__liste_message.append("partie_commence")
 
+    def __recevoir_creer_id(self, donnee: dict) -> str:
+        _nombre_joueur = len(self.__joueurs)
+        _joueur = JoueurAbstrait()
+        _joueur.id = _nombre_joueur
+        self.__joueurs.append(_joueur)
+        return json.dumps({'ID': _nombre_joueur})
 
-    def recevoir_client(self, requete) -> str:
+    def __recevoir_maj(self, donnee: dict) -> str:
+        self.__joueurs[donnee['ID']].position = (
+            donnee['Position'][0],
+            donnee['Position'][1],
+            donnee['Position'][2]
+        )
+        return json.dumps(self.__formatter_dict())
+
+    def recevoir_client(self, requete: str) -> str:
         """
         accepter les données du client
         Args:
@@ -106,6 +122,9 @@ class MondeServeur:
         Returns:
             str: la sortie du serveur
         """
+        _donnee = json.loads(requete)
+        return self.__REQUETES[_donnee['Type']](_donnee)
+        
 
     
     def terminer_partie(self):

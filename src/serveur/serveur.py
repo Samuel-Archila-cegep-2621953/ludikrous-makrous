@@ -24,45 +24,31 @@ class Serveur:
         print(f"Serveur lancé sur {CONFIGURATION_SERVEUR["IP"]}:{CONFIGURATION_SERVEUR["Port"]}")
 
     def __gerer_client(self, socket_client: socket.socket):
-        requete = socket_client.recv(1024)
-        print(f"[+] Reçu: {requete}")
+        _requete = socket_client.recv(1024)
+        # print(f"[+] Reçu: {_requete}")
 
-        #self.__monde_serveur.recevoir_client(requete)
+        socket_client.send(self.__monde_serveur.recevoir_client(_requete).encode())
 
-        socket_client.send(json.dumps({
-            "Joueurs": [
-                {
-                    "Position": [-1, 0, -2]
-                },
-                {
-                    "Position": [-3, 1, 2]
-                }
-            ]
-        }).encode())
         socket_client.close()
 
     def boucle_principale(self):
 
-        temps_entre_update = 0.0
-        debut = 0.0
-        fin = 0.0
+        _temps_entre_update = 0.0
+        _debut = 0.0
+        _fin = 0.0
 
         while True:
+            _client, _addresse = self.__serveur.accept()
+
+            _gerant_de_client = threading.Thread(target=self.__gerer_client, args=(_client,))
+            _gerant_de_client.start()
 
 
+            _temps_entre_update = _fin - _debut
 
-            client, addresse = self.__serveur.accept()
-            print(f"[+] Accepté la connection depuis: {addresse[0]}:{addresse[1]}")
-
-            gerant_de_client = threading.Thread(target=self.__gerer_client, args=(client,))
-            gerant_de_client.start()
-
-
-            temps_entre_update = fin - debut
-
-            debut = time.time()
-            self.__monde_serveur.mise_a_jour_jeu(temps_entre_update)
-            fin = time.time()
+            _debut = time.time()
+            self.__monde_serveur.mise_a_jour_jeu(_temps_entre_update)
+            _fin = time.time()
 
 
 
