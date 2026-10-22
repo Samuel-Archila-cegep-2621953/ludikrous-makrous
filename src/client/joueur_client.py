@@ -45,7 +45,7 @@ class JoueurClient(FirstPersonController):
         for i, _ in enumerate(_joueurs):
             _position = _['Position']
             if i >= len(self.__joueurs):
-                _joueur = joueur.Joueur(i, '', (_position[0], _position[1], _position[2]))
+                _joueur = joueur.Joueur(_joueurs[i]["ID"], '', (_position[0], _position[1], _position[2]))
                 self.__joueurs.append(_joueur)
             else:
                 self.__joueurs[i].position = (_position[0], _position[1], _position[2])

@@ -22,6 +22,7 @@ class MondeServeur:
         self.__liste_messages = []
 
         self.__liste_obstacle = []
+        self.__derniere_id = 0
 
         self.__REQUETES = {
             'CREER ID': self.__recevoir_creer_id,
@@ -48,46 +49,48 @@ class MondeServeur:
 
                 "Joueurs": [ # Envoyer en ordre de leur classement selon leur score
                     {
+                        "ID": <ID>
                         "Position": <[x, y, x]>,
                         "Nom": <nom>,
                         "Vie": <vie>,
+                        "En_vie": <en_vie>
                         "Animation": <animation>
                     }
-                ]
+                }
             }
 
         """
-        fichier_json = {}
+        _fichier_json = {}
 
-        fichier_json["Général"] = {}
+        _fichier_json["Général"] = {}
 
-        fichier_json["Général"]["Temps de jeu"] = self.__temps_de_jeu
+        _fichier_json["Général"]["Temps de jeu"] = self.__temps_de_jeu
 
-        liste_message = []
+        _liste_message = []
         for m in self.__liste_messages:
 
-            liste_message.append(m)
+            _liste_message.append(m)
 
-            fichier_json["Général"]["Liste messages"] = self.__liste_messages
+            _fichier_json["Général"]["Liste messages"] = self.__liste_messages
 
 
-        fichier_json["Nouveaux obstacles"] = []
+        _fichier_json["Nouveaux obstacles"] = []
 
         for o in self.__liste_obstacle:
 
-            nouveau_obstacle = {}
+            _nouveau_obstacle = {}
 
-            nouveau_obstacle["Type"] = o.__type_obstacle
-            nouveau_obstacle["Position"] = [o.__position[0], o.__position[1], o.__position[2]]
+            _nouveau_obstacle["Type"] = o.__type_obstacle
+            _nouveau_obstacle["Position"] = [o.__position[0], o.__position[1], o.__position[2]]
 
-            fichier_json["Nouveaux obstacles"].append(nouveau_obstacle)
+            _fichier_json["Nouveaux obstacles"].append(_nouveau_obstacle)
 
 
-        fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
+        _fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
 
-        return fichier_json
+        return _fichier_json
 
-    def demarrer_nouvelle_partie(self):
+    def __demarrer_nouvelle_partie(self):
         """
         Commencer une nouvelle partie
         """
@@ -100,11 +103,12 @@ class MondeServeur:
         self.__liste_message.append("partie_commence")
 
     def __recevoir_creer_id(self, donnee: dict) -> str:
-        _nombre_joueur = len(self.__joueurs)
         _joueur = JoueurAbstrait()
-        _joueur.id = _nombre_joueur
+        _joueur.id = self.__derniere_id
         self.__joueurs.append(_joueur)
-        return json.dumps({'ID': _nombre_joueur})
+        _resultat = json.dumps({'ID': self.__derniere_id})
+        self.__derniere_id += 1
+        return _resultat
 
     def __recevoir_maj(self, donnee: dict) -> str:
         self.__joueurs[donnee['ID']].position = (
@@ -127,7 +131,7 @@ class MondeServeur:
         
 
     
-    def terminer_partie(self):
+    def __terminer_partie(self):
         """
         terminer la partie
         """
@@ -136,7 +140,7 @@ class MondeServeur:
         self.__difficulte_globale = 0.0
         self.__temps_de_jeu = 0.0
         self.__partie_en_cours = False
-        self.effacer_tout_obstacle()
+        self.__effacer_tout_obstacle()
 
         self.__liste_message.append("partie_fin")
 
@@ -151,59 +155,59 @@ class MondeServeur:
 
                 obstacle1.mise_a_jour(temps_entre_update)
                 
-            self.maj_difficulte(temps_entre_update)
+            self.__maj_difficulte(temps_entre_update)
 
-            self.choisir_obstacles()
+            self.__choisir_obstacles()
 
                 
             
-    def joueurs_ordonnes(self) -> list[JoueurAbstrait]:
+    def __joueurs_ordonnes(self) -> list[JoueurAbstrait]:
         """
         Place les joueurs en ordre selon leur score
         """
-        liste_joueurs: list[JoueurAbstrait] = []
+        _liste_joueurs: list[JoueurAbstrait] = []
         for idx, j in enumerate(self.__joueurs):
-            for j_a in liste_joueurs:
+            for j_a in _liste_joueurs:
                 if j.score > j_a.score:
-                    liste_joueurs.insert(idx, j)
+                    _liste_joueurs.insert(idx, j)
         # TODO tester
                     
                     
 
-    def difficulte_actuelle(self) -> float:
+    def __difficulte_actuelle(self) -> float:
         """
         Compte les obstacles présents sur la grille et retourne la somme de leurs difficultés
         """
-        difficulte_actuelle = 0.0
-        for o in self.__liste_obstacle:
-            difficulte_actuelle += o.difficulte
+        _difficulte_actuelle = 0.0
+        for  o in self.__liste_obstacle:
+            _difficulte_actuelle += o.difficulte
 
-        return difficulte_actuelle
+        return _difficulte_actuelle
 
 
-    def choisir_obstacles(self) -> list[TypeObstacle]:
-        difficulte_cible = self.__difficulte_globale        
-        difficulte_atteinte = 0.0 + self.difficulte_actuelle()
-        nouveaux_obstacles: list[TypeObstacle] = []
+    def __choisir_obstacles(self) -> list[TypeObstacle]:
+        _difficulte_cible = self.__difficulte_globale        
+        _difficulte_atteinte = 0.0 + self.__difficulte_actuelle()
+        _nouveaux_obstacles: list[TypeObstacle] = []
 
-        while difficulte_atteinte < difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
-            rand_obstacle: TypeObstacle = random.randint(1, TypeObstacle.max())
+        while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
+            _rand_obstacle: TypeObstacle = random.randint(1, TypeObstacle.max())
             
-            difficulte_atteinte += rand_obstacle.difficulte
-            nouveaux_obstacles.append(rand_obstacle)
+            _difficulte_atteinte += _rand_obstacle.difficulte
+            _nouveaux_obstacles.append(_rand_obstacle)
 
-        return nouveaux_obstacles
+        return _nouveaux_obstacles
         
         
-    def creer_obstacles(self, nouveaux_obstacles: list[TypeObstacle]):
+    def __creer_obstacles(self, nouveaux_obstacles: list[TypeObstacle]):
         # TODO Compléter
         pass
 
-    def maj_difficulte(self, temps_entre_update: float):
+    def __maj_difficulte(self, temps_entre_update: float):
         self.__difficulte_globale += (temps_entre_update * 0.1) #formule linéaire, nombres surement à changer
         # TODO Changer la formule pour augmenter la difficulté
 
-    def effacer_tout_obstacle(self):
+    def __effacer_tout_obstacle(self):
 
         for o in self.__liste_obstacle:
             o.detruire()
