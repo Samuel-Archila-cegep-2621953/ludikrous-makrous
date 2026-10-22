@@ -2,7 +2,8 @@ from ursina import *
 
 class Joueur(Entity):
     def __init__(self, id, nom, position: tuple[float,float,float], **kwargs):
-        super().__init__(model='cube', color=rgb(255,0,0), scale=1)
+        super().__init__(model='cube', color=rgb(0,0,0), scale=(1,2.5,1))
+        self.alpha_setter(0.5)
         self.__ID = id
         self.__nom = nom
         self.__score = 0

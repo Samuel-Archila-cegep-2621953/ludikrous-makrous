@@ -1,5 +1,5 @@
-# import pytest
-from .. import 
+import pytest
+from gestionnaire_langues import GestionnaireLangues
 
 def test_obtenir():
     resultat_attendu = "Fermer"
@@ -8,4 +8,5 @@ def test_obtenir():
 
     resultat = GestionnaireLangues.obtenir(k, lang)
 
+    #print("hello")
     assert resultat == resultat_attendu

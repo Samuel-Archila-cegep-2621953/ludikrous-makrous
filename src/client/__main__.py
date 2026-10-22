@@ -3,11 +3,16 @@ from ursina import *
 import joueur_client
 from ressources import obtenir_ressources
 from gestionnaire_langues import GestionnaireLangues
+import monde
 
 if __name__ == '__main__':
     _client = Client()
 
     window.borderless = False
+    window.vsync = False
+    window.size = (1280, 720)
+
+    LANGUE = "fr"
 
     app = Ursina(icon=obtenir_ressources() / 'logo.ico', title="Ludikrous Makrous")
 
@@ -25,20 +30,20 @@ if __name__ == '__main__':
         menu_principal.disable()
         musique_titre.fade_out(duration=0.7)
 
-        plateforme = Entity(model='cube', color=rgb(25, 205, 225), scale=(10, 1, 10), position=(0, -2, 0),collider='box')
+        _monde = monde.Monde(8, 8)
         joueur_client.JoueurClient(_client)
 
     #app.wireframe_on()
     #print("\033[92m" + "Succes" + "\033[0m")
     bg = Entity(parent=menu_principal, model='quad', scale=(window.aspect_ratio, 1), z=1, texture='ressources/textures/wk')
-    btn_commencer = Button(text='Jouer', parent=menu_principal, scale=(0.25, 0.075), y=-0.2, on_click=commencer_jeu, color=color.blue)
-    btn_fermer = Button(text='Fermer', parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
+    btn_commencer = Button(text=GestionnaireLangues.obtenir("menu_principal.boutons.commencer", LANGUE), parent=menu_principal, scale=(0.25, 0.075), y=-0.2, on_click=commencer_jeu, color=color.blue)
+    #btn_fermer = Button(text="Fermer", parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
+    btn_fermer = Button(text=GestionnaireLangues.obtenir("menu_principal.boutons.fermer", LANGUE), parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
     titre = Entity(texture='ressources/textures/titre_vrai', parent=menu_principal, origin=(0, 0), y=0.2, model='quad', scale=(1, 0.5))
 
     musique_titre = Audio('ressources/sons/twin_princes.ogg', loop=True, autoplay=True, volume=0.7)
 
-
-
-    plateforme = Entity(model='cube', color=rgb(255, 255, 255), scale=(10,1,10), position=(0,-2,0), collider='box')
+    pivot = Entity()
+    DirectionalLight(parent=pivot, y = 2, z = 3, shadows=True, rotation = (45, -45, 45))
 
     app.run()
