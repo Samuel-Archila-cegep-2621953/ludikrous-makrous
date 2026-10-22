@@ -48,7 +48,10 @@ class JoueurClient(FirstPersonController):
                 _joueur = joueur.Joueur(_joueurs[i]["ID"], '', (_position[0], _position[1], _position[2]))
                 self.__joueurs.append(_joueur)
             else:
-                self.__joueurs[i].position = (_position[0], _position[1], _position[2])
+                self.__joueurs[i].position = (_position[0], _position[1] + 1.25, _position[2])
+        for _ in _donnee['Joueurs quittés']:
+            destroy(self.__joueurs[_])
+            del self.__joueurs[_]
 
 
     def update(self):
@@ -56,3 +59,5 @@ class JoueurClient(FirstPersonController):
         temps_en_ce_moment = self.__obtenir_temps()
         if temps_en_ce_moment - self.__dernier_temps > 1 / 12:
             self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
+        if self.position.y < -10:
+            self.position = (0, 0, 0)

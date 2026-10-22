@@ -1,0 +1,2 @@
+[menu_principal]
+boutons = { fermer = "Quit", commencer = "Start" }

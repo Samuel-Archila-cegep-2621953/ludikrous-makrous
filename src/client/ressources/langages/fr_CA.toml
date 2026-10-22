@@ -1,2 +1,2 @@
 [menu_principal]
-bouton = { fermer = "Fermer", commencer = "Commencer" }
+boutons = { fermer = "Fermer", commencer = "Commencer" }

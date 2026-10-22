@@ -1,3 +1,5 @@
+import time
+
 class JoueurAbstrait:
     def __init__(self):
         self.id = 0
@@ -7,6 +9,7 @@ class JoueurAbstrait:
         self.vie = 100
         self.en_vie = True
         self.animation = "pause"
+        self.dernier_paquet = time.time()
 
 
 def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:

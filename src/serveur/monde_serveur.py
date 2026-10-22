@@ -8,6 +8,7 @@ from joueur_abstrait import JoueurAbstrait
 import joueur_abstrait
 
 import json
+import time
 
 class MondeServeur:
     def __init__(self):
@@ -30,7 +31,7 @@ class MondeServeur:
         }
         
 
-    def __formatter_dict(self):
+    def __formatter_dict(self, joueurs_quitte: list[int]):
         """
         Formatte le monde du serveur en json pour l'envoyer au client.
         Style:
@@ -88,6 +89,8 @@ class MondeServeur:
 
         _fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
 
+        _fichier_json["Joueurs quittés"] = joueurs_quitte
+
         return _fichier_json
 
     def __demarrer_nouvelle_partie(self):
@@ -103,20 +106,45 @@ class MondeServeur:
         self.__liste_message.append("partie_commence")
 
     def __recevoir_creer_id(self, donnee: dict) -> str:
+        _temps = time.time()
+        for idx, _ in enumerate(self.__joueurs):
+            if _temps - _.dernier_paquet > 10:
+                self.__joueurs.remove(_)
+        if len(self.__joueurs) == 0: self.__derniere_id = 0
         _joueur = JoueurAbstrait()
         _joueur.id = self.__derniere_id
         self.__joueurs.append(_joueur)
         _resultat = json.dumps({'ID': self.__derniere_id})
+        print(f"[+] Joueur {self.__derniere_id}")
         self.__derniere_id += 1
         return _resultat
 
     def __recevoir_maj(self, donnee: dict) -> str:
-        self.__joueurs[donnee['ID']].position = (
+        _index_joueur = 0
+        for idx, _ in enumerate(self.__joueurs):
+            if _.id == donnee['ID']:
+                _index_joueur = idx
+        self.__joueurs[_index_joueur].position = (
             donnee['Position'][0],
             donnee['Position'][1],
             donnee['Position'][2]
         )
-        return json.dumps(self.__formatter_dict())
+        _temps = time.time()
+        self.__joueurs[_index_joueur].dernier_paquet = _temps
+
+        _joueurs_quittes = []
+        for idx, _ in enumerate(self.__joueurs):
+            if _temps - _.dernier_paquet > 10:
+                _joueurs_quittes.append(idx)
+                self.__joueurs.remove(_)
+
+        if len(_joueurs_quittes) > 0:
+            if len(_joueurs_quittes) == 1:
+                print(f"[-] Joueur {_joueurs_quittes[0]}")
+            else:
+                print(f"[-] Joueurs {_joueurs_quittes}")
+
+        return json.dumps(self.__formatter_dict(_joueurs_quittes))
 
     def recevoir_client(self, requete: str) -> str:
         """
