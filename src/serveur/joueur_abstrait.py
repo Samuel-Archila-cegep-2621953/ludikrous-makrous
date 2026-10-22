@@ -4,7 +4,9 @@ class JoueurAbstrait:
         self.nom = ''
         self.score = 0
         self.position = (0,0,0)
-        self.vie = True
+        self.vie = 100
+        self.en_vie = True
+        self.animation = "pause"
 
 
 def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:
@@ -18,8 +20,10 @@ def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:
         json_joueurs.append({
             "Position":  [j.position[0], j.position[1], j.position[2]],
             "Nom":       j.nom,
-            "Vie":       j.vie #,
-            #"Animation": j.animation
+            "Vie":       j.vie,
+            "En_vie": j.en_vie,
+            "Animation": j.animation,
+            "ID": j.id,
         })
 
     return json_joueurs
