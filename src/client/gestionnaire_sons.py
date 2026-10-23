@@ -1,20 +1,12 @@
 from enum import Enum
+from types_musique import TypesMusique
 
-class GestionnaireMusique(Enum):
-    MENU_PRINCIPAL = 0
-    JEU_FACILE = 1
-    JEU_MOYEN = 2
-    JEU_DIFFICILE = 3
-    PERTE = 4
-    VICTOIRE = 5
-    FIN = 7
-    
+class GestionnaireSons(Enum):
     @staticmethod
-    def aleatoire(cat: GestionnaireMusique) -> str:
+    def aleatoire(cat: TypesMusique) -> str:
         """
         Args:
-            cat (GestionnaireMusique): Le type/catégorie de musique
+            cat (TypesMusique): Le type/catégorie de musique
         Returns:
             str: Le chemin vers le fichier choisi aléatoirement
         """
-        pass
