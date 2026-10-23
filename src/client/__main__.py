@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     def commencer_jeu():
         menu_principal.disable()
-        musique_titre.fade_out(duration=0.7)
+        #musique_titre.fade_out(duration=0.7)
 
         _monde = monde.Monde(8, 8)
         joueur_client.JoueurClient(_client)
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     btn_fermer = Button(text=GestionnaireLangues.obtenir("menu_principal.boutons.fermer", LANGUE), parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
     titre = Entity(texture='ressources/textures/titre_vrai', parent=menu_principal, origin=(0, 0), y=0.2, model='quad', scale=(1, 0.5))
 
-    musique_titre = Audio('ressources/sons/twin_princes.ogg', loop=True, autoplay=True, volume=0.7)
+    #musique_titre = Audio('ressources/sons/twin_princes.ogg', loop=True, autoplay=True, volume=0.7)
 
     pivot = Entity()
     DirectionalLight(parent=pivot, y = 2, z = 3, shadows=True, rotation = (45, -45, 45))
