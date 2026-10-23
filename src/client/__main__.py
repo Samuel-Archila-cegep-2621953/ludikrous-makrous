@@ -12,7 +12,7 @@ if __name__ == "__main__":
     window.vsync = True
     window.size = (1280, 720)
 
-    LANGUE = "es"
+    LANGUE = "fr"
 
     app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
 
