@@ -9,6 +9,19 @@ class TypesMusique(Enum):
     VICTOIRE = 5
     FIN = 7
 
-    def comme_chemin(self):
+    def comme_chemin(self) -> str:
+        """
+        Return:
+            Le dossier correspondant à la musique demandée
+        """
+        _dir = ""
         match self:
-            case self.MENU_PRINCIPAL: "menu_principal"
+            case self.MENU_PRINCIPAL: _dir = "menu_principal/"
+            case self.JEU_FACILE:     _dir = "jeu/facile/"
+            case self.JEU_MOYEN:      _dir = "jeu/moyen/"
+            case self.JEU_DIFFICILE:  _dir = "jeu/difficile/"
+            case self.PERTE:          _dir = "jeu/perte/"
+            case self.VICTOIRE:       _dir = "jeu/victoire/"
+            case self.FIN:            _dir = "jeu/fin/"
+
+        return _dir

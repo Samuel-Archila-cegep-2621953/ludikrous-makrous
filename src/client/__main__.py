@@ -4,6 +4,8 @@ import joueur_client
 from ressources import obtenir_ressources
 from gestionnaire_langues import GestionnaireLangues
 import monde
+from musique import Musique
+from types_musique import TypesMusique
 
 if __name__ == "__main__":
     _client = Client()
@@ -34,7 +36,6 @@ if __name__ == "__main__":
         joueur_client.JoueurClient(_client)
 
     # app.wireframe_on()
-    # print("\033[92m" + "Succes" + "\033[0m")
     bg = Entity(
         parent=menu_principal,
         model="quad",
@@ -70,10 +71,13 @@ if __name__ == "__main__":
         scale=(1, 0.5),
     )
 
+    musique_menu_principal = Musique.aleatoire(TypesMusique.MENU_PRINCIPAL)
+
     musique_titre = Audio(
-        "ressources/sons/twin_princes.ogg", loop=True, autoplay=True, volume=0.7
+        musique_menu_principal, loop=True, autoplay=True, volume=0.7
     )
 
+        
     pivot = Entity()
     DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
