@@ -1,9 +1,9 @@
 #import serveur
-import base_de_donnee
+import src.serveur.base_de_donnees as base_de_donnees
 import hashlib
 
 if __name__ == '__main__':
-    _bd = base_de_donnee.BaseDeDonnee()
+    _bd = base_de_donnees.BaseDeDonnee()
 
     if input("connexion? (O/n) ").lower() == 'o':
         while True:

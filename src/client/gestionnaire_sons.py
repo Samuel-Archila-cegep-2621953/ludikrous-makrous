@@ -1,5 +1,6 @@
-from abc import ABC,  abstractmethod
+from abc import ABC, abstractmethod
 
+# "Interface" ?
 class GestionnaireSons(ABC):
     @abstractmethod
     def aleatoire(chemin: str) -> str:

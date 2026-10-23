@@ -9,7 +9,7 @@ import joueur_abstrait
 
 import json
 import time
-import ModificateurDifficulte
+from modificateur_difficulte import ModificateurDifficulte
 
 class MondeServeur:
     def __init__(self):

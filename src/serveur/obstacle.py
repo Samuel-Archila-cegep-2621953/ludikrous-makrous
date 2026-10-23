@@ -18,7 +18,7 @@ class Obstacle:
         return self.__type_obstacle
 
     def mise_a_jour(self, temps) -> float:
-        __temps_en_vie += temps
+        self.__temps_en_vie += temps
 
     def creer(self):
         pass
