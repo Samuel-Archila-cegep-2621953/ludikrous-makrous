@@ -19,7 +19,7 @@ class GestionnaireLangues:
         match lang:
             case "fr": _prefixe_langage = "fr_CA"
             case "en": _prefixe_langage = "en_US"
-            case "es": _prefixe_langage = "es_MX"
+            case "es": _prefixe_langage = "es_419"
 
         _chemin_lang = _parent + _prefixe_langage + ".toml"
         _fichier_toml = open(_chemin_lang, 'rb')
