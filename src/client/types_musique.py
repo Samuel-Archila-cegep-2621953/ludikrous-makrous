@@ -8,3 +8,7 @@ class TypesMusique(Enum):
     PERTE = 4
     VICTOIRE = 5
     FIN = 7
+
+    def comme_chemin(self):
+        match self:
+            case self.MENU_PRINCIPAL: "menu_principal"

@@ -1,0 +1,1 @@
+EXTENSIONS_SONS = ["ogg", "wav", "mp3"]
