@@ -13,7 +13,6 @@ class JoueurAbstrait:
 
 
 def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:
-    # TODO Reparer ce warning    ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
     """
     Formatte une liste de JoueurAbstrait en dict pour json
     """
