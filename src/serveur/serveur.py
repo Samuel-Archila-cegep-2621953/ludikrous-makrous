@@ -2,26 +2,24 @@ import socket
 import threading
 import time
 import monde_serveur
-import json
+import tomllib
+from pathlib import Path
 
 """
 TODO: Changer le serveur pour qu'il soit async
 """
 
-CONFIGURATION_SERVEUR = {
-    "IP": '127.0.0.1',
-    "Port": 24113
-}
-
 class Serveur:
     def __init__(self):
+        _fichier_toml = open(Path(__file__).parent / "config.toml", 'rb')
+        self.__config = tomllib.load(_fichier_toml)
         self.__serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__serveur.bind((CONFIGURATION_SERVEUR["IP"], CONFIGURATION_SERVEUR["Port"]))
+        self.__serveur.bind((self.__config["Serveur"]["ip"], self.__config["Serveur"]["port"]))
         self.__serveur.listen(5)
 
         self.__monde_serveur = monde_serveur.MondeServeur()
 
-        print(f"Serveur lancé sur {CONFIGURATION_SERVEUR["IP"]}:{CONFIGURATION_SERVEUR["Port"]}")
+        print(f"Serveur lancé sur {self.__config["Serveur"]["ip"]}:{self.__config["Serveur"]["port"]}")
 
     def __gerer_client(self, socket_client: socket.socket):
         _requete = socket_client.recv(1024)

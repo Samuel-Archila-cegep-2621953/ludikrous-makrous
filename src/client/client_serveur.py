@@ -1,20 +1,18 @@
 import asyncio
-
-CONFIGURATION_CLIENT = {
-    "IP": '127.0.0.1',
-    "Port": 24113
-}
+import tomllib
+from pathlib import Path
 
 class Client:
     def __init__(self):
-        pass
+        _fichier_toml = open(Path(__file__).parent / "config.toml", 'rb')
+        self.__config = tomllib.load(_fichier_toml)
     async def __gerer_envoyer_message(self, message: str) -> str:
         _message = await self.__envoyer_message(message)
         await self.__fermer()
         return _message
     
     async def __envoyer_message(self, message: str) -> str:
-        self.__lire, self.__ecrire = await asyncio.open_connection(CONFIGURATION_CLIENT["IP"], CONFIGURATION_CLIENT["Port"])
+        self.__lire, self.__ecrire = await asyncio.open_connection(self.__config["Client"]["ip"], self.__config["Client"]["port"])
 
         self.__ecrire.write(message.encode('utf-8'))
         await self.__ecrire.drain()
