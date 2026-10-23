@@ -8,10 +8,9 @@ class Sons(GestionnaireSons):
         chemin.replace('.', '/')
 
         try:
-            choix: str = aleatoire_dans_dir(chemin)
+            choix: str = aleatoire_dans_dir(CHEMIN_SONS + chemin)
         except:
             return "ressources/sons/erreur.mp4"
-            # TODO: Créer ressources/sons/erreur.mp4
         
         return CHEMIN_SONS + chemin + choix
 

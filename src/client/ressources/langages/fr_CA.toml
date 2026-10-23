@@ -1,6 +1,4 @@
-[menu_principal]
-boutons = {
-    fermer = "Fermer", 
-    commencer = "Commencer",
+[menu_principal.boutons]
+    fermer = "Fermer" 
+    commencer = "Commencer"
     config = "Options"
-}

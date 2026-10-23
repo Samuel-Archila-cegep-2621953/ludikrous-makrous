@@ -54,10 +54,13 @@ def aleatoire_dans_dir(chemin_dir: str, extensions: list[str] = constantes.EXTEN
     # Ajoute à _fichiers_son seulement les fichier qui ont une des extensions de son permises dans client/constantes.py
     for f in _dans_dir_cible:
         _t: list[str] = f.split('.')
+
         if _t[-1] in extensions:
-            _fichiers.append(_t.join())
+            print(_t)
+            _fichiers.append('.'.join(_t))
 
     if len(_fichiers) < 1:
         raise Exception("Chemin non existant")
 
+    
     return random.choice(_fichiers)
