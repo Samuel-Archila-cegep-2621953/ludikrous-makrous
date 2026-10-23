@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     def commencer_jeu():
         menu_principal.disable()
-        musique_titre.fade_out(duration=0.7)
+        #musique_titre.fade_out(duration=0.7)
 
         ciel_texte = load_texture("ressources/textures/end-rect")
         ciel = Sky(texture=ciel_texte)
