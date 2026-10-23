@@ -9,6 +9,7 @@ import joueur_abstrait
 
 import json
 import time
+import ModificateurDifficulte
 
 class MondeServeur:
     def __init__(self):
@@ -232,8 +233,7 @@ class MondeServeur:
         pass
 
     def __maj_difficulte(self, temps_entre_update: float):
-        self.__difficulte_globale += (temps_entre_update * 0.1) #formule linéaire, nombres surement à changer
-        # TODO Changer la formule pour augmenter la difficulté
+        self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
 
     def __effacer_tout_obstacle(self):
 
