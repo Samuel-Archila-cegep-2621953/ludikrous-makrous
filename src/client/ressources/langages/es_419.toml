@@ -1,2 +1,6 @@
 [menu_principal]
-boutons = { fermer = "Cerrar", commencer = "Comenzar" }
+boutons = {
+    fermer = "Cerrar", 
+    commencer = "Comenzar", 
+    config = "Configuración" 
+}

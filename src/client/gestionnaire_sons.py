@@ -1,12 +1,12 @@
-from enum import Enum
-from types_musique import TypesMusique
+from abc import ABC,  abstractmethod
 
-class GestionnaireSons(Enum):
-    @staticmethod
-    def aleatoire(cat: TypesMusique) -> str:
+class GestionnaireSons(ABC):
+    @abstractmethod
+    def aleatoire(chemin: str) -> str:
         """
         Args:
-            cat (TypesMusique): Le type/catégorie de musique
+            chemin (str): Le type/catégorie de sons
         Returns:
-            str: Le chemin vers le fichier choisi aléatoirement
+            Le chemin vers le fichier choisi aléatoirement
         """
+
