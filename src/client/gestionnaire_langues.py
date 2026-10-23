@@ -22,8 +22,11 @@ class GestionnaireLangues:
             case "es": _prefixe_langage = "es_419"
 
         _chemin_lang = CHEMIN_LANGAGES + _prefixe_langage + ".toml"
-        _fichier_toml = open(_chemin_lang, 'rb')
-        _toml_lang: dict = tomllib.load(_fichier_toml)
+        #print("Chemin du fichier de langue: " + _chemin_lang)
+        #_fichier_toml = open(_chemin_lang, 'rb')
+        with open(_chemin_lang, 'rb') as _fichier_toml:
+            _toml_lang: dict = tomllib.load(_fichier_toml)
+        #_fichier_toml.close()
 
         return trouver_dernier_item(_toml_lang, k)
 
