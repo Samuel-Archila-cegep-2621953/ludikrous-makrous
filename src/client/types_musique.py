@@ -15,11 +15,12 @@ class TypesMusique(Enum):
             Le dossier correspondant à la musique demandée
         """
         _dir = ""
+        D_DIFF = "jeu/difficulte/"
         match self:
             case self.MENU_PRINCIPAL: _dir = "menu_principal/"
-            case self.JEU_FACILE:     _dir = "jeu/facile/"
-            case self.JEU_MOYEN:      _dir = "jeu/moyen/"
-            case self.JEU_DIFFICILE:  _dir = "jeu/difficile/"
+            case self.JEU_FACILE:     _dir = D_DIFF + "facile/"
+            case self.JEU_MOYEN:      _dir = D_DIFF + "moyen/"
+            case self.JEU_DIFFICILE:  _dir = D_DIFF + "difficile/"
             case self.PERTE:          _dir = "jeu/perte/"
             case self.VICTOIRE:       _dir = "jeu/victoire/"
             case self.FIN:            _dir = "jeu/fin/"
