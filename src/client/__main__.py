@@ -32,15 +32,15 @@ def commencer_jeu():
     menu_principal.disable()
     musique_titre.fade_out(duration=0.7)
 
-    ciel_texte = load_texture("ressources/textures/ciel")
+    ciel_texte = load_texture("ressources/textures/end-carre")
     _ciel = Sky(texture=ciel_texte)
     _monde = monde.Monde(8, 8)
 
-    _musique = Audio(Musique.aleatoire(TypesMusique.JEU_FACILE), loop=True, volume=0.7).fade_in(duration=0.7)
 
     #vie = HealthBar(parent=camera.ui, bar_color=color.red, roundness=0.5, value=100, max_value=100, y=-0.45)
 
     _moi = joueur_client.JoueurClient(_client)
+    _moi.musique.fade_in(duration=0.7)
 
 
 

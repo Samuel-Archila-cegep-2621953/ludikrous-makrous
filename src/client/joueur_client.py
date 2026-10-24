@@ -6,6 +6,8 @@ import json
 import joueur
 from ursina import *
 import __main__ as principale
+from types_musique import TypesMusique
+from musique import Musique
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -15,8 +17,22 @@ class JoueurClient(FirstPersonController):
         #print(self.__id)
         self.__dernier_temps = self.__obtenir_temps()
         self.__joueurs: list[joueur.Joueur] = []
-        self.vie = HealthBar(parent=camera.ui, bar_color=color.red, roundness=0.2, value=255, max_value=255, y=0.45, x= -0.8)
+        self.vie = HealthBar(
+            parent=camera.ui, 
+            bar_color=rgb(84/255, 23/255, 14/255), 
+            roundness=0.3, 
+            value=255, 
+            max_value=255, 
+            y=0.45, 
+            x= -0.8, 
+            color=rgb(129/255,129/255,129/255), 
+            scale=(0.3, 0.05)
+        )
         self.cursor.visible = False
+
+        _chemin_musique = Musique.aleatoire(TypesMusique.JEU_FACILE)
+        self.musique = Audio(_chemin_musique, loop=True, volume=0.7)
+        self.__chemin_musique = _chemin_musique
 
     def __creer_id(self) -> int:
         _resultat = self.__client.envoyer_message(json.dumps({
@@ -63,8 +79,16 @@ class JoueurClient(FirstPersonController):
         temps_en_ce_moment = self.__obtenir_temps()
         if temps_en_ce_moment - self.__dernier_temps > 1 / 12:
             self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
+        
+        #print(self.position)
         if self.position.y < -10:
-            self.position = (0, 0, 0)
+            self.position = (60, 0, 60)
+
+        if self.position.x > 72 and self.position.z > 72 and self.__chemin_musique != "ressources/sons/musique/jeu/victoire/mi_corazoncito.ogg":
+            print(self.__chemin_musique)
+            self.__chemin_musique = Musique.aleatoire(TypesMusique.VICTOIRE)
+            self.musique.fade_out(duration=0.3)
+            self.musique = Audio(self.__chemin_musique, loop=True, volume=0.7).fade_in(duration=0.7)
 
     def input(self,key):
         super().input(key)
