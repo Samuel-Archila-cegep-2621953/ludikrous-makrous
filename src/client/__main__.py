@@ -1,5 +1,6 @@
 from client_serveur import Client
 from ursina import *
+from ursina.prefabs.health_bar import HealthBar
 import joueur_client
 from ressources import obtenir_ressources
 from gestionnaire_langues import GestionnaireLangues
@@ -7,78 +8,87 @@ import monde
 from musique import Musique
 from types_musique import TypesMusique
 
-if __name__ == "__main__":
-    _client = Client()
+#if __name__ == "__main__":
+_client = Client()
 
-    window.borderless = False
-    window.vsync = True
-    window.size = (1280, 720)
+window.borderless = False
+window.vsync = True
+#window.size = (1280, 720)
 
-    LANGUE = "fr"
+LANGUE = "fr"
 
-    app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
+app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
 
-    menu_principal = Entity(parent=camera.ui)
+menu_principal = Entity(parent=camera.ui)
 
-    Text.default_font = "ressources/polices/CraftyGirls-Regular.ttf"
+Text.default_font = "ressources/polices/CraftyGirls-Regular.ttf"
 
-    def terminer_jeu():
-        application.quit()
+def terminer_jeu():
+    print("Fermeture du jeu...")
+    application.quit()
 
-    def commencer_jeu():
-        menu_principal.disable()
-        musique_titre.fade_out(duration=0.7)
 
-        ciel_texte = load_texture("ressources/textures/end-rect")
-        ciel = Sky(texture=ciel_texte)
-        _monde = monde.Monde(8, 8)
-        #ground = Entity(model='cube', position=(0,0,0), scale=(2, 0.5, 2), color=color.white, collider="box")
-        joueur_client.JoueurClient(_client)
+def commencer_jeu():
+    menu_principal.disable()
+    musique_titre.fade_out(duration=0.7)
 
-    # app.wireframe_on()
-    bg = Entity(
-        parent=menu_principal,
-        model="quad",
-        scale=(window.aspect_ratio, 1),
-        z=1,
-        texture="ressources/textures/matte-black",
-    )
-    btn_commencer = Button(
-        #text="Commencer",
-        text=GestionnaireLangues.obtenir("menu_principal.boutons.commencer", LANGUE),
-        parent=menu_principal,
-        scale=(0.25, 0.075),
-        y=-0.2,
-        on_click=commencer_jeu,
-        color=color.azure,
-    )
-    # btn_fermer = Button(text="Fermer", parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
-    btn_fermer = Button(
-        #text="Fermer",
-        text=GestionnaireLangues.obtenir("menu_principal.boutons.fermer", LANGUE),
-        parent=menu_principal,
-        scale=(0.25, 0.075),
-        y=-0.29,
-        on_click=terminer_jeu,
-        color=color.red,
-    )
-    titre = Entity(
-        texture="ressources/textures/titre_vrai",
-        parent=menu_principal,
-        origin=(0, 0),
-        y=0.2,
-        model="quad",
-        scale=(1, 0.5),
-    )
+    ciel_texte = load_texture("ressources/textures/ciel")
+    _ciel = Sky(texture=ciel_texte)
+    _monde = monde.Monde(8, 8)
 
-    musique_menu_principal = Musique.aleatoire(TypesMusique.MENU_PRINCIPAL)
+    _musique = Audio(Musique.aleatoire(TypesMusique.JEU_FACILE), loop=True, volume=0.7).fade_in(duration=0.7)
 
-    musique_titre = Audio(
-        musique_menu_principal, loop=True, autoplay=True, volume=0.7
-    )
+    #vie = HealthBar(parent=camera.ui, bar_color=color.red, roundness=0.5, value=100, max_value=100, y=-0.45)
 
-        
-    pivot = Entity()
-    DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
+    _moi = joueur_client.JoueurClient(_client)
 
-    app.run()
+
+
+# app.wireframe_on()
+bg = Entity(
+    parent=menu_principal,
+    model="quad",
+    scale=(window.aspect_ratio, 1),
+    z=1,
+    texture="ressources/textures/matte-black",
+)
+btn_commencer = Button(
+    #text="Commencer",
+    text=GestionnaireLangues.obtenir("menu_principal.boutons.commencer", LANGUE),
+    parent=menu_principal,
+    scale=(0.25, 0.075),
+    y=-0.2,
+    on_click=commencer_jeu,
+    color=color.azure,
+)
+# btn_fermer = Button(text="Fermer", parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
+btn_fermer = Button(
+    #text="Fermer",
+    text=GestionnaireLangues.obtenir("menu_principal.boutons.fermer", LANGUE),
+    parent=menu_principal,
+    scale=(0.25, 0.075),
+    y=-0.29,
+    on_click=terminer_jeu,
+    color=color.red,
+)
+titre = Entity(
+    texture="ressources/textures/titre_vrai",
+    parent=menu_principal,
+    origin=(0, 0),
+    y=0.2,
+    model="quad",
+    scale=(1, 0.5),
+)
+
+musique_menu_principal = Musique.aleatoire(TypesMusique.MENU_PRINCIPAL)
+
+musique_titre = Audio(
+    musique_menu_principal, loop=True, autoplay=True, volume=0.7
+)
+    
+pivot = Entity()
+DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
+
+
+app.run()
+
