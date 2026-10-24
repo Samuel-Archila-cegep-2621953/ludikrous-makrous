@@ -56,7 +56,6 @@ def aleatoire_dans_dir(chemin_dir: str, extensions: list[str] = constantes.EXTEN
         _t: list[str] = f.split('.')
 
         if _t[-1] in extensions:
-            print(_t)
             _fichiers.append('.'.join(_t))
 
     if len(_fichiers) < 1:

@@ -6,6 +6,7 @@ class Client:
     def __init__(self):
         _fichier_toml = open(Path(__file__).parent / "config.toml", 'rb')
         self.__config = tomllib.load(_fichier_toml)
+
     async def __gerer_envoyer_message(self, message: str) -> str:
         _message = await self.__envoyer_message(message)
         await self.__fermer()

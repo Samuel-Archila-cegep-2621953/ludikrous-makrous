@@ -1,18 +1,22 @@
 from ursina.prefabs.first_person_controller import FirstPersonController
+from ursina.prefabs.health_bar import HealthBar
 import client_serveur
 import time
 import json
 import joueur
 from ursina import *
+import __main__ as principale
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
         super().__init__(height, **kwargs)
         self.__client = client
         self.__id = self.__creer_id()
-        print(self.__id)
+        #print(self.__id)
         self.__dernier_temps = self.__obtenir_temps()
         self.__joueurs: list[joueur.Joueur] = []
+        self.vie = HealthBar(parent=camera.ui, bar_color=color.red, roundness=0.2, value=255, max_value=255, y=0.45, x= -0.8)
+        self.cursor.visible = False
 
     def __creer_id(self) -> int:
         _resultat = self.__client.envoyer_message(json.dumps({
@@ -61,3 +65,10 @@ class JoueurClient(FirstPersonController):
             self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
         if self.position.y < -10:
             self.position = (0, 0, 0)
+
+    def input(self,key):
+        super().input(key)
+        match key:
+            case "escape": principale.terminer_jeu()
+            case "-": self.vie.value -= 10
+            case "=": self.vie.value += 10
