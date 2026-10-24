@@ -80,12 +80,8 @@ titre = Entity(
     scale=(1, 0.5),
 )
 
-musique_menu_principal = Musique.aleatoire(TypesMusique.MENU_PRINCIPAL)
+musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
 
-musique_titre = Audio(
-    musique_menu_principal, loop=True, autoplay=True, volume=0.7
-)
-    
 pivot = Entity()
 DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 

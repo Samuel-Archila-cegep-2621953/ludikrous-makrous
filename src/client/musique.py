@@ -4,55 +4,61 @@ from types_musique import TypesMusique
 from ursina import *
 
 
-class Musique(GestionnaireSons, Audio):
+class Musique(Audio):
     def __init__(
             self,
             type_musique: TypesMusique,
             aleatoire: bool = True,
-            prochain_aleatoire: bool = True,
+            repeter_aleatoire: bool = True,
             sound_file_name: str = '', 
             volume: int = 0.5,
-            pitch: int = 1,
-            balance: int = 0,
-            loop: bool = True,
-            loops: int = 1,
+            boucle: bool = False,
             autoplay: bool = True,
-            auto_destroy: bool = False,
-            group: str = 'sfx',
             **kwargs: any
         ):
 
-        sound_file_name = Musique.aleatoire(type_musique) if aleatoire else sound_file_name
+        if sound_file_name == '':
+            sound_file_name = Musique.aleatoire(type_musique)
 
-        self.musique: Audio = super().__init__(sound_file_name, volume, pitch, balance, loop, loops, autoplay, auto_destroy, group, **kwargs)
-        self.__prochain_aleatoire: bool = prochain_aleatoire
+        if repeter_aleatoire:
+           boucle = False
+
+        self.__audio = super().__init__(sound_file_name, volume, loop=boucle, autoplay=autoplay, **kwargs)
+
         self.__type_musique: TypesMusique = type_musique
-        self.__chemin_musique: str = sound_file_name
+        self.__repeter_aleatoire = repeter_aleatoire
+        self.__sound_file_name = sound_file_name
+        self.__vol = volume
+        #self.__loop = loop
+        self.__autoplay = autoplay
+        #TODO!: FRANCAIS
 
-    def remplacer(self, musique: 'Musique'):
-        """
-        Remplace l'objet musique actuel par un nouvel objet musique.
-        """
-        # Remplacer l'objet musique actuel par le nouvel objet musique
-        self.__dict__.clear()
-        self.__dict__.update(musique.__dict__)
+
 
     def remplacer_par_aleatoire(self):
         """
         Remplace l'objet musique actuel par un nouvel objet musique aléatoire du même type.
         """
-        if self.__prochain_aleatoire:
-            nouvelle_musique = Musique(self.__type_musique, aleatoire=True, prochain_aleatoire=True)
-            self.remplacer(nouvelle_musique)
+        self.clip = Musique.aleatoire(self.__type_musique)
+        self.play()
 
+    
+    #TODO!: Reverifier
     def remplacer_par_nouveau_type(self, nouveau_type: TypesMusique):
         """
         Remplace l'objet musique actuel par un nouvel objet musique aléatoire d'un nouveau type.
         """
-        nouvelle_musique = Musique(nouveau_type, aleatoire=True, prochain_aleatoire=True)
+        nouvelle_musique = Musique(nouveau_type, aleatoire=True, repeter_aleatoire=True)
         self.remplacer(nouvelle_musique)
 
 
+    def update(self):
+        if not self.playing:
+            if self.__repeter_aleatoire:
+                self.remplacer_par_aleatoire()
+                print("changement de musique aléatoire")
+            else:
+                self.on_destroy = Musique.remplacer_par_aleatoire
 
     @staticmethod
     def aleatoire(t: TypesMusique):
@@ -61,7 +67,7 @@ class Musique(GestionnaireSons, Audio):
 
         try:
             choix: str = aleatoire_dans_dir(CHEMIN_MUSIQUE + chemin)
-        except Exception as e:
+        except:
             return "ressources/sons/erreur.mp3"
 
         return CHEMIN_MUSIQUE + chemin + choix

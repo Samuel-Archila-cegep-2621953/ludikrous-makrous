@@ -30,9 +30,7 @@ class JoueurClient(FirstPersonController):
         )
         self.cursor.visible = False
 
-        _chemin_musique = Musique.aleatoire(TypesMusique.JEU_FACILE)
-        self.musique = Audio(_chemin_musique, loop=True, volume=0.7)
-        self.__chemin_musique = _chemin_musique
+        self.musique = Musique(TypesMusique.PERTE)
 
     def __creer_id(self) -> int:
         _resultat = self.__client.envoyer_message(json.dumps({
@@ -84,12 +82,7 @@ class JoueurClient(FirstPersonController):
         if self.position.y < -10:
             self.position = (60, 0, 60)
 
-        if self.position.x > 72 and self.position.z > 72 and self.__chemin_musique != "ressources/sons/musique/jeu/victoire/mi_corazoncito.ogg":
-            print(self.__chemin_musique)
-            self.__chemin_musique = Musique.aleatoire(TypesMusique.VICTOIRE)
-            self.musique.fade_out(duration=0.3)
-            self.musique = Audio(self.__chemin_musique, loop=True, volume=0.7).fade_in(duration=0.7)
-
+        
     def input(self,key):
         super().input(key)
         match key:
