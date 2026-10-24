@@ -15,7 +15,7 @@ window.borderless = False
 window.vsync = True
 #window.size = (1280, 720)
 
-LANGUE = "fr"
+LANGUE = "es"
 
 app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
 
