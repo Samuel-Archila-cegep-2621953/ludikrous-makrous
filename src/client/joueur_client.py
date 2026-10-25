@@ -31,6 +31,7 @@ class JoueurClient(FirstPersonController):
         self.cursor.visible = False
 
         self.musique = Musique(TypesMusique.PERTE)
+        self.musique.fade_in(0.7)
 
     def __creer_id(self) -> int:
         _resultat = self.__client.envoyer_message(json.dumps({
