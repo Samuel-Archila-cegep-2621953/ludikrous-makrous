@@ -26,10 +26,10 @@ class Musique(Audio):
 
         self.__type_musique: TypesMusique = type_musique
         self.__repeter_aleatoire = repeter_aleatoire
-        self.__chemin_fichier_musique = sound_file_name
-        self.__vol = volume
+        #self.__chemin_fichier_musique = sound_file_name
+        #self.__vol = volume
         #self.__repeter = loop
-        self.__lecture_automatique = autoplay
+        #self.__lecture_automatique = autoplay
 
 
     def remplacer_par_aleatoire(self):
