@@ -3,10 +3,11 @@ from ursina import *
 from ursina.prefabs.health_bar import HealthBar
 import joueur_client
 from ressources import obtenir_ressources
-from gestionnaire_langues import GestionnaireLangues
+from gestionnaire_langues import GestionnaireLangues as Langues
 import monde
 from musique import Musique
 from types_musique import TypesMusique
+from sons import Son
 
 #if __name__ == "__main__":
 _client = Client()
@@ -54,7 +55,7 @@ bg = Entity(
 )
 btn_commencer = Button(
     #text="Commencer",
-    text=GestionnaireLangues.obtenir("menu_principal.boutons.commencer", LANGUE),
+    text=Langues.obtenir("menu_principal.boutons.commencer", LANGUE),
     parent=menu_principal,
     scale=(0.25, 0.075),
     y=-0.2,
@@ -64,7 +65,7 @@ btn_commencer = Button(
 # btn_fermer = Button(text="Fermer", parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
 btn_fermer = Button(
     #text="Fermer",
-    text=GestionnaireLangues.obtenir("menu_principal.boutons.fermer", LANGUE),
+    text=Langues.obtenir("menu_principal.boutons.fermer", LANGUE),
     parent=menu_principal,
     scale=(0.25, 0.075),
     y=-0.29,

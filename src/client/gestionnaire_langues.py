@@ -14,13 +14,10 @@ class GestionnaireLangues:
         """
 
         if not db:
-            
             CHEMIN_LANGAGES = "ressources/langages/"
 
-
             _chemin_lang = CHEMIN_LANGAGES + GestionnaireLangues.__lang_comme_code(lang) + ".toml"
-            #print("Chemin du fichier de langue: " + _chemin_lang)
-            #_fichier_toml = open(_chemin_lang, 'rb')
+
             with open(_chemin_lang, 'rb') as _fichier_toml:
                 _toml_lang: dict = tomllib.load(_fichier_toml)
             #_fichier_toml.close()
@@ -38,6 +35,7 @@ class GestionnaireLangues:
             case "fr": _code_lang = "fr_CA"
             case "en": _code_lang = "en_US"
             case "es": _code_lang = "es_419"
+            case _: raise Exception("Code de langue non valide")
 
         return _code_lang
 

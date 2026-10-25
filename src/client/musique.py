@@ -1,4 +1,3 @@
-from gestionnaire_sons import GestionnaireSons
 from utilitaires import aleatoire_dans_dir
 from types_musique import TypesMusique
 from ursina import *
@@ -27,12 +26,10 @@ class Musique(Audio):
 
         self.__type_musique: TypesMusique = type_musique
         self.__repeter_aleatoire = repeter_aleatoire
-        self.__sound_file_name = sound_file_name
+        self.__chemin_fichier_musique = sound_file_name
         self.__vol = volume
-        #self.__loop = loop
-        self.__autoplay = autoplay
-        #TODO!: FRANCAIS
-
+        #self.__repeter = loop
+        self.__lecture_automatique = autoplay
 
 
     def remplacer_par_aleatoire(self):
@@ -43,22 +40,11 @@ class Musique(Audio):
         self.play()
 
     
-    #TODO!: Reverifier
-    def remplacer_par_nouveau_type(self, nouveau_type: TypesMusique):
-        """
-        Remplace l'objet musique actuel par un nouvel objet musique aléatoire d'un nouveau type.
-        """
-        nouvelle_musique = Musique(nouveau_type, aleatoire=True, repeter_aleatoire=True)
-        self.remplacer(nouvelle_musique)
-
-
     def update(self):
         if not self.playing:
-            if self.__repeter_aleatoire:
+            if self.__repeter_aleatoire: # Quand la musique arrête et que __repeter_aleatoire est vrai, appeler remplacer_par_aleatoire()
                 self.remplacer_par_aleatoire()
-                print("changement de musique aléatoire")
-            else:
-                self.on_destroy = Musique.remplacer_par_aleatoire
+            #print("changement de musique aléatoire")
 
     @staticmethod
     def aleatoire(t: TypesMusique):
