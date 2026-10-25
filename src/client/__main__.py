@@ -8,6 +8,7 @@ import monde
 from musique import Musique
 from types_musique import TypesMusique
 from sons import Son
+from menu_principal import QuelquesMenus
 
 #if __name__ == "__main__":
 _client = Client()
@@ -20,9 +21,10 @@ LANGUE = "es"
 
 app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
 
-menu_principal = Entity(parent=camera.ui)
+#menu_principal = Entity(parent=camera.ui)
 
 Text.default_font = "ressources/polices/CraftyGirls-Regular.ttf"
+
 
 def terminer_jeu():
     print("Fermeture du jeu...")
@@ -31,21 +33,22 @@ def terminer_jeu():
 
 def commencer_jeu():
     menu_principal.disable()
-    musique_titre.fade_out(duration=0.7)
+    #musique.fade_out(duration=0.7)
 
     ciel_texte = load_texture("ressources/textures/end-carre")
     _ciel = Sky(texture=ciel_texte)
     _monde = monde.Monde(8, 8)
 
 
-    #vie = HealthBar(parent=camera.ui, bar_color=color.red, roundness=0.5, value=100, max_value=100, y=-0.45)
 
     _moi = joueur_client.JoueurClient(_client)
-    _moi.musique.fade_in(duration=0.7)
+    #_moi.musique.fade_in(duration=0.7)
 
 
+menu_principal = QuelquesMenus.menu_principal()
 
 # app.wireframe_on()
+"""
 bg = Entity(
     parent=menu_principal,
     model="quad",
@@ -81,8 +84,9 @@ titre = Entity(
     scale=(1, 0.5),
 )
 
-musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
 
+musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
+"""
 pivot = Entity()
 DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
