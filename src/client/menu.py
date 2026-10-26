@@ -5,6 +5,7 @@ from musique import Musique
 class Menu(Entity):
     def __init__(
             self, 
+            nom: str,
             texture_fond, 
             musique: Musique = None, 
             boutons: list[Button] = [], 
@@ -16,6 +17,7 @@ class Menu(Entity):
         """
         Un menu. Les parents sont automatiquement définis comme le fond.
         Args:
+            nom (str): Le nom du menu
             texture_fond (str ou ursina.Texture): La texture du fond du menu. Inclue déjà `ressources/textures/`
             musique (Musique): La musique à joueur dans ce menu
             boutons (list[ursina.Button]): La liste de boutons
@@ -27,25 +29,51 @@ class Menu(Entity):
         self.menu = Entity(parent = camera.ui)
         self.fond = Entity(parent = self.menu, model = 'quad', scale = (window.aspect_ratio, 1), texture = f"ressources/textures/{texture_fond}", enabled = enabled, z=1)
         self.musique = musique
+        self.nom = nom
 
         #print(str(type(boutons)))
 
-        for b in boutons + autres + textes + menus_deroulants:
-            b.parent = self.menu
+        for x in boutons + autres + textes + menus_deroulants:
+            x.parent = self.menu
+            x.enabled = enabled
 
         self.boutons = boutons
         self.textes = textes
         self.menus_deroulants = menus_deroulants
+        self.autres = autres
 
+
+    def jouer_musique(self):
+        if self.musique is not None:
+            self.musique.play()
+
+
+    def play(self):
+        """Alias pour Menu.joueur_musique()"""
+        self.jouer_musique()
+
+
+    def arreter_musique(self):
+        if self.musique is not None:
+            self.musique.stop()
+
+
+    def stop(self):
+        """Alias pour Menu.arreter_musique()"""
+        self.arreter_musique()
+    
 
     def montrer(self):
         """
         Active le `Menu`
         """
         self.menu.enable()
+        self.fond.enable()
         #for b in self.boutons:
          #   b.text_entity.text = b.text
-        self.musique.play()
+        for x in self.boutons + self.autres + self.textes + self.menus_deroulants:
+            x.enabled = True
+        self.jouer_musique()
             
 
     def cacher(self):
@@ -53,6 +81,8 @@ class Menu(Entity):
         Désactive le `Menu`
         """
         self.menu.disable()
+        for x in self.boutons + self.autres + self.textes + self.menus_deroulants:
+            self.enabled = False
         self.musique.fade_out(0.5)
 
 
@@ -61,5 +91,14 @@ class Menu(Entity):
         Alias de `Menu.cacher()`
         """
         self.cacher()
+
+
+    def enable(self):
+        """
+        Alias de `Menu.montrer()`
+        """
+        self.montrer()
+
+        
         
 
