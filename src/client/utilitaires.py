@@ -2,6 +2,8 @@ import constantes
 import os
 import random
 from ursina import Button
+import __main__ as main
+from gestionnaire_langues import GestionnaireLangues
 
 def trouver_dernier_item(d: dict, k: str, s = ".") -> str:
     """
@@ -71,7 +73,8 @@ def ordonner_boutons(
         d_boutons: float, 
         H_bouton: float, 
         L_bouton: float, 
-        debut: float
+        debut: float,
+        couleur = None
     ) -> list[Button]:
     """
     Ordonne des `ursina.Button` de haut en bas pour un `Menu`
@@ -81,6 +84,7 @@ def ordonner_boutons(
         H_bouton (`float`): La hauteur d'un bouton
         L_bouton (`float`): La largeur d'un bouton
         debut (`float`): La valeur en `y` du premier bouton (`boutons[0]`)
+        couleur: La couleur à appliquer à chaque bouton. Si aucune couleur n'est indiquée, aucune valeur de `color` ne sera changée
     Returns:
         Une liste de `ursina.Button` ordonnée
     """
@@ -90,5 +94,14 @@ def ordonner_boutons(
         boutons[idx_b].y = debut - idx_b * d_boutons
         boutons[idx_b].text_entity.text = boutons[idx_b].text
 
+    if couleur is not None:
+        for b in boutons:
+            b.color = couleur
+
     return boutons
+
+
+def changer_langue(nouvelle_langue: str):
+    GestionnaireLangues.LANGUE = nouvelle_langue
+    print("nuova lingua " + nouvelle_langue)
 

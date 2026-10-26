@@ -15,10 +15,10 @@ from gestionnaire_menus import GestionnaireMenus as GM
 _client = Client()
 
 window.borderless = False
-window.vsync = True
+window.vsync = False
 #window.size = (1280, 720)
 
-LANGUE = "es"
+LANGUE = Langues.LANGUE
 
 app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
 
@@ -48,6 +48,8 @@ def commencer_jeu():
 
 GM.ajouter(QuelquesMenus.menu_principal())
 GM.montrer()
+#_principal = QuelquesMenus.menu_principal()
+
 
 # app.wireframe_on()
 """
@@ -92,6 +94,10 @@ musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
 pivot = Entity()
 DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
+def input(key):
+    if GM.nom_maintenant() == "config" and GM.nom_passe() == "principal":
+        if key == "escape":
+            GM.retourner_et_montrer()
 
 app.run()
 

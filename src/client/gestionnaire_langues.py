@@ -1,10 +1,13 @@
 import tomllib
-from utilitaires import trouver_dernier_item
 import sqlite3
 
 class GestionnaireLangues:
+    liste = ["fr", "en", "es"]
+    LANGUE = "fr"
+
     @staticmethod
     def obtenir(k: str, lang: str = "fr", db: bool = True) -> str:
+        from utilitaires import trouver_dernier_item
         """
         Args:
             k: La clef vers la phrase recherchée
