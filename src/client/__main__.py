@@ -36,7 +36,7 @@ def commencer_jeu():
     GM.maintenant().cacher()
     #musique.fade_out(duration=0.7)
 
-    ciel_texte = load_texture("ressources/textures/end-carre")
+    ciel_texte = load_texture("ressources/textures/ciel")
     _ciel = Sky(texture=ciel_texte)
     _monde = monde.Monde(8, 8)
 
