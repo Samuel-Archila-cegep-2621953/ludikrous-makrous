@@ -8,7 +8,8 @@ import monde
 from musique import Musique
 from types_musique import TypesMusique
 from sons import Son
-from menu_principal import QuelquesMenus
+from menus import QuelquesMenus
+from gestionnaire_menus import GestionnaireMenus as GM
 
 #if __name__ == "__main__":
 _client = Client()
@@ -32,7 +33,7 @@ def terminer_jeu():
 
 
 def commencer_jeu():
-    menu_principal.disable()
+    GM.maintenant().cacher()
     #musique.fade_out(duration=0.7)
 
     ciel_texte = load_texture("ressources/textures/end-carre")
@@ -45,7 +46,8 @@ def commencer_jeu():
     #_moi.musique.fade_in(duration=0.7)
 
 
-menu_principal = QuelquesMenus.menu_principal()
+GM.ajouter(QuelquesMenus.menu_principal())
+GM.montrer()
 
 # app.wireframe_on()
 """
