@@ -1,6 +1,7 @@
 import constantes
 import os
 import random
+from ursina import Button
 
 def trouver_dernier_item(d: dict, k: str, s = ".") -> str:
     """
@@ -63,3 +64,31 @@ def aleatoire_dans_dir(chemin_dir: str, extensions: list[str] = constantes.EXTEN
 
     
     return random.choice(_fichiers)
+
+
+def ordonner_boutons(
+        boutons: list[Button], 
+        d_boutons: float, 
+        H_bouton: float, 
+        L_bouton: float, 
+        debut: float
+    ) -> list[Button]:
+    """
+    Ordonne des `ursina.Button` de haut en bas pour un `Menu`
+    Args:
+        boutons (`list[ursina.Button]`): La liste de boutons à transformer. `boutons[0]` sera en haut
+        d_boutons (`float`): La distance entre les boutons
+        H_bouton (`float`): La hauteur d'un bouton
+        L_bouton (`float`): La largeur d'un bouton
+        debut (`float`): La valeur en `y` du premier bouton (`boutons[0]`)
+    Returns:
+        Une liste de `ursina.Button` ordonnée
+    """
+
+    for idx_b in range(len(boutons)):
+        boutons[idx_b].scale = (L_bouton, H_bouton)
+        boutons[idx_b].y = debut - idx_b * d_boutons
+        boutons[idx_b].text_entity.text = boutons[idx_b].text
+
+    return boutons
+

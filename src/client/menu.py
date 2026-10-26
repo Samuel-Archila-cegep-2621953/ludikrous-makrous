@@ -28,6 +28,8 @@ class Menu(Entity):
         self.fond = Entity(parent = self.menu, model = 'quad', scale = (window.aspect_ratio, 1), texture = f"ressources/textures/{texture_fond}", enabled = enabled, z=1)
         self.musique = musique
 
+        #print(str(type(boutons)))
+
         for b in boutons + autres + textes + menus_deroulants:
             b.parent = self.menu
 
@@ -41,6 +43,8 @@ class Menu(Entity):
         Active le `Menu`
         """
         self.menu.enable()
+        #for b in self.boutons:
+         #   b.text_entity.text = b.text
         self.musique.play()
             
 
@@ -50,4 +54,12 @@ class Menu(Entity):
         """
         self.menu.disable()
         self.musique.fade_out(0.5)
+
+
+    def disable(self):
+        """
+        Alias de `Menu.cacher()`
+        """
+        self.cacher()
+        
 

@@ -3,6 +3,8 @@ from musique import Musique
 from types_musique import TypesMusique
 from ursina import *
 from gestionnaire_langues import GestionnaireLangues as Langues
+from gestionnaire_menus import GestionnaireMenus as GM
+from utilitaires import ordonner_boutons
 
 class QuelquesMenus:
 
@@ -19,7 +21,6 @@ class QuelquesMenus:
         _btn_commencer = Button(
             text=Langues.obtenir("menu_principal.boutons.jouer_seul", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            y=DEBUT_Y_BOUTONS,
             on_click=main.commencer_jeu,
             color=color.azure,
         )
@@ -27,7 +28,6 @@ class QuelquesMenus:
         _btn_heberger = Button(
             text=Langues.obtenir("menu_principal.boutons.heberger", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            y=DEBUT_Y_BOUTONS - D_BOUTONS,
             on_click=main.commencer_jeu,
             color=color.azure,
         )
@@ -35,7 +35,6 @@ class QuelquesMenus:
         _btn_en_ligne = Button(
             text=Langues.obtenir("menu_principal.boutons.en_ligne", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            y=DEBUT_Y_BOUTONS - 2 * D_BOUTONS,
             on_click= main.commencer_jeu,
             color=color.azure,
         )
@@ -43,7 +42,6 @@ class QuelquesMenus:
         _btn_config = Button(
             text=Langues.obtenir("menu_principal.boutons.config", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            y=DEBUT_Y_BOUTONS - 3 * D_BOUTONS,
             on_click=QuelquesMenus.menu_configuration,
             color=color.azure,
         )
@@ -51,7 +49,6 @@ class QuelquesMenus:
         _btn_fermer = Button(
             text=Langues.obtenir("menu_principal.boutons.fermer", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            y=DEBUT_Y_BOUTONS - 4 * D_BOUTONS,
             on_click=main.terminer_jeu,
             color=color.red,
         )
@@ -66,10 +63,13 @@ class QuelquesMenus:
             #z = 1.00001
         )
 
+        _btn = ordonner_boutons([_btn_commencer, _btn_heberger, _btn_en_ligne, _btn_config, _btn_fermer], D_BOUTONS, H_BOUTON, L_BOUTON, DEBUT_Y_BOUTONS)
+        # Quand la fonction ordonner_boutons() modifie scale, le texte n'est pas montré correctement. Je ne sais pas pourquoi.
+
         return Menu(
             "matte-black", 
             Musique(TypesMusique.MENU_PRINCIPAL), 
-            [_btn_commencer, _btn_config, _btn_fermer, _btn_en_ligne, _btn_heberger],
+            _btn,
             [_logo_titre]
         )
 
