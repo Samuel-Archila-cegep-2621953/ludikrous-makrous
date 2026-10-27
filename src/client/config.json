@@ -1,8 +1,8 @@
 {
    "Client": {
-      "ip": "127.0.0.1",
+      "ip": "127.0123132131313",
       "port": 24113,
-      "langue": "es",
+      "langue": "en",
       "nom_utilisateur": "",
       "nom_affichage": "Petit Ludikrous"
    }
