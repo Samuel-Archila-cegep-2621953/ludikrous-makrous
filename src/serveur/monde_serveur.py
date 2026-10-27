@@ -20,7 +20,7 @@ import hashlib
 class MondeServeur:
     def __init__(self):
         dimensions = [8,8] # grille 8 x 8
-        self.__base_donnee = base_de_donnees.BaseDeDonnees()
+        self.base_donnee = base_de_donnees.BaseDeDonnees()
         self.__compteur = 0
 
         self.__difficulte_globale = 0
@@ -42,9 +42,9 @@ class MondeServeur:
             'MAJ': self.__recevoir_maj
         }
         self.__REQUETES_PAQUETS = {
-            TypePaquetClient.MAJ_JOUEUR.value: self.__recevoir_maj_paquets,
-            TypePaquetClient.CONNEXION.value: self.__recevoir_connexion_paquets,
-            TypePaquetClient.CREATION_COMPTE.value: self.__recevoir_inscrire_paquets
+            TypePaquetClient.MAJ_JOUEUR.value[0]: self.__recevoir_maj_paquets,
+            TypePaquetClient.CONNEXION.value[0]: self.__recevoir_connexion_paquets,
+            TypePaquetClient.CREATION_COMPTE.value[0]: self.__recevoir_inscrire_paquets
         }
         
 
@@ -177,10 +177,10 @@ class MondeServeur:
         Entrée: `B16s32s`\n
         Sortie: `B32s` | `B`\n
         """
-        if self.__base_donnee.connexion(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
+        if self.base_donnee.connexion(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
-            _id = self.__base_donnee.obtenir_id(donnee[1].decode())
+            _id = self.base_donnee.obtenir_id(donnee[1].decode())
 
             _joueur = JoueurAbstrait()
             _joueur.id = _id
@@ -197,10 +197,10 @@ class MondeServeur:
         Entrée: `B16s32s`\n
         Sortie: `B32s` | `B`\n
         """
-        if self.__base_donnee.creer_utilisateur(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
+        if self.base_donnee.creer_utilisateur(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
-            _id = self.__base_donnee.obtenir_id(donnee[1].decode())
+            _id = self.base_donnee.obtenir_id(donnee[1].decode())
         
             _joueur = JoueurAbstrait()
             _joueur.id = _id

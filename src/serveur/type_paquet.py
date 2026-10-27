@@ -12,7 +12,7 @@ class TypePaquetClient(enum.Enum):
     MAX = 3
 
 formats_serveur_par_type = [
-    'BIfff16sBB',
+    'BI16sfffBB',
     'B32s',
     'B'
 ]

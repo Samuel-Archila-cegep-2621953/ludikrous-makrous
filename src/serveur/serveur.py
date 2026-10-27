@@ -5,6 +5,7 @@ import monde_serveur
 import tomllib
 from pathlib import Path
 import select
+import hashlib
 
 class Serveur:
     def __init__(self):
@@ -13,7 +14,6 @@ class Serveur:
 
     def __gerer_client(self, socket_client: socket.socket):
         _requete = socket_client.recv(1024)
-        # print(f"[+] Reçu: {_requete}")
 
         socket_client.send(self.__monde_serveur.recevoir_client_paquets(_requete))
 
@@ -51,14 +51,42 @@ class Serveur:
                     self.__monde_serveur.mise_a_jour_jeu(_temps_entre_update)
                     _fin = time.time()
 
-    def __fermer(self, langue):
+    def __fermer(self, langue, commande):
         self.__ouvert = False
 
-    def __aide(self, langue):
+    def __aide(self, langue, commande):
         if langue == 'fr':
-            print("fermer — ferme le serveur")
+            print("fermer ————————————————————————————————————— ferme le serveur")
+            print("ajouter-utilisateur <nom> <mot-de-passe> ——— ajoute un utilisateur dans la base de donnée")
+            print("connexion-utilisateur <nom> <mot-de-passe> — effectue un test de connexion d'un utilisateur")
         elif langue == 'en':
-            print("exit / stop — closes the server")
+            print("exit / stop ———————————————————————— closes the server")
+            print("add-user <username> <password> ————— adds a user in the database")
+            print("connect-user <username> <password> — does a connection test to a user")
+
+    def __ajouter_utilisateur(self, langue, commande):
+        if langue == 'fr':
+            if self.__monde_serveur.base_donnee.creer_utilisateur(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
+                print(f"Utilisateur {commande[1]} a été créé!")
+            else:
+                print(f"Un utilisateur avec le même nom éxiste.")
+        elif langue == 'en':
+            if self.__monde_serveur.base_donnee.creer_utilisateur(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
+                print(f"User {commande[1]} has been added!")
+            else:
+                print(f"A user with the same username already exists.")
+
+    def __connexion_utilisateur(self, langue, commande):
+        if langue == 'fr':
+            if self.__monde_serveur.base_donnee.connexion(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
+                print(f"Utilisateur {commande[1]} a été connecté!")
+            else:
+                print(f"Mauvais nom d'utilisateur ou mot de passe")
+        elif langue == 'en':
+            if self.__monde_serveur.base_donnee.connexion(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
+                print(f"User {commande[1]} has been connected!")
+            else:
+                print(f"Wrong username or password.")
 
     def boucle_principale(self):
         _commandes = {
@@ -66,22 +94,26 @@ class Serveur:
             "exit": (self.__fermer, "en"),
             "stop": (self.__fermer, "en"),
             "aide": (self.__aide, "fr"),
-            "help": (self.__aide, "en")
+            "help": (self.__aide, "en"),
+            "ajouter-utilisateur": (self.__ajouter_utilisateur, "fr"),
+            "add-user": (self.__ajouter_utilisateur, "en"),
+            "connexion-utilisateur": (self.__connexion_utilisateur, "fr"),
+            "connect-user": (self.__connexion_utilisateur, "en")
         }
 
         _serveur = threading.Thread(target=self.__serveur)
         _serveur.start()
         time.sleep(0.5)
         while self.__ouvert:
-            _commande = input('> ')
-            if _commande in _commandes:
-                _commandes[_commande][0](_commandes[_commande][1])
+            _commande = input('> ').split(' ')
+
+            if _commande[0] in _commandes:
+                _commandes[_commande[0]][0](_commandes[_commande[0]][1], _commande)
             else:
                 print(f"Commande « {_commande} » n'éxiste pas, écrivez la commande « aide » pour la liste des commandes")
                 print(f"Command \"{_commande}\" doesn't exist, write the command \"help\" for the commands list")
 
         _serveur.join()
-
 
 
 
