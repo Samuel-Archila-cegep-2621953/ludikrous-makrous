@@ -7,16 +7,26 @@ from signal_serveur_client import SignalServeurClient
 from joueur_abstrait import JoueurAbstrait
 import joueur_abstrait
 
+import struct
 import json
 import time
 from modificateur_difficulte import ModificateurDifficulte
 
+from type_paquet import TypePaquetClient
+import paquet
+import base_de_donnees
+import hashlib
+
 class MondeServeur:
     def __init__(self):
         dimensions = [8,8] # grille 8 x 8
+        self.__base_donnee = base_de_donnees.BaseDeDonnees()
+        self.__compteur = 0
+
         self.__difficulte_globale = 0
         self.__dimensions: list[int] = dimensions # grandeur de la grille, par défaux 8x8
         self.__joueurs: list[JoueurAbstrait] = [] # Liste de joueurs
+        self.__joueurs_hache: dict[bytes,int] = {}
         self.__liste_modificateur = []
         self.__temps_de_jeu = 0.0
         self.__partie_en_cours = False
@@ -30,6 +40,11 @@ class MondeServeur:
         self.__REQUETES = {
             'CREER ID': self.__recevoir_creer_id,
             'MAJ': self.__recevoir_maj
+        }
+        self.__REQUETES_PAQUETS = {
+            TypePaquetClient.MAJ_JOUEUR.value: self.__recevoir_maj_paquets,
+            TypePaquetClient.CONNEXION.value: self.__recevoir_connexion_paquets,
+            TypePaquetClient.CREATION_COMPTE.value: self.__recevoir_inscrire_paquets
         }
         
 
@@ -131,6 +146,8 @@ class MondeServeur:
             donnee['Position'][1],
             donnee['Position'][2]
         )
+
+
         _temps = time.time()
         self.__joueurs[_index_joueur].dernier_paquet = _temps
 
@@ -148,8 +165,71 @@ class MondeServeur:
 
         return json.dumps(self.__formatter_dict(_joueurs_quittes))
 
+    def __obtenir_joueur_par_id(self, id: int):
+        for _ in self.__joueurs:
+            if _.id == id:
+                return _
+        return None
+
+    def __recevoir_connexion_paquets(self, donnee: tuple) -> bytes:
+        """
+        Lit un paquet de connexion et envoit une notification de réussite ou d'échec\n
+        Entrée: `B16s32s`\n
+        Sortie: `B32s` | `B`\n
+        """
+        if self.__base_donnee.connexion(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
+            self.__compteur += 1
+            _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
+            _id = self.__base_donnee.obtenir_id(donnee[1].decode())
+
+            _joueur = JoueurAbstrait()
+            _joueur.id = _id
+            self.__joueurs.append(_joueur)
+
+            self.__joueurs_hache[_clef] = _id
+            return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef)])
+        return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
+
+
+    def __recevoir_inscrire_paquets(self, donnee: tuple) -> bytes:
+        """
+        Lit un paquet d'inscription et envoit une notification de réussite ou d'échec\n
+        Entrée: `B16s32s`\n
+        Sortie: `B32s` | `B`\n
+        """
+        if self.__base_donnee.creer_utilisateur(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
+            self.__compteur += 1
+            _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
+            _id = self.__base_donnee.obtenir_id(donnee[1].decode())
+        
+            _joueur = JoueurAbstrait()
+            _joueur.id = _id
+            self.__joueurs.append(_joueur)
+        
+            self.__joueurs_hache[_clef] = _id
+            return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef)])
+        return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
+
+    def __recevoir_maj_paquets(self, donnee: tuple) -> bytes:
+        """
+        Lit un paquet de mise à jour et envoit une mise à jour de chaque joueurs\n
+        Entrée: `B32sfffBB`\n
+        Sortie: `H(BIfff16sBB+...)`\n
+        """
+        _id = self.__joueurs_hache[donnee[1]]
+
+        if (joueur := self.__obtenir_joueur_par_id(_id)) != None:
+            joueur.position = (donnee[2], donnee[3], donnee[4])
+            joueur.vie = donnee[5]
+            joueur.animation = donnee[6]
+
+        _joueurs = [paquet.creer_paquet_joueur(joueur) for joueur in self.__joueurs]
+        return paquet.construire_paquet(_joueurs)
+
     def recevoir_client_paquets(self, requete: bytes) -> bytes:
-        pass
+        _paquet = paquet.lire_paquet(requete)
+        return self.__REQUETES_PAQUETS[_paquet[0]](_paquet)
+
 
     def recevoir_client(self, requete: str) -> str:
         """
