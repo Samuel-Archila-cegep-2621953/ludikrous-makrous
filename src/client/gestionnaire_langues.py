@@ -1,9 +1,12 @@
 import tomllib
 import sqlite3
+from config import Config
 
 class GestionnaireLangues:
     liste = ["fr", "en", "es"]
     LANGUE = "fr"
+    LANGUE_AVANT = "fr"
+    __CHEMIN_DB = "ressources/langages/lang.db"
 
     @staticmethod
     def obtenir(k: str, lang: str = "fr", db: bool = True) -> str:
@@ -32,7 +35,7 @@ class GestionnaireLangues:
 
 
     @staticmethod
-    def __lang_comme_code(lang: str):
+    def __lang_comme_code(lang: str) -> str:
         _code_lang = ""
         match lang:
             case "fr": _code_lang = "fr_CA"
@@ -43,12 +46,57 @@ class GestionnaireLangues:
         return _code_lang
 
 
+    def __code_comme_lang(code: str) -> str:
+        _lang = ""
+        match code:
+            case "fr_CA": _lang = "fr"
+            case "en_US": _lang = "en"
+            case "es_419": _lang = "es"
+            case _: raise Exception("Code de langue non valide")
+
+        return _lang
+
+
+
     @staticmethod
     def __obtenir_de_db(k: str, lang: str):
-        with sqlite3.connect("ressources/langages/lang.db") as _connection_db:
+        with sqlite3.connect(GestionnaireLangues.__CHEMIN_DB) as _connection_db:
             _curseur = _connection_db.cursor()
             _colonne = GestionnaireLangues.__lang_comme_code(lang).replace('_', '-')
 
             _curseur.execute(f"SELECT [{_colonne}] FROM lang WHERE clef = '{k}'")
 
             return _curseur.fetchone()[0]
+
+
+    def trouver_clef(s: str) -> str:
+        with sqlite3.connect(GestionnaireLangues.__CHEMIN_DB) as _connection_db:
+            _curseur  = _connection_db.cursor()
+            _colonne = GestionnaireLangues.__lang_comme_code(GestionnaireLangues.LANGUE).replace('_', '-')
+            _sql = f"SELECT clef FROM lang WHERE [{_colonne}] = '{s}'"
+            _curseur.execute(_sql)
+
+            return _curseur.fetchone()[0]
+
+
+    def clef_maintenant(s: str) -> str:
+        return GestionnaireLangues.trouver_clef(GestionnaireLangues.LANGUE)
+
+
+    def clef_avant(s: str) -> str:
+        return GestionnaireLangues.trouver_clef(GestionnaireLangues.LANGUE_AVANT)
+
+
+    def changer(nouvelle_langue: str):
+        GestionnaireLangues.LANGUE_AVANT = GestionnaireLangues.LANGUE
+        GestionnaireLangues.LANGUE = nouvelle_langue
+        _json = Config.json()
+        _json["Client"]["langue"] = nouvelle_langue
+        Config.modifier(_json)
+        
+        #print("nuova lingua " + nouvelle_langue)
+
+
+    def de_config():
+        _nouvelle = Config.json()["Client"]["langue"]
+        GestionnaireLangues.changer(_nouvelle)

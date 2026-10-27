@@ -1,6 +1,7 @@
 from menu import Menu
 from array import array
 from ursina import *
+from gestionnaire_langues import GestionnaireLangues as Langues
 
 # Peut-être ça sera utilisé
 
@@ -17,6 +18,7 @@ class GestionnaireMenus:
         """
         GestionnaireMenus.liste[0] = GestionnaireMenus.liste[1]
         GestionnaireMenus.liste[1] = prochain
+        GestionnaireMenus.liste[1].musique.stop()
         GestionnaireMenus.liste[2] = None
 
 
@@ -25,6 +27,13 @@ class GestionnaireMenus:
         if GestionnaireMenus.liste[1] is None:
             application.quit()
             return
+
+        """
+        if Langues.LANGUE != Langues.LANGUE_AVANT:
+            for m in GestionnaireMenus.liste:
+                if m is not None:
+                    m.maj_langue()
+        """
 
         GestionnaireMenus.liste[1].montrer()
 

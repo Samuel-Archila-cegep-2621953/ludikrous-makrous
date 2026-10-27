@@ -1,6 +1,7 @@
 from ursina import *
 from ursina.prefabs.dropdown_menu import DropdownMenu
 from musique import Musique
+from gestionnaire_langues import GestionnaireLangues as Langues
 
 class Menu(Entity):
     def __init__(
@@ -98,6 +99,12 @@ class Menu(Entity):
         Alias de `Menu.montrer()`
         """
         self.montrer()
+
+
+    def maj_langue(self):
+        for t in self.boutons + self.textes:
+            _clef: str = Langues.clef_avant(t.text)
+            t.text = Langues.obtenir(_clef, Langues.LANGUE)
 
         
         

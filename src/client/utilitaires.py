@@ -1,7 +1,7 @@
 import constantes
 import os
 import random
-from ursina import Button
+from ursina import *
 import __main__ as main
 from gestionnaire_langues import GestionnaireLangues
 
@@ -74,7 +74,10 @@ def ordonner_boutons(
         H_bouton: float, 
         L_bouton: float, 
         debut: float,
-        couleur = None
+        couleur_base = None,
+        couleur_survol = None,
+        #alpha: float = 0,
+        rayon: float = 0
     ) -> list[Button]:
     """
     Ordonne des `ursina.Button` de haut en bas pour un `Menu`
@@ -93,15 +96,19 @@ def ordonner_boutons(
         boutons[idx_b].scale = (L_bouton, H_bouton)
         boutons[idx_b].y = debut - idx_b * d_boutons
         boutons[idx_b].text_entity.text = boutons[idx_b].text
+        boutons[idx_b].radius = rayon
+        #boutons[idx_b].alpha = 0.5
 
-    if couleur is not None:
+
+
+    if couleur_base is not None:
+        if couleur_survol is None:
+            couleur_survol = couleur_base
         for b in boutons:
-            b.color = couleur
+            b.color = couleur_base
+            b.highlight_color = couleur_survol
 
     return boutons
 
 
-def changer_langue(nouvelle_langue: str):
-    GestionnaireLangues.LANGUE = nouvelle_langue
-    print("nuova lingua " + nouvelle_langue)
 
