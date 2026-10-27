@@ -97,7 +97,7 @@ class JoueurClient(FirstPersonController):
             case "=": self.vie.value += 10
 
 
-    def creer_liste_score()
+    def creer_liste_score():
         """
         Reçoit une liste de joueurs des serveurs et crée une list[tuple[str, int]] contenant les noms et scores des joueurs
         """
