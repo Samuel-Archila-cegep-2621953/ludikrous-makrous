@@ -9,6 +9,7 @@ from gestionnaire_langues import GestionnaireLangues as Langues
 from gestionnaire_menus import GestionnaireMenus as GM
 from utilitaires import (ordonner_boutons)
 from config import Config
+from constantes import LEN_MAX_NOM
 
 class QuelquesMenus:
     COULEUR_BASE = color.rgba(130/255, 69/255, 16/255, 0.6)
@@ -140,6 +141,7 @@ class QuelquesMenus:
             default_value = Config.json()["Client"]["nom_affichage"],
             origin = (0,0),
             position = (0, -0.15),
+            character_limit = LEN_MAX_NOM,
             tooltip = Tooltip("Nom d'affichage")
             #scale = (L_BOUTON, H_BOUTON)
         )
@@ -178,6 +180,3 @@ class QuelquesMenus:
         )
         
         return Menu("config", "matte-black", Musique(TypesMusique.MENU_PRINCIPAL, autoplay = False), [_btn_confirmer], [_saisir], [_etiquette_saisir], [_deroulant_langue], False)
-
-
-def 
