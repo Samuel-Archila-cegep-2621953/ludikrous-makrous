@@ -20,13 +20,14 @@ class JoueurClient(FirstPersonController):
         self.vie = HealthBar(
             parent=camera.ui, 
             bar_color=rgb(84/255, 23/255, 14/255), 
-            roundness=0.3, 
+            roundness=0, 
             value=255, 
             max_value=255, 
             y=0.45, 
             x= -0.8, 
             color=rgb(129/255,129/255,129/255), 
-            scale=(0.3, 0.05)
+            scale=(0.3, 0.05),
+            show_text=False
         )
         self.cursor.visible = False
 
@@ -83,10 +84,22 @@ class JoueurClient(FirstPersonController):
         if self.position.y < -10:
             self.position = (60, 0, 60)
 
+
+    def reduire_vie(self, quantite: float):
+        self.vie.value -= quantite
+
         
     def input(self,key):
         super().input(key)
         match key:
             case "escape": principale.terminer_jeu()
-            case "-": self.vie.value -= 10
+            case "-": self.reduire_vie(3)
             case "=": self.vie.value += 10
+
+
+    def creer_liste_score()
+        """
+        Reçoit une liste de joueurs des serveurs et crée une list[tuple[str, int]] contenant les noms et scores des joueurs
+        """
+        # TODO!
+        pass
