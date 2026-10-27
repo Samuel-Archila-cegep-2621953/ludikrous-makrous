@@ -10,6 +10,7 @@ from gestionnaire_menus import GestionnaireMenus as GM
 from utilitaires import (ordonner_boutons)
 from config import Config
 from constantes import LEN_MAX_NOM
+import socket
 
 class QuelquesMenus:
     COULEUR_BASE = color.rgba(130/255, 69/255, 16/255, 0.6)
@@ -38,7 +39,7 @@ class QuelquesMenus:
         _btn_heberger = Button(
             text=Langues.obtenir("menu_principal.boutons.heberger", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            on_click=main.commencer_jeu,
+            on_click=Func(GM.ajouter_et_montrer, QuelquesMenus.menu_heberger()),
         )
 
         _btn_en_ligne = Button(
@@ -81,7 +82,7 @@ class QuelquesMenus:
 
 
     @staticmethod
-    def menu_configuration():
+    def menu_configuration() -> Menu:
         import __main__ as main
 
         L_BOUTON = 0.5
@@ -181,7 +182,7 @@ class QuelquesMenus:
 
 
     @staticmethod
-    def menu_multijoueur():
+    def menu_multijoueur() -> Menu:
         import __main__ as main
 
         L_BOUTON = 0.5
@@ -219,3 +220,46 @@ class QuelquesMenus:
         )
 
         return Menu("multijoueur", "matte-black", boutons = [_btn_connection], autres = [_saisir_ip], textes = [_etiquette_saisir_ip], enabled = False)
+
+
+    @staticmethod
+    def menu_heberger() -> Menu:
+        import __main__ as main
+
+        L_BOUTON = 0.5
+        H_BOUTON = 0.06
+        DEBUT_Y_BOUTONS: float = -0.13
+        D_BOUTONS = 0.07
+        COULEUR_BASE = color.rgba(0, 0, 0, 0.8)
+        #COULEUR_BASE = color.rgba(23/255, 21/255, 21/255, 0.8)
+        COULEUR_SURVOL = QuelquesMenus.COULEUR_SURVOL
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        _mon_ip = s.getsockname()[0]
+        s.close()
+
+        _texte_mon_ip = Text(
+            text = Langues.obtenir("menu_heberger.texte.ip_local", Langues.LANGUE) + _mon_ip,
+            origin = (0,0),
+            position = (0,0)
+        )
+
+        #TODO!: Obtenir une liste de joueurs
+        _liste_joueurs: list[str] = ["Big John", "Scarlett", "Makrous", "Ursino"]
+
+        def __formatter_liste_joueurs(joueurs: list[str]) -> str:
+            _joueurs_fmt: str = ""
+            for j in joueurs:
+                _joueurs_fmt += j + "\n"
+
+            return _joueurs_fmt
+
+        _joueurs_connectes = Text(
+            text = Langues.obtenir("menu_heberger.texte.connections_presentes", Langues.LANGUE) + "\n" + __formatter_liste_joueurs(_liste_joueurs),
+            origin = (0,0),
+            position = (0,-0.1),
+        )
+
+        return Menu("heberger", "matte-black", textes = [_texte_mon_ip, _joueurs_connectes], enabled = False)
+        

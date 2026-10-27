@@ -108,5 +108,14 @@ def input(key):
         if key == "escape":
             GM.retourner_et_montrer()
 
+    elif GM.nom_maintenant() == "heberger" and GM.nom_passe() == "principal":
+        if key == "escape":
+            GM.retourner_et_montrer()
+    """
+    if GM.nom_passe() == "principal":
+        if key == "escape":
+            GM.retourner_et_montrer()
+    """
+
 app.run()
 
