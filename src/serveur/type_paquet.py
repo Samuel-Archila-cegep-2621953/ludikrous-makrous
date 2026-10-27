@@ -8,7 +8,8 @@ class TypePaquetServeur(enum.Enum):
 class TypePaquetClient(enum.Enum):
     MAJ_JOUEUR = 0,
     CONNEXION = 1,
-    CREATION_COMPTE = 2
+    CREATION_COMPTE = 2,
+    MAX = 3
 
 formats_serveur_par_type = [
     'BIfff16sBB',

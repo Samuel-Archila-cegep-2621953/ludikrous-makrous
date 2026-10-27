@@ -15,7 +15,7 @@ class Serveur:
         _requete = socket_client.recv(1024)
         # print(f"[+] Reçu: {_requete}")
 
-        socket_client.send(self.__monde_serveur.recevoir_client(_requete).encode())
+        socket_client.send(self.__monde_serveur.recevoir_client_paquets(_requete))
 
         socket_client.close()
 

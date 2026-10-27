@@ -1,7 +1,7 @@
 import struct
 import joueur_abstrait
 import monde_serveur
-from type_paquet import TypePaquetServeur, TypePaquetClient, formats_serveur_par_type
+from type_paquet import TypePaquetServeur, TypePaquetClient, formats_serveur_par_type, formats_clients_par_type
 import hashlib
 
 def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
@@ -57,6 +57,11 @@ def construire_paquet(paquets: list[bytes]) -> bytes:
     À répétition:
         - Type du paquet (`uint8_t`)
         - ... (`...`)
+    
+    Args:
+        paquets (list[bytes]): paquets
+    Returns:
+        bytes: le paquet final
     """
     _format = 'H'
     _taille = struct.pack(_format, len(paquets))
@@ -66,15 +71,13 @@ def construire_paquet(paquets: list[bytes]) -> bytes:
     return _paquet
 
 
-def lire_paquet(paquet: bytes):
+def lire_paquet(paquet: bytes) -> tuple[any]:
+    """
+    Lit un paquet et l'exporte en tuple.
+    """
     _type = struct.unpack('B', paquet[:1])[0]
-    match _type:
-        case TypePaquetClient.MAJ_JOUEUR.value:
-            _paquet = struct.unpack('BIfff16sBB', paquet)
-        case TypePaquetClient.CONNEXION.value:
-            _paquet = struct.unpack('B16s32s', paquet)
-        case TypePaquetClient.CREATION_COMPTE.value:
-            _paquet = struct.unpack('B16s32s', paquet)
+    if _type < TypePaquetClient.MAX:
+        return struct.unpack(formats_clients_par_type[_type], paquet)
         
     
         

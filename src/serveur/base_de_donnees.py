@@ -37,6 +37,11 @@ class BaseDeDonnees:
         _resultat = self.__curseur.fetchone()
         return _resultat != None
 
+    def obtenir_id(self, nom: str) -> int:
+        self.__curseur.execute("SELECT id FROM utilisateurs WHERE pseudonyme = ?", (nom,))
+        _resultat = self.__curseur.fetchone()
+        return _resultat
+
     def connexion(self, nom: str, mot_de_passe_hache: str) -> bool:
         """
         Connecter l'utilisateur à partir de son pseudonyme et de son mot de passe.
