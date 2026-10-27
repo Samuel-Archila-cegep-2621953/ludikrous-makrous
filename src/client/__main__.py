@@ -18,6 +18,7 @@ window.borderless = False
 window.vsync = False
 #window.size = (1280, 720)
 
+Langues.de_config()
 LANGUE = Langues.LANGUE
 
 app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
@@ -47,7 +48,8 @@ def commencer_jeu():
 
 
 GM.ajouter(QuelquesMenus.menu_principal())
-GM.montrer()
+#print(Langues.trouver_clef("Paramètres"))
+#GM.montrer()
 #_principal = QuelquesMenus.menu_principal()
 
 

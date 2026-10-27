@@ -1,6 +1,9 @@
 {
-    "dernier_ip": "127.0.0.1",
-    "langue": "fr",
-    "nom_utilisateur": "",
-    "nom_affichage": ""
+   "Client": {
+      "ip": "127.0.0.1",
+      "port": 24113,
+      "langue": "es",
+      "nom_utilisateur": "",
+      "nom_affichCage": ""
+   }
 }
