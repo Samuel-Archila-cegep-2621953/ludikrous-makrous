@@ -17,7 +17,7 @@ formats_serveur_par_type = [
 ]
 
 formats_clients_par_type = [
-    "B32sfffBB",
-    "B16s32s",
-    "B16s32s"
+    "B32sfffBB", # Type, hache clé, x, y, z, vie, animation
+    "B16s32s", # Type, nom, mdp haché
+    "B16s32s" # Type, nom, mdp haché
 ]
