@@ -148,6 +148,9 @@ class MondeServeur:
 
         return json.dumps(self.__formatter_dict(_joueurs_quittes))
 
+    def recevoir_client_paquets(self, requete: bytes) -> bytes:
+        pass
+
     def recevoir_client(self, requete: str) -> str:
         """
         accepter les données du client
