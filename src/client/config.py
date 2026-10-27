@@ -4,10 +4,12 @@ import os
 class Config:
     CHEMIN: str = "config.json"
 
+    """
     @staticmethod
     def lire_specifique(k: str) -> str:
         with open(Config.CHEMIN, 'r') as _f_json:
             return json.load(_f_json)[k]
+    """
 
     @staticmethod
     def json() -> str:
@@ -37,6 +39,14 @@ class Config:
         _cfg = Config.json()
         _cfg["Client"]["nom_affichage"] = nom
         Config.modifier(_cfg)
+
+
+    @staticmethod
+    def changer_ip(ip: str):
+        _cfg = Config.json()
+        _cfg["Client"]["ip"] = ip
+        Config.modifier(_cfg)
+
 
 
 

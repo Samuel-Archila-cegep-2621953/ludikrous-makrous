@@ -75,6 +75,12 @@ class Menu(Entity):
         for x in self.boutons + self.autres + self.textes + self.menus_deroulants:
             x.enabled = True
         self.jouer_musique()
+
+
+    def essayer_fade_out(self):
+        if self.musique is not None:
+            self.musique.fade_out(0.5)
+
             
 
     def cacher(self):
@@ -84,7 +90,7 @@ class Menu(Entity):
         self.menu.disable()
         for x in self.boutons + self.autres + self.textes + self.menus_deroulants:
             self.enabled = False
-        self.musique.fade_out(0.5)
+        self.essayer_fade_out()
 
 
     def disable(self):

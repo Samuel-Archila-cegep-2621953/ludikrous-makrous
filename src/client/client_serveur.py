@@ -30,5 +30,3 @@ class Client:
     def envoyer_message(self, message: str) -> str:
         return asyncio.run(self.__gerer_envoyer_message(message))
 
-
-    def interpreter_octets()

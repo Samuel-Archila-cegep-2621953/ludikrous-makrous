@@ -18,7 +18,7 @@ class GestionnaireMenus:
         """
         GestionnaireMenus.liste[0] = GestionnaireMenus.liste[1]
         GestionnaireMenus.liste[1] = prochain
-        GestionnaireMenus.liste[1].musique.stop()
+        GestionnaireMenus.liste[1].arreter_musique()
         GestionnaireMenus.liste[2] = None
 
 

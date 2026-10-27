@@ -14,7 +14,7 @@ class Joueur(Entity):
     def nom(self) -> str:
         return self.__nom
 
-    def nom(self, nouveau_nom):
+    def changer_nom(self, nouveau_nom):
         self.__nom = nouveau_nom
 
     def mise_a_jour(self, temps_entre_update):
