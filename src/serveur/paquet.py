@@ -51,11 +51,12 @@ def creer_paquet_connexion_rate() -> bytes:
 def construire_paquet(paquets: list[bytes]) -> bytes:
     """
     Formatte la réponse du serveur avec plusieurs paquets
-    Format: `H(B?)`
-    - Nombre de paquets
-    (à répétition)
-    - Type du paquet
-    - donnée avec
+    Format: `H(B...)`
+    - Nombre de paquets (`uint16_t`)
+    
+    À répétition:
+        - Type du paquet (`uint8_t`)
+        - ... (`...`)
     """
     _format = 'H'
     _taille = struct.pack(_format, len(paquets))
