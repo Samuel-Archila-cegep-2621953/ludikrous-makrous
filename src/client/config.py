@@ -9,6 +9,7 @@ class Config:
         with open(Config.CHEMIN, 'r') as _f_json:
             return json.load(_f_json)[k]
 
+    @staticmethod
     def json() -> str:
         with open(Config.CHEMIN, 'r') as _f_json:
             return json.load(_f_json)
@@ -29,6 +30,13 @@ class Config:
         os.remove(Config.CHEMIN)
         with open(Config.CHEMIN, 'w') as _f_json:
             json.dump(j, _f_json, indent=3)
+
+
+    @staticmethod
+    def changer_nom(nom: str):
+        _cfg = Config.json()
+        _cfg["Client"]["nom_affichage"];
+        Config.modifier(_cfg)
 
 
             

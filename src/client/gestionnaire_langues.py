@@ -46,6 +46,7 @@ class GestionnaireLangues:
         return _code_lang
 
 
+    @staticmethod
     def __code_comme_lang(code: str) -> str:
         _lang = ""
         match code:
@@ -69,6 +70,7 @@ class GestionnaireLangues:
             return _curseur.fetchone()[0]
 
 
+    @staticmethod
     def trouver_clef(s: str) -> str:
         with sqlite3.connect(GestionnaireLangues.__CHEMIN_DB) as _connection_db:
             _curseur  = _connection_db.cursor()
@@ -79,14 +81,17 @@ class GestionnaireLangues:
             return _curseur.fetchone()[0]
 
 
+    @staticmethod
     def clef_maintenant(s: str) -> str:
         return GestionnaireLangues.trouver_clef(GestionnaireLangues.LANGUE)
 
 
+    @staticmethod
     def clef_avant(s: str) -> str:
         return GestionnaireLangues.trouver_clef(GestionnaireLangues.LANGUE_AVANT)
 
 
+    @staticmethod
     def changer(nouvelle_langue: str):
         GestionnaireLangues.LANGUE_AVANT = GestionnaireLangues.LANGUE
         GestionnaireLangues.LANGUE = nouvelle_langue
@@ -97,6 +102,7 @@ class GestionnaireLangues:
         #print("nuova lingua " + nouvelle_langue)
 
 
+    @staticmethod
     def de_config():
         _nouvelle = Config.json()["Client"]["langue"]
         GestionnaireLangues.changer(_nouvelle)
