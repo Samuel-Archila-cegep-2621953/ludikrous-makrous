@@ -4,8 +4,6 @@ class TypePaquetServeur(enum.Enum):
     MAJ_JOUEUR = 0,
     CONNEXION_REUSSIT = 1,
     CONNEXION_RATE = 2,
-    JOUEUR_CONNECTE = 3,
-    JOUEUR_DECONNECTE = 4
 
 class TypePaquetClient(enum.Enum):
     MAJ_JOUEUR = 0,

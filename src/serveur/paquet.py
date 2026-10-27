@@ -8,14 +8,14 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
     """
     Formatte un joueur abstrait en paquet binaire. \n
     Format: `BIfff16sBB`
-    - type         (`unsigned char`)
-    - ID           (`unsigned int`)
+    - type         (`uint8_t`)
+    - ID           (`uint32_t`)
+    - nom          (`char[16]`)
     - position X   (`float`)
     - position Y   (`float`)
     - position Z   (`float`)
-    - nom          (`char[]`)
-    - vie          (`unsigned char`)
-    - animation    (`unsigned char`)
+    - vie          (`uint8_t`)
+    - animation    (`uint8_t`)
     Args:
         joueur (JoueurAbstrait): joueur
     Returns:
@@ -26,8 +26,8 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
     return struct.pack(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value], 
                        TypePaquetServeur.MAJ_JOUEUR.value, 
                        joueur.id,
-                       joueur.position[0], joueur.position[1], joueur.position[2],
                        joueur.nom.encode(),
+                       joueur.position[0], joueur.position[1], joueur.position[2],
                        joueur.vie,
                        joueur.animation)
 
@@ -45,7 +45,8 @@ def creer_paquet_connexion_rate() -> bytes:
     Formatte la réponse lorsqu'une connexion est raté
     Format: `B`
     """
-    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE], TypePaquetServeur.CONNEXION_RATE.value)
+    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value], TypePaquetServeur.CONNEXION_RATE.value)
+
 
 def construire_paquet(paquets: list[bytes]) -> bytes:
     """
