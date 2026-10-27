@@ -3,11 +3,16 @@ from musique import Musique
 from types_musique import TypesMusique
 from ursina import *
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
+from ursina.prefabs.window_panel import WindowPanel
+from ursina.prefabs.input_field import InputField
 from gestionnaire_langues import GestionnaireLangues as Langues
 from gestionnaire_menus import GestionnaireMenus as GM
 from utilitaires import (ordonner_boutons)
+from config import Config
 
 class QuelquesMenus:
+    COULEUR_BASE = color.rgba(130/255, 69/255, 16/255, 0.6)
+    COULEUR_SURVOL = color.rgba(251/255, 119/255, 5/255, 0.8)
 
     @staticmethod
     def menu_principal() -> Menu:
@@ -89,32 +94,71 @@ class QuelquesMenus:
         H_BOUTON = 0.06
         DEBUT_Y_BOUTONS: float = -0.13
         D_BOUTONS = 0.07
+        COULEUR_BASE = QuelquesMenus.COULEUR_BASE
+        COULEUR_SURVOL = QuelquesMenus.COULEUR_SURVOL
 
-        _ls_lang: list[str] = []
+
+        _changements: dict[str, str] = {}
+
+        def changer_langue(l: str):
+            _changements["langue"] = l
+
+        def changer_nom_affichage(nom: str):
+            _changements["nom_affichage"] = nom
+
+        def appliquer_changements():
+            try:
+                Langues.changer(_changements["langue"])
+            except:
+                pass
+
+            try:
+                Config.changer_nom(_changements["nom_affichage"])
+            except:
+                pass
+                
 
         _boutons_lang: list[Button] = []
 
         for l in Langues.liste:
             _boutons_lang.append(DropdownMenuButton(
                 text = Langues.obtenir("nom", l),
-                color = color.azure,
-                #scale = (L_BOUTON, H_BOUTON),
-                #origin = (0,0),
+                color = COULEUR_BASE,
                 x = 0,
                 on_click = Func(Langues.changer, l),
-                #enabled = False
             ))
 
         _deroulant_langue = DropdownMenu(
-            #origin = (0,0),
-            y = -0.13,
-            x = 0,
-            text=Langues.obtenir("nom", Langues.LANGUE),
-            scale = (L_BOUTON, H_BOUTON),
+            text=Langues.obtenir("menu_config.boutons.langues", Langues.LANGUE),
+            scale = (L_BOUTON - 0.1, H_BOUTON),
             buttons = _boutons_lang,
-            #enabled = False
         )
+        _deroulant_langue.x = -0.25
+        _deroulant_langue.y = -0.2
 
-        #TODO _btn_sauvegarder = Button()
+        _saisir = InputField(label = "jon", name ="name_field")
 
-        return Menu("config", "wk", Musique(TypesMusique.MENU_PRINCIPAL, autoplay = False), [], [], [], [_deroulant_langue], False)
+        _menu_nom = WindowPanel(
+            title = None,
+            content = (
+                Text("Paramètres"),
+                _saisir,
+                _deroulant_langue
+            ),
+            popup = False,
+        )
+        _menu_nom.y = _menu_nom.panel.scale_y / 2 * _menu_nom.scale_y#
+        #_menu_nom.x = -0.25
+        _menu_nom.origin = (0,0)
+        _menu_nom.collider = None
+        _menu_nom.disable()
+        _menu_nom.layout()
+
+        _btn_confirmer = Button(
+            text = 
+        )
+        
+
+
+
+        return Menu("config", "wk-ln", Musique(TypesMusique.MENU_PRINCIPAL, autoplay = False), [], [_saisir], [], [_deroulant_langue], False)
