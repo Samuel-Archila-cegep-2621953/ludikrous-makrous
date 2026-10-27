@@ -24,6 +24,7 @@ class MondeServeur:
         self.__liste_messages = []
 
         self.__liste_obstacle = []
+        self.__personnes_a_ajoute: list[tuple[int,str]] = []
         self.__derniere_id = 0
 
         self.__REQUETES = {
