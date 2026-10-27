@@ -35,8 +35,9 @@ class Config:
     @staticmethod
     def changer_nom(nom: str):
         _cfg = Config.json()
-        _cfg["Client"]["nom_affichage"];
+        _cfg["Client"]["nom_affichage"] = nom
         Config.modifier(_cfg)
+
 
 
             

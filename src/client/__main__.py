@@ -16,6 +16,9 @@ _client = Client()
 
 window.borderless = False
 window.vsync = False
+#window.fullscreen = True
+#window.main_monitor = window.monit
+#window.show_ursina_splash = True
 #window.size = (1280, 720)
 
 Langues.de_config()
