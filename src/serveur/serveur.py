@@ -25,6 +25,20 @@ class Serveur:
         _serveur: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         _serveur.bind((self.__config["Serveur"]["ip"], self.__config["Serveur"]["port"]))
         _serveur.listen(5)
+
+        print(""" █████                      █████  ███  █████                                                                         █████                                           
+░░███                      ░░███  ░░░  ░░███                                                                         ░░███                                            
+ ░███        █████ ████  ███████  ████  ░███ █████ ████████   ██████  █████ ████  █████     █████████████    ██████   ░███ █████ ████████   ██████  █████ ████  █████ 
+ ░███       ░░███ ░███  ███░░███ ░░███  ░███░░███ ░░███░░███ ███░░███░░███ ░███  ███░░     ░░███░░███░░███  ░░░░░███  ░███░░███ ░░███░░███ ███░░███░░███ ░███  ███░░  
+ ░███        ░███ ░███ ░███ ░███  ░███  ░██████░   ░███ ░░░ ░███ ░███ ░███ ░███ ░░█████     ░███ ░███ ░███   ███████  ░██████░   ░███ ░░░ ░███ ░███ ░███ ░███ ░░█████ 
+ ░███      █ ░███ ░███ ░███ ░███  ░███  ░███░░███  ░███     ░███ ░███ ░███ ░███  ░░░░███    ░███ ░███ ░███  ███░░███  ░███░░███  ░███     ░███ ░███ ░███ ░███  ░░░░███
+ ███████████ ░░████████░░████████ █████ ████ █████ █████    ░░██████  ░░████████ ██████     █████░███ █████░░████████ ████ █████ █████    ░░██████  ░░████████ ██████ 
+░░░░░░░░░░░   ░░░░░░░░  ░░░░░░░░ ░░░░░ ░░░░ ░░░░░ ░░░░░      ░░░░░░    ░░░░░░░░ ░░░░░░     ░░░░░ ░░░ ░░░░░  ░░░░░░░░ ░░░░ ░░░░░ ░░░░░      ░░░░░░    ░░░░░░░░ ░░░░░░  
+                                                                ▄▀▀▀ ▄▄  ▄ ▄▄ ▄   ▄  ▄▄  ▄  ▄ ▄ ▄▄ 
+                                                                ▀▀▄ █▀▀▀ █▀   ▀▄ ▄▀ █▀▀▀ █  █ █▀   
+                                                                ▀▀▀  ▀▀▀ ▀      ▀    ▀▀▀  ▀▀▀ ▀    
+                                                                            """)
+
         print(f"Serveur lancé sur {self.__config["Serveur"]["ip"]}:{self.__config["Serveur"]["port"]}")
 
         _temps_entre_update = 0.0
@@ -105,15 +119,15 @@ class Serveur:
         _serveur.start()
         time.sleep(0.5)
         while self.__ouvert:
-            _commande = input('> ').split(' ')
+            try:
+                _commande = input('> ').split(' ')
 
-            if _commande[0] in _commandes:
-                _commandes[_commande[0]][0](_commandes[_commande[0]][1], _commande)
-            else:
-                print(f"Commande « {_commande} » n'éxiste pas, écrivez la commande « aide » pour la liste des commandes")
-                print(f"Command \"{_commande}\" doesn't exist, write the command \"help\" for the commands list")
+                if _commande[0] in _commandes:
+                    _commandes[_commande[0]][0](_commandes[_commande[0]][1], _commande)
+                else:
+                    print(f"Commande « {_commande[0]} » n'éxiste pas, écrivez la commande « aide » pour la liste des commandes")
+                    print(f"Command \"{_commande[0]}\" doesn't exist, write the command \"help\" for the commands list")
+            except KeyboardInterrupt:
+                self.__ouvert = False
 
         _serveur.join()
-
-
-

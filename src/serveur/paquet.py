@@ -80,18 +80,4 @@ def lire_paquet(paquet: bytes) -> tuple[any]:
         if _type < TypePaquetClient.MAX.value:
             return struct.unpack(formats_clients_par_type[_type], paquet)
     except:
-        print("erreur")
-        
-    
-        
-
-
-_joueur = joueur_abstrait.JoueurAbstrait()
-_joueur.position = (10, 20, 30)
-_joueur.animation = 0
-_joueur.vie = 100
-_joueur.id = 0
-_joueur.nom = "Test"
-lire_paquet(creer_paquet_joueur(_joueur))
-
-print(len(hashlib.sha256(b"Test").digest()))
+        print(f"Erreur: le format du paquet n'est pas compatible, paquet: '{paquet}'")
