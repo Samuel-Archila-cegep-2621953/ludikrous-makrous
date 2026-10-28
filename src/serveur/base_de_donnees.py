@@ -4,7 +4,7 @@ from pathlib import Path
 class BaseDeDonnees:
     def __init__(self):
         # bd = base de donnée
-        self.__bd = sqlite3.connect(Path(__file__).parent / "serveur.db")
+        self.__bd = sqlite3.connect(Path(__file__).parent / "serveur.db", check_same_thread=False)
         self.__curseur = self.__bd.cursor()
 
         self.__curseur.execute("""

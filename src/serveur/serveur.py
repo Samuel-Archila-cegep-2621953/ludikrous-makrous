@@ -14,6 +14,7 @@ class Serveur:
 
     def __gerer_client(self, socket_client: socket.socket):
         _requete = socket_client.recv(1024)
+        #print(_requete)
 
         socket_client.send(self.__monde_serveur.recevoir_client_paquets(_requete))
 

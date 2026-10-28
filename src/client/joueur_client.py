@@ -8,6 +8,9 @@ from ursina import *
 import __main__ as principale
 from types_musique import TypesMusique
 from musique import Musique
+import paquet as Pq
+import struct
+import type_paquet
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -35,10 +38,15 @@ class JoueurClient(FirstPersonController):
         self.musique.fade_in(0.7)
 
     def __creer_id(self) -> int:
+        """
         _resultat = self.__client.envoyer_message(json.dumps({
                 "Type": "CREER ID"
             }))
         _donnee = json.loads(_resultat)
+        """
+
+        mdp = b"56ec4fee9f20de343a99f2caa8793dadb6c8fbeebeed0f124e397d660112245c"
+        _resultat = self.__client.envoyer_message(struct.pack(type_paquet.formats_clients_par_type[1], 1, b"Samuel", mdp))
         return _donnee['ID']
 
     def __obtenir_temps(self) -> float:
@@ -78,7 +86,7 @@ class JoueurClient(FirstPersonController):
         super().update()
         temps_en_ce_moment = self.__obtenir_temps()
         if temps_en_ce_moment - self.__dernier_temps > 1 / 12:
-            self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
+            self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())))
         
         #print(self.position)
         if self.position.y < -10:

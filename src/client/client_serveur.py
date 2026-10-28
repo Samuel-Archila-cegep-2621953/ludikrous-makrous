@@ -2,6 +2,7 @@ import asyncio
 import tomllib
 from pathlib import Path
 from config import Config
+from paquet import *
 
 class Client:
     def __init__(self):
@@ -14,19 +15,23 @@ class Client:
         await self.__fermer()
         return _message
     
-    async def __envoyer_message(self, message: str) -> str:
+    async def __envoyer_message(self, message: bytes) -> str:
+        # Retourne la réponse?
         self.__lire, self.__ecrire = await asyncio.open_connection(self.__config["Client"]["ip"], self.__config["Client"]["port"])
 
-        self.__ecrire.write(message.encode('utf-8'))
+
+        #self.__ecrire.write(message.encode('utf-8'))
+        self.__ecrire.write(message)
         await self.__ecrire.drain()
 
         donnee = await self.__lire.read(4096)
+        print(donnee)
         return donnee.decode('utf-8')
 
     async def __fermer(self):
         self.__ecrire.close()
         await self.__ecrire.wait_closed()
 
-    def envoyer_message(self, message: str) -> str:
+    def envoyer_message(self, message: bytes) -> str:
         return asyncio.run(self.__gerer_envoyer_message(message))
 

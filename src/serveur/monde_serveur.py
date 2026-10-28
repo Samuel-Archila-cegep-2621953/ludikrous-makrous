@@ -228,6 +228,8 @@ class MondeServeur:
 
     def recevoir_client_paquets(self, requete: bytes) -> bytes:
         _paquet = paquet.lire_paquet(requete)
+
+        #_paquet[0] indique le type de paquet? -> return un paquet selon le format
         return self.__REQUETES_PAQUETS[_paquet[0]](_paquet)
 
 

@@ -39,8 +39,8 @@ class GestionnaireMenus:
 
 
     @staticmethod
-    def cacher():
-        GestionnaireMenus.liste[1].cacher()
+    def cacher(garder_musique: bool = False):
+        GestionnaireMenus.liste[1].cacher(garder_musique = garder_musique)
 
 
     @staticmethod
@@ -49,8 +49,8 @@ class GestionnaireMenus:
 
 
     @staticmethod
-    def ajouter_et_montrer(menu: Menu):
-        GestionnaireMenus.liste[1].cacher()
+    def ajouter_et_montrer(menu: Menu, garder_musique: bool = False):
+        GestionnaireMenus.liste[1].cacher(garder_musique = garder_musique)
         GestionnaireMenus.ajouter(menu)
         GestionnaireMenus.montrer()
         #GestionnaireMenus.liste[1]
@@ -67,8 +67,8 @@ class GestionnaireMenus:
 
 
     @staticmethod
-    def retourner_et_montrer():
-        GestionnaireMenus.cacher()
+    def retourner_et_montrer(garder_musique: bool = False):
+        GestionnaireMenus.cacher(garder_musique)
         GestionnaireMenus.retourner()
         GestionnaireMenus.montrer()
 

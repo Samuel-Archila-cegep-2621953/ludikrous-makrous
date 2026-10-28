@@ -40,19 +40,19 @@ class QuelquesMenus:
         _btn_heberger = Button(
             text=Langues.obtenir("menu_principal.boutons.heberger", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            on_click=Func(GM.ajouter_et_montrer, QuelquesMenus.menu_heberger()),
+            on_click=Func(GM.ajouter_et_montrer, QuelquesMenus.menu_heberger(), True),
         )
 
         _btn_en_ligne = Button(
             text=Langues.obtenir("menu_principal.boutons.en_ligne", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            on_click= Func(GM.ajouter_et_montrer, QuelquesMenus.menu_multijoueur()),
+            on_click= Func(GM.ajouter_et_montrer, QuelquesMenus.menu_multijoueur(), True),
         )
 
         _btn_config = Button(
             text=Langues.obtenir("menu_principal.boutons.config", LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            on_click=Func(GM.ajouter_et_montrer, QuelquesMenus.menu_configuration()),
+            on_click=Func(GM.ajouter_et_montrer, QuelquesMenus.menu_configuration(), True),
         )
 
         _btn_fermer = Button(
@@ -179,7 +179,8 @@ class QuelquesMenus:
             position = (0, 0.3)
         )
         
-        return Menu("config", "matte-black", Musique(TypesMusique.MENU_PRINCIPAL, autoplay = False), [_btn_confirmer], [_saisir], [_etiquette_saisir], [_deroulant_langue], False)
+        #return Menu("config", "matte-black", Musique(TypesMusique.MENU_PRINCIPAL, autoplay = False), [_btn_confirmer], [_saisir], [_etiquette_saisir], [_deroulant_langue], False)
+        return Menu("config", "matte-black", None, [_btn_confirmer], [_saisir], [_etiquette_saisir], [_deroulant_langue], False)
 
 
     @staticmethod
@@ -249,7 +250,7 @@ class QuelquesMenus:
                 
             Config.changer_ip(_saisir_ip.text.strip())
             Config.changer_port(int(_saisir_port.text.strip()))
-            GM.ajouter_et_montrer(QuelquesMenus.menu_attente())
+            GM.ajouter_et_montrer(QuelquesMenus.menu_attente(), True)
             
 
         _btn_connection = Button(
@@ -316,4 +317,3 @@ class QuelquesMenus:
         )
 
         return Menu("heberger", "matte-black", textes = [_texte_mon_ip, _joueurs_connectes], enabled = False)
-        
