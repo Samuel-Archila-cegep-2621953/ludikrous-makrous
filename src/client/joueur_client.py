@@ -10,7 +10,7 @@ from types_musique import TypesMusique
 from musique import Musique
 import paquet as Pq
 import struct
-import type_paquet
+from type_paquet import *
 from config import Config
 
 class JoueurClient(FirstPersonController):
@@ -49,14 +49,15 @@ class JoueurClient(FirstPersonController):
         _mdp_hache = Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8")
         _nom_utilisateur = Config.json()["Client"]["nom_utilisateur"].encode("utf-8")
 
-        _resultat = self.__client.envoyer_message(struct.pack(type_paquet.formats_clients_par_type[1], 1, _nom_utilisateur, _mdp_hache))
+        _resultat = self.__client.envoyer_message(struct.pack(formats_clients_par_type[1], 1, _nom_utilisateur, _mdp_hache))
         #return _donnee['ID']
         return 6
 
     def __obtenir_temps(self) -> float:
         return time.time()
 
-    def __emballer_les_donnees(self) -> str:
+    def __emballer_les_donnees(self) -> bytes:
+        """
         return json.dumps({
             "Type": "MAJ",
             "ID": self.__id,
@@ -66,6 +67,18 @@ class JoueurClient(FirstPersonController):
                 self.position.z
             ]
         })
+        """
+        #TODO! Convertir en struct
+        return struct.pack(
+                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value[0]],
+                TypePaquetClient.MAJ_JOUEUR.value[0],
+                Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8"), #TODO! Confirmer ce que veut dire "hache clé"
+                self.position.x,
+                self.position.y,
+                self.position.z,
+                self.vie.value,
+                3 # TODO Animations
+            )
 
     def joueurs(self) -> list[joueur.Joueur]:
         return self.__joueurs
@@ -90,7 +103,7 @@ class JoueurClient(FirstPersonController):
         super().update()
         temps_en_ce_moment = self.__obtenir_temps()
         if temps_en_ce_moment - self.__dernier_temps > 1 / 12:
-            self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())))
+            self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())), TypePaquet.MAJ_JOUEUR)
         
         #print(self.position)
         if self.position.y < -10:
