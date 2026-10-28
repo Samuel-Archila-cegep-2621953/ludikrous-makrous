@@ -2,6 +2,7 @@ from menu import Menu
 from musique import Musique
 from types_musique import TypesMusique
 from ursina import *
+#from ursina.ursinastuff import invoke
 from ursina.prefabs.dropdown_menu import DropdownMenu, DropdownMenuButton
 from ursina.prefabs.window_panel import WindowPanel
 from ursina.prefabs.input_field import InputField
@@ -184,6 +185,7 @@ class QuelquesMenus:
     @staticmethod
     def menu_multijoueur() -> Menu:
         import __main__ as main
+        from utilitaires import verifier_ip, verifier_port
 
         L_BOUTON = 0.5
         H_BOUTON = 0.06
@@ -192,34 +194,86 @@ class QuelquesMenus:
         COULEUR_BASE = color.rgba(0, 0, 0, 0.8)
         #COULEUR_BASE = color.rgba(23/255, 21/255, 21/255, 0.8)
         COULEUR_SURVOL = QuelquesMenus.COULEUR_SURVOL
+        CHARS_PERMIS = "0123456789"
 
         _saisir_ip = InputField(
             default_value = Config.json()["Client"]["ip"],
             origin = (0,0),
             position = (0, -0.15),
             #character_limit = L
-            tooltip = Tooltip("IP")
+            #tooltip = Tooltip("IP")
+            limit_content_to = CHARS_PERMIS + '.'
         )
 
         _etiquette_saisir_ip = Text(
-            Langues.obtenir("menu_multijoueur.texte.ip"),
+            Langues.obtenir("menu_multijoueur.texte.ip", Langues.LANGUE),
             origin = (0,0),
-            position = (_saisir_ip.x - 0.23, _saisir_ip.y + 0.05)
+            position = (_saisir_ip.x - 0.18, _saisir_ip.y + 0.05)
         )
 
-        def __changer_ip():
-            Config.changer_ip(_saisir_ip.text)
+        _saisir_port = InputField(
+            default_value = str(Config.json()["Client"]["port"]).strip(),
+            origin = (0,0),
+            position = (0, -0.26),
+            limit_content_to = CHARS_PERMIS
+            #character_limit = L
+            #tooltip = Tooltip("IP")
+        )
+
+        _etiquette_saisir_port = Text(
+            Langues.obtenir("menu_multijoueur.texte.port", Langues.LANGUE),
+            origin = (0,0),
+            position = (_saisir_port.x - 0.22, _saisir_port.y + 0.05)
+        )
+        
+
+        def _cacher_texte(t: Text):
+            t.disable()
+
+        def _afficher_erreur(k: str):
+            _texte_erreur = Text(
+                text = Langues.obtenir(k, Langues.LANGUE),
+                origin = (0,0),
+                position = (0,0),
+                color = color.red,
+            )
+            invoke(_cacher_texte, _texte_erreur, delay = 2)
+
+        def __changer_infos():
+            if not verifier_ip(_saisir_ip.text.strip()): # Vérifier si l'addresse ip est valide. Montre un message d'erreur si elle ne l'est pas
+                _afficher_erreur("menu_multijoueur.texte.erreur_ip")
+                return
+            elif not verifier_port(_saisir_port.text.strip()):
+                _afficher_erreur("menu_multijoueur.texte.erreur_port")
+                return
+                
+            Config.changer_ip(_saisir_ip.text.strip())
+            Config.changer_port(int(_saisir_port.text.strip()))
+            GM.ajouter_et_montrer(QuelquesMenus.menu_attente())
+            
 
         _btn_connection = Button(
             text=Langues.obtenir("menu_multijoueur.boutons.connection", Langues.LANGUE),
             scale=(L_BOUTON, H_BOUTON),
-            on_click=__changer_ip,
+            on_click=__changer_infos,
             highlight_color = COULEUR_SURVOL,
             alpha = 0.5,
-            y = -0.24,
+            y = _saisir_port.y - 0.1,
         )
 
-        return Menu("multijoueur", "matte-black", boutons = [_btn_connection], autres = [_saisir_ip], textes = [_etiquette_saisir_ip], enabled = False)
+        return Menu("multijoueur", "matte-black", boutons = [_btn_connection], autres = [_saisir_ip, _saisir_port], textes = [_etiquette_saisir_ip, _etiquette_saisir_port], enabled = False)
+
+
+    def menu_attente():
+        GRANDEUR_TEXTE = 3
+        _texte = Text(
+            text = Langues.obtenir("menu_attente.texte.attendez", Langues.LANGUE),
+            origin = (0,0),
+            position = (0,0),
+            scale = GRANDEUR_TEXTE
+        )
+
+        return Menu("attente", "matte-black", textes = [_texte])
 
 
     @staticmethod
