@@ -23,9 +23,10 @@ class Client:
         #self.__ecrire.write(message.encode('utf-8'))
         self.__ecrire.write(message)
         await self.__ecrire.drain()
+        print("\033[91mAqui")
 
         donnee = await self.__lire.read(4096)
-        print(donnee)
+        print("\033[91m" + str(donnee))
         return donnee.decode('utf-8')
 
     async def __fermer(self):

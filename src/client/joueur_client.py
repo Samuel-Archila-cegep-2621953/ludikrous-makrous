@@ -11,6 +11,7 @@ from musique import Musique
 import paquet as Pq
 import struct
 import type_paquet
+from config import Config
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -45,9 +46,12 @@ class JoueurClient(FirstPersonController):
         _donnee = json.loads(_resultat)
         """
 
-        mdp = b"56ec4fee9f20de343a99f2caa8793dadb6c8fbeebeed0f124e397d660112245c"
-        _resultat = self.__client.envoyer_message(struct.pack(type_paquet.formats_clients_par_type[1], 1, b"Samuel", mdp))
-        return _donnee['ID']
+        _mdp_hache = Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8")
+        _nom_utilisateur = Config.json()["Client"]["nom_utilisateur"].encode("utf-8")
+
+        _resultat = self.__client.envoyer_message(struct.pack(type_paquet.formats_clients_par_type[1], 1, _nom_utilisateur, _mdp_hache))
+        #return _donnee['ID']
+        return 6
 
     def __obtenir_temps(self) -> float:
         return time.time()

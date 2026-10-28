@@ -32,4 +32,3 @@ def interpreter_paquet(paquet: tuple, type: TypePaquetServeur) -> dict:
 
         case TypePaquetServeur.CONNEXION_REUSSIT:
             print("\033[91mConnection réussie")
-

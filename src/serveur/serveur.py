@@ -54,6 +54,7 @@ class Serveur:
             for s in _lisable:
                 if s is _serveur:
                     _client, _addresse = s.accept()
+                    print(_client)
                     _client.setblocking(0)
                     entrees.append(_client)
                     _gerant_de_client = threading.Thread(target=self.__gerer_client, args=(_client,))

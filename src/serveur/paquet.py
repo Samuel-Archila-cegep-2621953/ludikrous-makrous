@@ -37,8 +37,10 @@ def creer_paquet_connexion_reussit(code: bytes) -> bytes:
     Format: `B32s`
     """
     return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value][0],
+    #NOTE nouvelle?: return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value[0]][0],
                        TypePaquetServeur.CONNEXION_REUSSIT.value[0],
                        code)
+
 
 def creer_paquet_connexion_rate() -> bytes:
     """
