@@ -125,6 +125,7 @@ class Serveur:
     def __boucle_principale_avec_graphiques(self, commandes: dict[tuple]):
         _fenetre = tk.Tk()
         _fenetre.title("Ludikrous Makrous")
+        _fenetre.resizable(False, False)
 
         def _destruction(_):
             self.__ouvert = False
@@ -133,8 +134,26 @@ class Serveur:
 
         try:
 
-            _graphique = tk.Canvas(_fenetre, width=300, height=200, bg='black')
-            _graphique.grid(row=0, column=0, sticky='n')
+            _conteneur_gauche = ttk.Frame(_fenetre)
+
+            _graphique = tk.Canvas(_conteneur_gauche, width=300, height=200, bg='white')
+            #graphique.grid(row=0, column=0, sticky='n')
+            _graphique.pack()
+
+            _graphique_ram = tk.Canvas(_conteneur_gauche, width=300, height=200, bg='white')
+            _graphique_ram.pack()
+
+            _joueurs_texte = ttk.Label(_conteneur_gauche, text='Joueurs')
+            _joueurs_texte.pack()
+
+            _scrollbar = ttk.Scrollbar(_conteneur_gauche)
+            _joueurs = ttk.Treeview(_conteneur_gauche, yscrollcommand=_scrollbar.set, show="tree", height=12)
+            _scrollbar.configure(command=_joueurs.yview)
+
+            _scrollbar.pack(side="right", fill="y")
+            _joueurs.pack(side="left", fill="both", expand=True)
+
+            _conteneur_gauche.grid(row=0,column=0, sticky='n')
 
             _conteneur_commandes = ttk.Frame(_fenetre)
 
@@ -163,12 +182,14 @@ class Serveur:
             _conteneur.pack()
 
             _conteneur_commandes.grid(row=0, column=1)
+
         except:
             journal.inserer_erreur("Échec lors de la création de l'interface graphique.")
             self.__ouvert = False
 
         _ancien = time.time()
         donnee_brutes = []
+        donnee_brutes_ram = []
 
         while self.__ouvert:
             try:
@@ -176,13 +197,30 @@ class Serveur:
 
                 _maintenant = time.time()
 
-                if _maintenant - _ancien > 0.1:
+                if _maintenant - _ancien > 0.5:
                     _ancien = _maintenant
                     donnee_brutes.append(psutil.cpu_percent())
-                    donnee_brutes = donnee_brutes[-80:]
-                    _graphique.create_rectangle(0,0,300,200, fill='black')
+                    donnee_brutes = donnee_brutes[-20:]
+                    _graphique.create_rectangle(0,0,300,200, fill='white', width=0)
+                    _graphique.create_line(0, 50, 300, 50, fill='light gray')
+                    _graphique.create_line(0, 100, 300, 100, fill='light gray')
+                    _graphique.create_line(0, 150, 300, 150, fill='light gray')
+                    _graphique.create_text(150, 10, text="Utilisation CPU")
                     for i, d in enumerate(donnee_brutes):
-                        _graphique.create_rectangle(i*(300/80), 200-(d*2), i*(300/80)+3, 200-(d*2+3), fill='white', width=2)
+                        if i > 0:
+                            _graphique.create_line(i*(300/20), 200-(d*2), (i-1)*(300/20), 200-(donnee_brutes[i-1]*2), fill='green', width=3)
+
+                    donnee_brutes_ram.append(psutil.virtual_memory().percent)
+                    donnee_brutes_ram = donnee_brutes_ram[-20:]
+
+                    _graphique_ram.create_rectangle(0,0,300,200, fill='white', width=0)
+                    _graphique_ram.create_line(0, 50, 300, 50, fill='light gray')
+                    _graphique_ram.create_line(0, 100, 300, 100, fill='light gray')
+                    _graphique_ram.create_line(0, 150, 300, 150, fill='light gray')
+                    _graphique_ram.create_text(150, 10, text="Utilisation RAM (%.1f/%.1f GB)" % (psutil.virtual_memory().used / 1024 / 1024 / 1024, psutil.virtual_memory().total / 1024 / 1024 / 1024))
+                    for i, d in enumerate(donnee_brutes_ram):
+                                    if i > 0:
+                                        _graphique_ram.create_line(i*(300/20), 200-(d*2), (i-1)*(300/20), 200-(donnee_brutes_ram[i-1]*2), fill='blue', width=3)
 
                 _fenetre.update()
             except KeyboardInterrupt:
