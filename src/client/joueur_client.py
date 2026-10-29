@@ -51,7 +51,7 @@ class JoueurClient(FirstPersonController):
 
         _resultat = self.__client.envoyer_message(struct.pack(formats_clients_par_type[1], 1, _nom_utilisateur, _mdp_hache))
         #return _donnee['ID']
-        return 6
+        return 8
 
     def __obtenir_temps(self) -> float:
         return time.time()
@@ -70,7 +70,7 @@ class JoueurClient(FirstPersonController):
         """
         #TODO! Convertir en struct
         return struct.pack(
-                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value[0]],
+                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value],
                 TypePaquetClient.MAJ_JOUEUR.value[0],
                 Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8"), #TODO! Confirmer ce que veut dire "hache clé"
                 self.position.x,
@@ -83,8 +83,10 @@ class JoueurClient(FirstPersonController):
     def joueurs(self) -> list[joueur.Joueur]:
         return self.__joueurs
 
-    def lire_donnee(self, donnee_texte: str):
-        _donnee = json.loads(donnee_texte)
+    def lire_donnee(self, donnee_texte: dict):
+        #NOTE VEUX_donnee = json.loads(donnee_texte)
+        _donnee = donnee_texte
+        print("DONNEES LUES")
 
         _joueurs = _donnee["Joueurs"]
         for i, _ in enumerate(_joueurs):
@@ -103,7 +105,8 @@ class JoueurClient(FirstPersonController):
         super().update()
         temps_en_ce_moment = self.__obtenir_temps()
         if temps_en_ce_moment - self.__dernier_temps > 1 / 12:
-            self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())), TypePaquet.MAJ_JOUEUR)
+            #NOTE VIEUX self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())), TypePaquetServeur.MAJ_JOUEUR)
+            self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
         
         #print(self.position)
         if self.position.y < -10:

@@ -30,15 +30,15 @@ class Musique(Audio):
 
         self.__type_musique: TypesMusique = type_musique
         self.__repeter_aleatoire = repeter_aleatoire
-        self.__chemin_fichier_musique = sound_file_name
+        #self.__chemin_fichier_musique = sound_file_name
         #self.__vol = volume
         #self.__repeter = loop
         #self.__lecture_automatique = autoplay
         #print(str(self.temps) + " - - - - - INIT")
         #print(str(self.temps) + " - - - - - INIT")
-        print("Created Music:", id(self), "Clip:", id(self.clip))
-        print(self.__chemin_fichier_musique)
-        print(id(self))
+        #print("Musique creee:", id(self), "Clip:", id(self.clip))
+        #print(self.__chemin_fichier_musique)
+        #print(id(self))
 
 
     def remplacer_par_aleatoire(self):
