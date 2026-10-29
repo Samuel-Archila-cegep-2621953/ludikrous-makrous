@@ -111,7 +111,7 @@ class Serveur:
         time.sleep(0.5)
         while self.__ouvert:
             try:
-                _commande = input('> ').split(' ')
+                _commande = input('❱ ').split(' ')
 
                 journal.inserer_commande(_commande)
         
@@ -155,8 +155,12 @@ class Serveur:
 
             _conteneur_commandes = ctk.CTkFrame(_fenetre)
 
-            _journal = ctk.CTkTextbox(_conteneur_commandes, width=600, height=600)
+            _journal = ctk.CTkTextbox(_conteneur_commandes, width=600, height=600, font=("Consolas", 14))
             _journal.pack()
+
+            _journal.tag_config('erreur', foreground="red")
+            _journal.tag_config('reponse', foreground="green")
+            _journal.tag_config('avertissement', foreground="yellow")
 
             _conteneur = ctk.CTkFrame(_conteneur_commandes)
 
@@ -193,7 +197,7 @@ class Serveur:
 
         while self.__ouvert:
             try:
-                _journal.insert(ctk.END, journal.obtenir_texte())
+                journal.obtenir_texte(_journal)
 
                 _maintenant = time.time()
 
