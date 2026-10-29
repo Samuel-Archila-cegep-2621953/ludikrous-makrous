@@ -1,7 +1,5 @@
 import serveur
 import arguments
-import journal
-import sys
 
 if __name__ == '__main__':
     arguments.gerer_arguments()
