@@ -45,7 +45,10 @@ class Menu(Entity):
 
 
     def jouer_musique(self):
-        if self.musique is not None and not self.musique.playing:
+        #if self.musique is not None and not self.musique.playing:
+        if self.musique is not None and self.musique.status == False:
+            print(self.nom)
+            print("Joueur musique" + str(self.musique.playing))
             self.musique.play()
 
 
