@@ -1,6 +1,7 @@
 from utilitaires import aleatoire_dans_dir
 from types_musique import TypesMusique
 from ursina import *
+import time
 
 
 class Musique(Audio):
@@ -22,14 +23,23 @@ class Musique(Audio):
         if repeter_aleatoire:
            boucle = False
 
-        self.__audio = super().__init__(sound_file_name, volume, loop=boucle, autoplay=autoplay, **kwargs)
+        #print(f"ID AVANT: {id(self)}")
+
+        super().__init__(sound_file_name, volume, loop=boucle, autoplay=autoplay, **kwargs)
+        #print(f"ID APRES: {id(self)}")
 
         self.__type_musique: TypesMusique = type_musique
         self.__repeter_aleatoire = repeter_aleatoire
-        #self.__chemin_fichier_musique = sound_file_name
+        self.__chemin_fichier_musique = sound_file_name
         #self.__vol = volume
         #self.__repeter = loop
         #self.__lecture_automatique = autoplay
+        self.temps = time.time()
+        #print(str(self.temps) + " - - - - - INIT")
+        #print(str(self.temps) + " - - - - - INIT")
+        print(self.__chemin_fichier_musique)
+        print(id(self))
+        print("Created Music:", id(self), "Clip:", id(self.clip))
 
 
     def remplacer_par_aleatoire(self):
@@ -43,6 +53,7 @@ class Musique(Audio):
     def update(self):
         if not self.playing:
             if self.__repeter_aleatoire: # Quand la musique arrête et que __repeter_aleatoire est vrai, appeler remplacer_par_aleatoire()
+                print("remplacer" + str(self.temps))
                 self.remplacer_par_aleatoire()
             #print("changement de musique aléatoire")
 
@@ -57,6 +68,20 @@ class Musique(Audio):
             return "ressources/sons/erreur.mp3"
 
         return CHEMIN_MUSIQUE + chemin + choix
+
+
+    def arreter(self):
+        if self.playing == False: return
+        print("Try arret")
+        print(self.temps)
+        #self.__audio.stop(False)
+        self.stop(False)
+
+    def stop(self, destroy: bool = False):
+        print(f"STOP: {id(self)}")
+        print("Music.stop() called")
+        super().stop(destroy = False)
+        print("After stop:", self.playing)
 
 
 

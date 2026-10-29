@@ -58,7 +58,8 @@ GM.ajouter(QuelquesMenus.menu_principal())
 
 # app.wireframe_on()
 
-musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
+#musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
+#TODO WHY WAS THIS UNCOMMENTED ^ ^ ^ ^ ^ 
 pivot = Entity()
 DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
@@ -74,6 +75,11 @@ def input(key):
     elif GM.nom_maintenant() == "heberger" and GM.nom_passe() == "principal":
         if key == "escape":
             GM.retourner_et_montrer(True)
+
+    #if held_keys['t'] and held_keys["shift"]:
+    if key == "t":
+        print("Arreter musique")
+        GM.remplacer_musique()
     """
     if GM.nom_passe() == "principal":
         if key == "escape":

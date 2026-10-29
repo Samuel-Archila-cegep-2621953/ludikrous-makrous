@@ -16,6 +16,8 @@ class GestionnaireMenus:
             prochain (Menu): Le prochain menu à montrer
 
         """
+        print("Temps menu")
+        print(prochain.musique.temps)
         GestionnaireMenus.liste[0] = GestionnaireMenus.liste[1]
         GestionnaireMenus.liste[1] = prochain
         GestionnaireMenus.liste[1].arreter_musique()
@@ -86,3 +88,9 @@ class GestionnaireMenus:
     @staticmethod
     def nom_passe() -> str:
         return GestionnaireMenus.liste[0].nom
+
+
+    @staticmethod
+    def remplacer_musique():
+        print(GestionnaireMenus.liste[1].nom)
+        GestionnaireMenus.liste[1].musique.arreter()

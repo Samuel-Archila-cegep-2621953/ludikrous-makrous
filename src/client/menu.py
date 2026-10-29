@@ -30,6 +30,7 @@ class Menu(Entity):
         self.menu = Entity(parent = camera.ui)
         self.fond = Entity(parent = self.menu, model = 'quad', scale = (window.aspect_ratio, 1), texture = f"ressources/textures/{texture_fond}", enabled = enabled, z=1)
         self.musique = musique
+        print("Moved")
         self.nom = nom
 
         #print(str(type(boutons)))
@@ -42,6 +43,7 @@ class Menu(Entity):
         self.textes = textes
         self.menus_deroulants = menus_deroulants
         self.autres = autres
+        print(self.nom)
 
 
     def jouer_musique(self):
