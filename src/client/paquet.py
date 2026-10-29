@@ -25,33 +25,41 @@ def interpreter_paquet(paquet: tuple) -> dict:
     match _type:
         case TypePaquetServeur.MAJ_JOUEUR:
             print(f"Paquet MAJ JOUEUR: {paquet}")
-            _, x, y, z, nom, vie, animation = paquet
+            x, y, z, nom, vie, animation = paquet
             return {
-                "Joueurs": [{
+                "Joueur": {
                     "ID": 123,
                     "Position": [x, y, z],
                     "Nom": nom,
                     "En_vie": vie,
                     "Animation": animation
-                }]
+                }
             }
 
         case TypePaquetServeur.CONNEXION_RATE:
             print("\033[91mErreur de connexion")
+            return {
+                "Connexion": None
+            }
 
         case TypePaquetServeur.CONNEXION_REUSSIT:
             print("\033[91mConnection réussie")
+            return {
+                "Connexion": 
+            }
 
-def longueur(b: bytes) -> int:
+def longueur_paquet(b: int) -> int:
     """
-    Prend 1 byte est retourne la grandeur du message qui le suit selon son type
+    Prend 1 byte est retourne la grandeur du message qui le suit selon son type, sans inclure l'en-tête
     """
     try:
-        match int.from_bytes(b):
-            case TypePaquetServeur.MAJ_JOUEUR.value:        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value])
-            case TypePaquetServeur.CONNEXION_REUSSIT.value: return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value])
-            case TypePaquetServeur.CONNEXION_RATE.value:    return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value])
-            case TypePaquetServeur.MAX.value:               return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAX.value])
+        match b:
+            case TypePaquetServeur.MAJ_JOUEUR.value:        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value]) -1
+            case TypePaquetServeur.CONNEXION_REUSSIT.value: return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value]) -1
+            case TypePaquetServeur.CONNEXION_RATE.value:    return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value]) -1
+            case TypePaquetServeur.MAX.value:               return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAX.value]) -1
     except Exception as e:
         print(f"DANS LONGUEUR {e}")
         exit()
+
+

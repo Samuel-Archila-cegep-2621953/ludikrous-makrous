@@ -6,6 +6,14 @@ class TypePaquetServeur(enum.Enum):
     CONNEXION_RATE = 2
     MAX = 3
 
+    @staticmethod
+    def depuis_int(n: int) -> "TypePaquetServeur":
+        match n:
+            case 0: return TypePaquetServeur.MAJ_JOUEUR
+            case 1: return TypePaquetServeur.CONNEXION_REUSSIT
+            case 2: return TypePaquetServeur.CONNEXION_RATE
+            case 3: return TypePaquetServeur.MAX
+
 class TypePaquetClient(enum.Enum):
     MAJ_JOUEUR = 0
     CONNEXION = 1

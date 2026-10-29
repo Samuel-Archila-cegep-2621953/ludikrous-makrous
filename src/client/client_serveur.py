@@ -19,12 +19,9 @@ class Client:
         await self.__fermer()
         return _message
     
-    async def __envoyer_message(self, message: bytes) -> dict:
+    async def __envoyer_message(self, message: bytes) -> list[tuple[TypePaquetServeur, bytes]]:
         # Retourne la réponse?
-        try:
-            self.__lire, self.__ecrire = await asyncio.open_connection(self.__config["Client"]["ip"], self.__config["Client"]["port"])
-        except Exception as e:
-            print(f"ERREUR CONNEXION ASYNCIO>OPEN{e}")
+        self.__lire, self.__ecrire = await asyncio.open_connection(self.__config["Client"]["ip"], self.__config["Client"]["port"])
 
         #self.__ecrire.write(message.encode('utf-8'))
         print(f"MESSAGE IN __ENVOYER_MESsAGE: {message}")
@@ -32,12 +29,21 @@ class Client:
         await self.__ecrire.drain()
 
 
-        _aw_nb_paquets = await self.__lire.readexactly(1) # LIre le type
-        _nb_paquets = struct.unpack('H', _aw_nb_paquets) # BIG ENDIAN
+        _aw_nb_paquets = await self.__lire.readexactly(2) # Lire le nombre de paquets
+        _nb_paquets = struct.unpack('H', _aw_nb_paquets)[0] # BIG ENDIAN u16
 
-        for i in range(_nb_paquets):
-            _longueur_message: int = longueur(_entete)
-            #TODO CREER LA LISTE DE PAQUETS
+        _liste_paquets: list[tuple[TypePaquetServeur, bytes]] = []
+
+        for _ in range(_nb_paquets):
+            _entete = await self.__lire.readexactly(1) # Lire l'en-tête pour déterminer le type de paquet
+            _type_paquet: int = struct.unpack('B', _entete) # u8
+            _longueur_message: int = longueur_paquet(_entete)
+            
+            _ce_paquet = await self.__lire.readexactly(_longueur_message)
+            _liste_paquets.append((
+                TypePaquetServeur.depuis_int(_type_paquet),
+                _ce_paquet
+            ))
 
         print(f"LEN MSG EXPECT {_longueur_message}")
         try: 
@@ -47,12 +53,10 @@ class Client:
             print(time.time())
             exit()
 
-        self.__ecrire.close()
-        await self.__ecrire.wait_closed()
 
         print("\033[91mDonnees lues" + str(donnee))
         #NOTE Vieuxreturn donnee.decode('utf-8')
-        return interpreter_paquet(lire_paquet(donnee))
+        return _liste_paquets
 
     async def __fermer(self):
         self.__ecrire.close()
