@@ -155,12 +155,12 @@ class Serveur:
 
             _conteneur_commandes = ctk.CTkFrame(_fenetre)
 
-            _journal = ctk.CTkTextbox(_conteneur_commandes, width=300, height=600)
+            _journal = ctk.CTkTextbox(_conteneur_commandes, width=600, height=600)
             _journal.pack()
 
             _conteneur = ctk.CTkFrame(_conteneur_commandes)
 
-            _commande = ctk.CTkEntry(_conteneur, width=210, corner_radius=16, placeholder_text="aide/help")
+            _commande = ctk.CTkEntry(_conteneur, width=510, corner_radius=16, placeholder_text="aide/help")
             _commande.grid(row=0, column=0)
 
             def _appuyer_commande_e(*args):
@@ -205,7 +205,7 @@ class Serveur:
                     _graphique.create_line(0, 50, 300, 50, fill='light gray')
                     _graphique.create_line(0, 100, 300, 100, fill='light gray')
                     _graphique.create_line(0, 150, 300, 150, fill='light gray')
-                    _graphique.create_text(150, 10, text="Utilisation CPU (%.1f%%)" % (psutil.cpu_percent(),), fill='black')
+                    _graphique.create_text(150, 10, text="Utilisation CPU (%.1f%%)" % (donnee_brutes[len(donnee_brutes)-1],), fill='black')
                     for i, d in enumerate(donnee_brutes):
                         if i > 0:
                             _graphique.create_line(i*(300/20), 200-(d*2), (i-1)*(300/20), 200-(donnee_brutes[i-1]*2), fill='green', width=3)
