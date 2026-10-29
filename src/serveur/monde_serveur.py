@@ -177,6 +177,7 @@ class MondeServeur:
         Entrée: `B16s32s`\n
         Sortie: `B32s` | `B`\n
         """
+        print(f"DONNEE DANS RECEVOIR_CONNX_PAQ: {donnee}")
         if self.base_donnee.connexion(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
@@ -187,7 +188,9 @@ class MondeServeur:
             self.__joueurs.append(_joueur)
 
             self.__joueurs_hache[_clef] = _id
+            print("CONNEXION UTILISATEUR REUSSIE")
             return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef)])
+        print("CONNEXION UTILISATEUR RATEE")
         return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
 
 
@@ -197,6 +200,7 @@ class MondeServeur:
         Entrée: `B16s32s`\n
         Sortie: `B32s` | `B`\n
         """
+        print("DANS __recevoir_inscrire_paquets")
         if self.base_donnee.creer_utilisateur(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()

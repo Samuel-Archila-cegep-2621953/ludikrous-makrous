@@ -6,6 +6,7 @@ import tomllib
 from pathlib import Path
 import select
 import hashlib
+import time
 
 class Serveur:
     def __init__(self):
@@ -50,11 +51,21 @@ class Serveur:
         sorties = []
         
         while self.__ouvert:
-            _lisable, _ecrivable, _exceptionelles = select.select(entrees, sorties, entrees, 1)
+            try:
+                _lisable, _ecrivable, _exceptionelles = select.select(entrees, sorties, entrees, 1)
+            #"""
+            except Exception as e:
+                print(time.time())
+                print(f"{type(e).__name__}: {e}")
+                exit()
+            #"""
+
             for s in _lisable:
                 if s is _serveur:
                     _client, _addresse = s.accept()
+
                     print(_client)
+
                     _client.setblocking(0)
                     entrees.append(_client)
                     _gerant_de_client = threading.Thread(target=self.__gerer_client, args=(_client,))

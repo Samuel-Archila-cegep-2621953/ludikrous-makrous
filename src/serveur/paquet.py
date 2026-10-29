@@ -36,8 +36,9 @@ def creer_paquet_connexion_reussit(code: bytes) -> bytes:
     Formatte la réponse lorsqu'une connexion est réussit
     Format: `B32s`
     """
-    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value][0],
-    #NOTE nouvelle?: return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value[0]][0],
+    #NOTE VIEUX return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value][0],
+    print("CONNEXION A UN CLIENT")
+    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value[0]][0],
                        TypePaquetServeur.CONNEXION_REUSSIT.value[0],
                        code)
 
@@ -47,7 +48,9 @@ def creer_paquet_connexion_rate() -> bytes:
     Formatte la réponse lorsqu'une connexion est raté
     Format: `B`
     """
-    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value[0]], TypePaquetServeur.CONNEXION_RATE.value[0])
+    _msg = struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value[0]], TypePaquetServeur.CONNEXION_RATE.value[0])
+    print(_msg)
+    return _msg
 
 
 def construire_paquet(paquets: list[bytes]) -> bytes:
@@ -66,10 +69,13 @@ def construire_paquet(paquets: list[bytes]) -> bytes:
         bytes: le paquet final
     """
     _format = 'H'
-    _taille = struct.pack(_format, len(paquets))
-    _paquet = _taille
-    for _ in paquets:
-        _paquet += _
+    _taille: bytes = struct.pack(_format, len(paquets))
+    _paquet: bytes = _taille
+    print("DANS constuire_paquet")
+
+    for p in paquets:
+        _paquet += p
+    print(f"_paquet: {_paquet}")
     return _paquet
 
 
@@ -77,6 +83,7 @@ def lire_paquet(paquet: bytes) -> tuple[any]:
     """
     Lit un paquet et l'exporte en tuple.
     """
+    print(paquet)
     try:
         _type = struct.unpack('B', paquet[:1])[0]
         if _type < TypePaquetClient.MAX.value:
