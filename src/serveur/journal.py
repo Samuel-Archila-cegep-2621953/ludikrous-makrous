@@ -4,7 +4,7 @@ __journal = []
 __nouveau = []
 
 def inserer_info(texte: str):
-    print(f"ⓘ {texte}")
+    print(f"(i) {texte}")
     __journal.append(('info', texte))
     __nouveau.append(('info', texte))
 
@@ -33,7 +33,7 @@ def obtenir_texte(journal: ctk.CTkTextbox) -> str:
     _derniere_ligne: int = len(journal.get('1.0', ctk.END).splitlines())
     for idx, i in enumerate(__nouveau):
         if i[0] == 'info':
-            journal.insert(ctk.END, f"ⓘ {i[1]}\n")
+            journal.insert(ctk.END, f"(i) {i[1]}\n")
         elif i[0] == 'erreur':
             journal.insert(ctk.END, f"🞭 {i[1]}\n")
         elif i[0] == 'commande':

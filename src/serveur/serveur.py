@@ -78,34 +78,48 @@ class Serveur:
             journal.inserer_reponse("fermer ————————————————————————————————————— ferme le serveur")
             journal.inserer_reponse("ajouter-utilisateur <nom> <mot-de-passe> ——— ajoute un utilisateur dans la base de donnée")
             journal.inserer_reponse("connexion-utilisateur <nom> <mot-de-passe> — effectue un test de connexion d'un utilisateur")
+            journal.inserer_reponse("retirer-utilisateur <nom> —————————————————— enlève un utilisateur de la base de donnée")
         elif langue == 'en':
             journal.inserer_reponse("exit / stop ———————————————————————— closes the server")
             journal.inserer_reponse("add-user <username> <password> ————— adds a user in the database")
             journal.inserer_reponse("connect-user <username> <password> — does a connection test to a user")
+            journal.inserer_reponse("remove-user <nom> —————————————————— removes a user from the database")
 
     def __ajouter_utilisateur(self, langue, commande):
         if langue == 'fr':
             if self.__monde_serveur.base_donnee.creer_utilisateur(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
                 journal.inserer_reponse(f"Utilisateur {commande[1]} a été créé!")
             else:
-                journal.inserer_erreur(f"Un utilisateur avec le même nom éxiste.")
+                journal.inserer_avertissement(f"Un utilisateur avec le même nom éxiste.")
         elif langue == 'en':
             if self.__monde_serveur.base_donnee.creer_utilisateur(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
                 journal.inserer_reponse(f"User {commande[1]} has been added!")
             else:
-                journal.inserer_erreur(f"A user with the same username already exists.")
+                journal.inserer_avertissement(f"A user with the same username already exists.")
 
     def __connexion_utilisateur(self, langue, commande):
         if langue == 'fr':
             if self.__monde_serveur.base_donnee.connexion(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
                 journal.inserer_reponse(f"Utilisateur {commande[1]} a été connecté!")
             else:
-                journal.inserer_erreur(f"Mauvais nom d'utilisateur ou mot de passe")
+                journal.inserer_avertissement(f"Mauvais nom d'utilisateur ou mot de passe")
         elif langue == 'en':
             if self.__monde_serveur.base_donnee.connexion(commande[1], hashlib.sha256(hashlib.sha256(commande[2].encode()).digest()).hexdigest()):
                 journal.inserer_reponse(f"User {commande[1]} has been connected!")
             else:
-                journal.inserer_erreur(f"Wrong username or password.")
+                journal.inserer_avertissement(f"Wrong username or password.")
+
+    def __retirer_utilisateur(self, langue, commande):
+        if langue == 'fr':
+            if self.__monde_serveur.base_donnee.retirer(commande[1]):
+                journal.inserer_reponse(f"Retiré l'utilisateur « {commande[1]} » !")
+            else:
+                journal.inserer_reponse(f"n'a pas pu retirer l'utilisateur « {commande[1]} » !")
+        if langue == 'en':
+            if self.__monde_serveur.base_donnee.retirer(commande[1]):
+                journal.inserer_reponse(f"Removed user \"{commande[1]}\" !")
+            else:
+                journal.inserer_reponse(f"Couldn't remove user \"{commande[1]}\" !")
 
     def __boucle_principale_sans_graphiques(self, commandes: dict[tuple]):
         time.sleep(0.5)
@@ -160,7 +174,7 @@ class Serveur:
 
             _journal.tag_config('erreur', foreground="red")
             _journal.tag_config('reponse', foreground="green")
-            _journal.tag_config('avertissement', foreground="yellow")
+            _journal.tag_config('avertissement', foreground="#E79A0B")
 
             _conteneur = ctk.CTkFrame(_conteneur_commandes)
 
@@ -241,7 +255,9 @@ class Serveur:
             "ajouter-utilisateur": (self.__ajouter_utilisateur, "fr"),
             "add-user": (self.__ajouter_utilisateur, "en"),
             "connexion-utilisateur": (self.__connexion_utilisateur, "fr"),
-            "connect-user": (self.__connexion_utilisateur, "en")
+            "connect-user": (self.__connexion_utilisateur, "en"),
+            "retirer-utilisateur": (self.__retirer_utilisateur, "fr"),
+            "remove-user": (self.__retirer_utilisateur, "en")
         }
 
         _serveur = threading.Thread(target=self.__serveur)
