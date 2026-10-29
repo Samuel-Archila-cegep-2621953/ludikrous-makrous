@@ -76,10 +76,9 @@ def input(key):
         if key == "escape":
             GM.retourner_et_montrer(True)
 
-    #if held_keys['t'] and held_keys["shift"]:
-    if key == "t":
-        print("Arreter musique")
-        GM.remplacer_musique()
+    if held_keys['t'] and held_keys["shift"]:
+    #if key == "t":
+        GM.remplacer_musique("principal")
     """
     if GM.nom_passe() == "principal":
         if key == "escape":

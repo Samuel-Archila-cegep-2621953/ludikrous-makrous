@@ -30,7 +30,6 @@ class Menu(Entity):
         self.menu = Entity(parent = camera.ui)
         self.fond = Entity(parent = self.menu, model = 'quad', scale = (window.aspect_ratio, 1), texture = f"ressources/textures/{texture_fond}", enabled = enabled, z=1)
         self.musique = musique
-        print("Moved")
         self.nom = nom
 
         #print(str(type(boutons)))
@@ -47,7 +46,6 @@ class Menu(Entity):
 
 
     def jouer_musique(self):
-        #if self.musique is not None and not self.musique.playing:
         if self.musique is not None and self.musique.status == False:
             print(self.nom)
             print("Joueur musique" + str(self.musique.playing))
@@ -94,7 +92,7 @@ class Menu(Entity):
         """
         self.menu.disable()
         for x in self.boutons + self.autres + self.textes + self.menus_deroulants:
-            self.enabled = False
+            x.enabled = False
 
         if not garder_musique:
             self.essayer_fade_out()

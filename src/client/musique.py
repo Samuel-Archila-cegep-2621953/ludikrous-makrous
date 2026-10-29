@@ -34,12 +34,11 @@ class Musique(Audio):
         #self.__vol = volume
         #self.__repeter = loop
         #self.__lecture_automatique = autoplay
-        self.temps = time.time()
         #print(str(self.temps) + " - - - - - INIT")
         #print(str(self.temps) + " - - - - - INIT")
+        print("Created Music:", id(self), "Clip:", id(self.clip))
         print(self.__chemin_fichier_musique)
         print(id(self))
-        print("Created Music:", id(self), "Clip:", id(self.clip))
 
 
     def remplacer_par_aleatoire(self):
@@ -53,7 +52,6 @@ class Musique(Audio):
     def update(self):
         if not self.playing:
             if self.__repeter_aleatoire: # Quand la musique arrête et que __repeter_aleatoire est vrai, appeler remplacer_par_aleatoire()
-                print("remplacer" + str(self.temps))
                 self.remplacer_par_aleatoire()
             #print("changement de musique aléatoire")
 
@@ -72,16 +70,10 @@ class Musique(Audio):
 
     def arreter(self):
         if self.playing == False: return
-        print("Try arret")
-        print(self.temps)
-        #self.__audio.stop(False)
         self.stop(False)
 
-    def stop(self, destroy: bool = False):
-        print(f"STOP: {id(self)}")
-        print("Music.stop() called")
-        super().stop(destroy = False)
-        print("After stop:", self.playing)
+    #def stop(self, destroy: bool = False):
+     #   super().stop(destroy = False)
 
 
 
