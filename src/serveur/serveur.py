@@ -6,11 +6,11 @@ import tomllib
 from pathlib import Path
 import select
 import hashlib
-import tkinter as tk
-import tkinter.ttk as ttk
+import customtkinter as ctk
 import variable_globale
 import journal
 import psutil
+import CTkListbox as ctkl
 
 class Serveur:
     def __init__(self):
@@ -123,7 +123,7 @@ class Serveur:
             except KeyboardInterrupt:
                 self.__ouvert = False
     def __boucle_principale_avec_graphiques(self, commandes: dict[tuple]):
-        _fenetre = tk.Tk()
+        _fenetre = ctk.CTk()
         _fenetre.title("Ludikrous Makrous")
         _fenetre.resizable(False, False)
 
@@ -134,38 +134,36 @@ class Serveur:
 
         try:
 
-            _conteneur_gauche = ttk.Frame(_fenetre)
+            _conteneur_gauche = ctk.CTkFrame(_fenetre)
 
-            _graphique = tk.Canvas(_conteneur_gauche, width=300, height=200, bg='white')
+            _graphique = ctk.CTkCanvas(_conteneur_gauche, width=300, height=200, bg='white')
             #graphique.grid(row=0, column=0, sticky='n')
             _graphique.pack()
 
-            _graphique_ram = tk.Canvas(_conteneur_gauche, width=300, height=200, bg='white')
+            _graphique_ram = ctk.CTkCanvas(_conteneur_gauche, width=300, height=200, bg='white')
             _graphique_ram.pack()
 
-            _joueurs_texte = ttk.Label(_conteneur_gauche, text='Joueurs')
+            _joueurs_texte = ctk.CTkLabel(_conteneur_gauche, text='Joueurs')
             _joueurs_texte.pack()
 
-            _scrollbar = ttk.Scrollbar(_conteneur_gauche)
-            _joueurs = ttk.Treeview(_conteneur_gauche, yscrollcommand=_scrollbar.set, show="tree", height=12)
-            _scrollbar.configure(command=_joueurs.yview)
+            _joueurs = ctkl.CTkListbox(_conteneur_gauche, width=300, height=170)
+            _joueurs.pack(fill='both')
 
-            _scrollbar.pack(side="right", fill="y")
-            _joueurs.pack(side="left", fill="both", expand=True)
+            _joueurs.insert(0, "Test1234")
 
             _conteneur_gauche.grid(row=0,column=0, sticky='n')
 
-            _conteneur_commandes = ttk.Frame(_fenetre)
+            _conteneur_commandes = ctk.CTkFrame(_fenetre)
 
-            _journal = tk.Text(_conteneur_commandes, width=60, height=40)
+            _journal = ctk.CTkTextbox(_conteneur_commandes, width=300, height=600)
             _journal.pack()
 
-            _conteneur = ttk.Frame(_conteneur_commandes)
+            _conteneur = ctk.CTkFrame(_conteneur_commandes)
 
-            _commande = ttk.Entry(_conteneur, width=55)
+            _commande = ctk.CTkEntry(_conteneur, width=210, corner_radius=16, placeholder_text="aide/help")
             _commande.grid(row=0, column=0)
 
-            def _appuyer_commande_e():
+            def _appuyer_commande_e(*args):
                 _commande_sep = _commande.get().split(' ')
                 journal.inserer_commande(_commande_sep)
 
@@ -175,16 +173,18 @@ class Serveur:
                     journal.inserer_erreur(f"Commande « {_commande_sep[0]} » n'éxiste pas, écrivez la commande « aide » pour la liste des commandes")
                     journal.inserer_erreur(f"Command \"{_commande_sep[0]}\" doesn't exist, write the command \"help\" for the commands list")
 
+            _fenetre.bind("<Return>", _appuyer_commande_e)
 
-            _appuyer_commande = ttk.Button(_conteneur, width=10, text="Envoyer", command=_appuyer_commande_e)
+            _appuyer_commande = ctk.CTkButton(_conteneur, width=70, text="Envoyer", command=_appuyer_commande_e, fg_color='gray', hover_color='dark gray', corner_radius=16)
             _appuyer_commande.grid(row=0, column=1)
 
             _conteneur.pack()
 
             _conteneur_commandes.grid(row=0, column=1)
 
-        except:
+        except Exception as e:
             journal.inserer_erreur("Échec lors de la création de l'interface graphique.")
+            journal.inserer_erreur(f"{repr(e)}")
             self.__ouvert = False
 
         _ancien = time.time()
@@ -193,7 +193,7 @@ class Serveur:
 
         while self.__ouvert:
             try:
-                _journal.insert(tk.END, journal.obtenir_texte())
+                _journal.insert(ctk.END, journal.obtenir_texte())
 
                 _maintenant = time.time()
 
@@ -205,7 +205,7 @@ class Serveur:
                     _graphique.create_line(0, 50, 300, 50, fill='light gray')
                     _graphique.create_line(0, 100, 300, 100, fill='light gray')
                     _graphique.create_line(0, 150, 300, 150, fill='light gray')
-                    _graphique.create_text(150, 10, text="Utilisation CPU")
+                    _graphique.create_text(150, 10, text="Utilisation CPU (%.1f%%)" % (psutil.cpu_percent(),), fill='black')
                     for i, d in enumerate(donnee_brutes):
                         if i > 0:
                             _graphique.create_line(i*(300/20), 200-(d*2), (i-1)*(300/20), 200-(donnee_brutes[i-1]*2), fill='green', width=3)
@@ -217,7 +217,8 @@ class Serveur:
                     _graphique_ram.create_line(0, 50, 300, 50, fill='light gray')
                     _graphique_ram.create_line(0, 100, 300, 100, fill='light gray')
                     _graphique_ram.create_line(0, 150, 300, 150, fill='light gray')
-                    _graphique_ram.create_text(150, 10, text="Utilisation RAM (%.1f/%.1f GB)" % (psutil.virtual_memory().used / 1024 / 1024 / 1024, psutil.virtual_memory().total / 1024 / 1024 / 1024))
+                    
+                    _graphique_ram.create_text(150, 10, fill='black', text="Utilisation RAM (%.1f/%.1f GB)" % (psutil.virtual_memory().used / 1024 / 1024 / 1024, psutil.virtual_memory().total / 1024 / 1024 / 1024))
                     for i, d in enumerate(donnee_brutes_ram):
                                     if i > 0:
                                         _graphique_ram.create_line(i*(300/20), 200-(d*2), (i-1)*(300/20), 200-(donnee_brutes_ram[i-1]*2), fill='blue', width=3)
