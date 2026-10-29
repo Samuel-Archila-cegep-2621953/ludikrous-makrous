@@ -2,30 +2,43 @@ import struct
 from type_paquet import *
 
 
-def lire_paquet(paquet: bytes) -> tuple[any]:
+def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaquetServeur, tuple[any]]:
     """
     Lit un paquet et l'exporte en tuple.
     """
     print(f"LEN PAQUET {len(paquet)}")
     try:
-        _type = struct.unpack('B', paquet[:1])[0]
+        _type = tuple_paquet[0]
+        _paquet = tuple_paquet[1]
         print(f"DANS LIRE_PAQUET TYPE EST {_type}")
         #NOTE Vieux if _type < TypePaquetClient.MAX.value:
         if _type < TypePaquetServeur.MAX.value:
-            return struct.unpack(formats_serveur_par_type[_type], paquet)
+
+            return (
+                _type,
+                struct.unpack(
+                    formats_serveur_par_type[_type.value][:1], # Enleve le char de format
+                    _paquet
+                )
+            )
+
     except Exception as e:
         print(f"Erreur: le format du paquet n'est pas compatible, paquet: '{paquet}'")
         print(e)
         exit()
 
+
+
+
 #NOTE VIEUX def interpreter_paquet(paquet: tuple, type: TypePaquetServeur) -> dict:
-def interpreter_paquet(paquet: tuple) -> dict:
+def interpreter_paquet(paquet: tuple[TypePaquetServeur, tuple[any]]) -> dict:
     if paquet is None: print("PAQUET EST NONe")
     _type = paquet[0]
+    _paquet = paquet[1]
     match _type:
         case TypePaquetServeur.MAJ_JOUEUR:
             print(f"Paquet MAJ JOUEUR: {paquet}")
-            x, y, z, nom, vie, animation = paquet
+            x, y, z, nom, vie, animation = _paquet
             return {
                 "Joueur": {
                     "ID": 123,
@@ -45,8 +58,9 @@ def interpreter_paquet(paquet: tuple) -> dict:
         case TypePaquetServeur.CONNEXION_REUSSIT:
             print("\033[91mConnection réussie")
             return {
-                "Connexion": 
+                "Connexion": _paquet[0]
             }
+
 
 def longueur_paquet(b: int) -> int:
     """
