@@ -57,5 +57,19 @@ class BaseDeDonnees:
             return mot_de_passe_hache == _resultat[0]
         return False
 
+    def retirer(self, nom: str) -> bool:
+        """
+        Retirer l'utilisateur à partir de son pseudonyme.
+        Args:
+            nom (str): pseudonyme
+        Returns:
+            bool: réussite; réussit = True, raté = False
+        """
+        if self.__verifier_personne_existe(nom):
+            self.__curseur.execute("DELETE FROM utilisateurs WHERE pseudonyme = ?", (nom,))
+            self.__bd.commit()
+            return True
+        return False
+
     def __del__(self):
         self.__bd.close()
