@@ -1,3 +1,4 @@
 [Serveur]
 ip = "127.0.0.1"
 port = 24113
+joueurs_max = 16
