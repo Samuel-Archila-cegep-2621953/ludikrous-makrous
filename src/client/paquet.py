@@ -24,7 +24,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
                 _type,
                 struct.unpack(
                     formats_serveur_par_type[_type.value][1:], # Enleve le char de format
-                    _paquet
+                    _paquet # Le paquet n'inclue pas le u8 de format au début
                 )
             )
 
