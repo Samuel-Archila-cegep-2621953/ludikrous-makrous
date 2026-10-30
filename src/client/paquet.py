@@ -6,7 +6,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
     """
     Lit un paquet et l'exporte en tuple.
     """
-    print(f"LEN PAQUET {len(paquet)}")
+    print(f"LEN PAQUET {len(tuple_paquet)}")
     try:
         _type: TypePaquetServeur = tuple_paquet[0]
         if _type == TypePaquetServeur.CONNEXION_RATE:
@@ -87,16 +87,38 @@ def longueur_paquet(b: int) -> int:
     """
     Prend 1 byte est retourne la grandeur du message qui le suit selon son type, sans inclure l'en-tête
     """
-    try:
-        match b:
-            case TypePaquetServeur.MAJ_JOUEUR.value:        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value]) -1
-            case TypePaquetServeur.CONNEXION_REUSSIT.value: return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value]) -1
-            case TypePaquetServeur.CONNEXION_RATE.value:    return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value]) -1
-            case TypePaquetServeur.DECONNEXION.value:    return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value]) -1
-            case TypePaquetServeur.MAJ_OBSTACLE.value:      return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_OBSTACLE.value]) -1
-    except Exception as e:
-        print(f"DANS LONGUEUR {e}")
-        exit()
+    match b:
+        case TypePaquetServeur.MAJ_JOUEUR.value:        
+            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value]) -1
+        case TypePaquetServeur.CONNEXION_REUSSIT.value: 
+            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value]) -1
+        case TypePaquetServeur.CONNEXION_RATE.value:    
+            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value]) -1
+        case TypePaquetServeur.DECONNEXION.value:       
+            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value]) -1
+        case TypePaquetServeur.MAJ_OBSTACLE.value:      
+            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_OBSTACLE.value]) -1
+        case _ : 
+            print(f"IN: {b} AUCUN CASE DE FONCTIONNE")
+            exit()
+    print(f"BE ES {b}")
+
+    """
+    if b == TypePaquetServeur.MAJ_JOUEUR.value: 
+        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value]) -1
+    elif b == TypePaquetServeur.CONNEXION_REUSSIT.value: 
+        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value]) -1
+    elif b == TypePaquetServeur.CONNEXION_RATE.value:    
+        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value]) -1
+    elif b == TypePaquetServeur.DECONNEXION.value:       
+        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value]) -1
+    elif b == TypePaquetServeur.MAJ_OBSTACLE.value:      
+        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_OBSTACLE.value]) -1
+    """
+
+    print("QUE PASO AQUI")
+ 
+        
 
 
 def deconstruire_superpaquet(superpaquet: list[tuple[TypePaquetServeur, bytes]]) -> dict[str, any]:

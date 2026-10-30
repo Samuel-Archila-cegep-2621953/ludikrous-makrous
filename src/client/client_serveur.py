@@ -15,9 +15,11 @@ class Client:
 
     #NOTE VIEUX async def __gerer_envoyer_message(self, message: str) -> str:
     async def __gerer_envoyer_message(self, message: str) -> dict:
-        _message = await self.__envoyer_message(message)
+        _message: list[tuple[TypePaquetServeur, bytes]] = await self.__envoyer_message(message)
         await self.__fermer()
-        return deconstruire_superpaquet(_message)
+        _decode: dict[str, any] = deconstruire_superpaquet(_message)
+        print(_decode)
+        return _decode
     
     async def __envoyer_message(self, message: bytes) -> list[tuple[TypePaquetServeur, bytes]]:
         # Retourne la réponse?
@@ -36,8 +38,9 @@ class Client:
 
         for _ in range(_nb_paquets):
             _entete = await self.__lire.readexactly(1) # Lire l'en-tête pour déterminer le type de paquet
-            _type_paquet: int = struct.unpack('B', _entete) # u8
-            _longueur_message: int = longueur_paquet(_entete)
+            _type_paquet: int = struct.unpack('B', _entete)[0] # u8, est un tuple qu'il duquel il faut extraire la valeur
+            print(f"Le type de paquet dans __ENVOYER_MESSAGE EST: {_type_paquet}")
+            _longueur_message: int = longueur_paquet(_type_paquet)
             
             _ce_paquet = await self.__lire.readexactly(_longueur_message)
             _liste_paquets.append((
