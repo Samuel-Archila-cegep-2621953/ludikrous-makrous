@@ -29,7 +29,7 @@ class Serveur:
         self.__config = tomllib.load(_fichier_toml)
         _serveur: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         _serveur.bind((self.__config["Serveur"]["ip"], self.__config["Serveur"]["port"]))
-        _serveur.listen(5)
+        _serveur.listen(self.__config["Serveur"]["joueurs_max"])
 
         print(""" █████                      █████  ███  █████                                                                         █████                                           
 ░░███                      ░░███  ░░░  ░░███                                                                         ░░███                                            
