@@ -32,8 +32,6 @@ class Menu(Entity):
         self.musique = musique
         self.nom = nom
 
-        #print(str(type(boutons)))
-
         for x in boutons + autres + textes + menus_deroulants:
             x.parent = self.menu
             x.enabled = enabled
@@ -42,10 +40,13 @@ class Menu(Entity):
         self.textes = textes
         self.menus_deroulants = menus_deroulants
         self.autres = autres
+        print(self.nom)
 
 
     def jouer_musique(self):
-        if self.musique is not None:
+        if self.musique is not None and self.musique.status == False:
+            #print(self.nom)
+            #print("Joueur musique" + str(self.musique.playing))
             self.musique.play()
 
 
@@ -83,21 +84,23 @@ class Menu(Entity):
 
             
 
-    def cacher(self):
+    def cacher(self, garder_musique: bool = False):
         """
         Désactive le `Menu`
         """
         self.menu.disable()
         for x in self.boutons + self.autres + self.textes + self.menus_deroulants:
-            self.enabled = False
-        self.essayer_fade_out()
+            x.enabled = False
+
+        if not garder_musique:
+            self.essayer_fade_out()
 
 
-    def disable(self):
+    def disable(self, garder_musique: bool = False):
         """
         Alias de `Menu.cacher()`
         """
-        self.cacher()
+        self.cacher(garder_musique = garder_musique)
 
 
     def enable(self):

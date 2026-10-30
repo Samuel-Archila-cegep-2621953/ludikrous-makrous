@@ -111,4 +111,44 @@ def ordonner_boutons(
     return boutons
 
 
+def verifier_ip(ip: str) -> bool:
+    """
+    Args:
+        ip (str): Une adresse IP
+    Returns:
+        bool: Si l'addresse IP est valide ou non
+    """
+    def _verifier_chars(s: str) -> bool:
+        _nombres = [1,2,3,4,5,6,7,8,9,0]
+        _nombres_str: list[str] = []
+        for n in _nombres:
+            _nombres_str.append(str(n))
 
+        _chars_permis = _nombres_str + ['.']
+
+        for c in s:
+            if c not in _chars_permis:
+                return False
+
+        return True
+
+    def _verifier_longueur_str(s: str) -> bool:
+        _l = s.split('.')
+        for segment in _l:
+            if len(segment) > 3 or len(segment) < 1:
+                return False
+        return True
+
+    return  len(ip.split(".")) == 4 and _verifier_chars and _verifier_longueur_str(ip)
+
+
+def verifier_port(p: int | str) -> bool:
+    """
+    Args:
+        p (int | str): Un port
+    Returns:
+        bool: Si le port est valide ou non
+    """
+    _port = str(p)
+
+    return _port.isdigit() and int(_port) <= 65535

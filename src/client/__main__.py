@@ -57,60 +57,28 @@ GM.ajouter(QuelquesMenus.menu_principal())
 
 
 # app.wireframe_on()
-"""
-bg = Entity(
-    parent=menu_principal,
-    model="quad",
-    scale=(window.aspect_ratio, 1),
-    z=1,
-    texture="ressources/textures/matte-black",
-)
-btn_commencer = Button(
-    #text="Commencer",
-    text=Langues.obtenir("menu_principal.boutons.commencer", LANGUE),
-    parent=menu_principal,
-    scale=(0.25, 0.075),
-    y=-0.2,
-    on_click=commencer_jeu,
-    color=color.azure,
-)
-# btn_fermer = Button(text="Fermer", parent=menu_principal, scale=(0.25, 0.075), y=-0.29, on_click=terminer_jeu, color=color.blue)
-btn_fermer = Button(
-    #text="Fermer",
-    text=Langues.obtenir("menu_principal.boutons.fermer", LANGUE),
-    parent=menu_principal,
-    scale=(0.25, 0.075),
-    y=-0.29,
-    on_click=terminer_jeu,
-    color=color.red,
-)
-titre = Entity(
-    texture="ressources/textures/titre_vrai",
-    parent=menu_principal,
-    origin=(0, 0),
-    y=0.2,
-    model="quad",
-    scale=(1, 0.5),
-)
 
-
-musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
-"""
+#musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
+#TODO WHY WAS THIS UNCOMMENTED ^ ^ ^ ^ ^ 
 pivot = Entity()
 DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
 def input(key):
     if GM.nom_maintenant() == "config" and GM.nom_passe() == "principal":
         if key == "escape":
-            GM.retourner_et_montrer()
+            GM.retourner_et_montrer(True)
 
     elif GM.nom_maintenant() == "multijoueur" and GM.nom_passe() == "principal":
         if key == "escape":
-            GM.retourner_et_montrer()
+            GM.retourner_et_montrer(True)
 
     elif GM.nom_maintenant() == "heberger" and GM.nom_passe() == "principal":
         if key == "escape":
-            GM.retourner_et_montrer()
+            GM.retourner_et_montrer(True)
+
+    if held_keys['t'] and held_keys["shift"]:
+    #if key == "t":
+        GM.remplacer_musique("principal")
     """
     if GM.nom_passe() == "principal":
         if key == "escape":

@@ -18,7 +18,7 @@ class GestionnaireMenus:
         """
         GestionnaireMenus.liste[0] = GestionnaireMenus.liste[1]
         GestionnaireMenus.liste[1] = prochain
-        GestionnaireMenus.liste[1].arreter_musique()
+        #GestionnaireMenus.liste[1].arreter_musique()
         GestionnaireMenus.liste[2] = None
 
 
@@ -39,8 +39,8 @@ class GestionnaireMenus:
 
 
     @staticmethod
-    def cacher():
-        GestionnaireMenus.liste[1].cacher()
+    def cacher(garder_musique: bool = False):
+        GestionnaireMenus.liste[1].cacher(garder_musique = garder_musique)
 
 
     @staticmethod
@@ -49,8 +49,8 @@ class GestionnaireMenus:
 
 
     @staticmethod
-    def ajouter_et_montrer(menu: Menu):
-        GestionnaireMenus.liste[1].cacher()
+    def ajouter_et_montrer(menu: Menu, garder_musique: bool = False):
+        GestionnaireMenus.liste[1].cacher(garder_musique = garder_musique)
         GestionnaireMenus.ajouter(menu)
         GestionnaireMenus.montrer()
         #GestionnaireMenus.liste[1]
@@ -59,7 +59,6 @@ class GestionnaireMenus:
     @staticmethod
     def retourner():
         _passe = GestionnaireMenus.liste[0]
-        #_passe.disable()
         GestionnaireMenus.liste[0] = GestionnaireMenus.liste[1]
         GestionnaireMenus.liste[1] = _passe
         GestionnaireMenus.liste[2] = None
@@ -67,8 +66,8 @@ class GestionnaireMenus:
 
 
     @staticmethod
-    def retourner_et_montrer():
-        GestionnaireMenus.cacher()
+    def retourner_et_montrer(garder_musique: bool = False):
+        GestionnaireMenus.cacher(garder_musique)
         GestionnaireMenus.retourner()
         GestionnaireMenus.montrer()
 
@@ -86,3 +85,10 @@ class GestionnaireMenus:
     @staticmethod
     def nom_passe() -> str:
         return GestionnaireMenus.liste[0].nom
+
+
+    @staticmethod
+    def remplacer_musique(nom: str):
+        #print(GestionnaireMenus.liste[1].nom)
+        for m in GestionnaireMenus.liste:
+            if m is not None and m.nom == nom: m.musique.arreter()

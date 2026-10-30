@@ -48,6 +48,8 @@ class Config:
         Config.modifier(_cfg)
 
 
-
-
-            
+    @staticmethod
+    def changer_port(port: int):
+        _cfg = Config.json()
+        _cfg["Client"]["port"] = port
+        Config.modifier(_cfg)
