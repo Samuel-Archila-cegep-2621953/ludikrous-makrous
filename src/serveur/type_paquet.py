@@ -1,9 +1,11 @@
 import enum
 
 class TypePaquetServeur(enum.Enum):
-    MAJ_JOUEUR = 0,
-    CONNEXION_REUSSIT = 1,
-    CONNEXION_RATE = 2,
+    MAJ_JOUEUR = 0
+    CONNEXION_REUSSIT = 1
+    CONNEXION_RATE = 2
+    OBSTACLE = 3
+    DECONNEXION = 4
 
 class TypePaquetClient(enum.Enum):
     MAJ_JOUEUR = 0,
@@ -14,6 +16,8 @@ class TypePaquetClient(enum.Enum):
 formats_serveur_par_type = [
     'BI16sfffBB',
     'B32s',
+    'B',
+    '',
     'B'
 ]
 

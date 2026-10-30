@@ -6,6 +6,7 @@ from signal_serveur_client import SignalServeurClient
 #import client.joueur
 from joueur_abstrait import JoueurAbstrait
 import joueur_abstrait
+import journal
 
 import struct
 import json
@@ -216,6 +217,9 @@ class MondeServeur:
         Entrée: `B32sfffBB`\n
         Sortie: `H(BIfff16sBB+...)`\n
         """
+        if donnee[1] not in self.__joueurs_hache:
+            journal.inserer_avertissement("Un joueur a tenté de mettre à jour un joueur qui n'existe pas.")
+            return paquet.construire_paquet([paquet.creer_paquet_deconnexion()])
         _id = self.__joueurs_hache[donnee[1]]
 
         if (joueur := self.__obtenir_joueur_par_id(_id)) != None:
