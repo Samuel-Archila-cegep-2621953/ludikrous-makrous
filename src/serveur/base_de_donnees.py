@@ -5,6 +5,9 @@ class BaseDeDonnees:
     def __init__(self):
         # bd = base de donnée
         self.__bd = sqlite3.connect(Path(__file__).parent / "serveur.db")
+        # BUG: sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 25840 and this is thread id 8524.
+        # UNSAFE FIX  ?
+        self.__bd = sqlite3.connect(Path(__file__).parent / "serveur.db", check_same_thread = False)
         self.__curseur = self.__bd.cursor()
 
         self.__curseur.execute("""
