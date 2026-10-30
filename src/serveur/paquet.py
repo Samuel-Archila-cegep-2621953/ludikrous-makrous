@@ -23,21 +23,31 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
     """
     #TODO!: Je pense que "s" devrait être remplacé par "<longueur_nom_utlisateur_max>s" pour qu'il soit interprété comme n * nb_chars. Il faudrait aussi soit: 1) Limiter les caractères permis a ascii ou 2) Compter le nombres de bytes (non de caractères) saisis de l'utlisateur avant de confirmer le nom d'utilisateur
     # 2026-10-26: J'ai changé pour rajouter un maximum de 16 caractères
-    return struct.pack(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value[0]], 
-                       TypePaquetServeur.MAJ_JOUEUR.value[0], 
+    return struct.pack(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value], 
+                       TypePaquetServeur.MAJ_JOUEUR.value, 
                        joueur.id,
                        joueur.nom.encode(),
                        joueur.position[0], joueur.position[1], joueur.position[2],
                        joueur.vie,
                        joueur.animation)
 
+def creer_paquet_deconnexion() -> bytes:
+    """
+    Formatte la réponse lorsque le serveur veut refuser les paquets. \n
+    Format: `B`
+    - type (`uint8_t`)
+    Returns:
+        bytes: paquet
+    """
+    return struct.pack(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value], TypePaquetServeur.DECONNEXION.value)
+
 def creer_paquet_connexion_reussit(code: bytes) -> bytes:
     """
     Formatte la réponse lorsqu'une connexion est réussit
     Format: `B32s`
     """
-    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value][0],
-                       TypePaquetServeur.CONNEXION_REUSSIT.value[0],
+    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value],
+                       TypePaquetServeur.CONNEXION_REUSSIT.value,
                        code)
 
 def creer_paquet_connexion_rate() -> bytes:
@@ -45,7 +55,7 @@ def creer_paquet_connexion_rate() -> bytes:
     Formatte la réponse lorsqu'une connexion est raté
     Format: `B`
     """
-    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value[0]], TypePaquetServeur.CONNEXION_RATE.value[0])
+    return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value], TypePaquetServeur.CONNEXION_RATE.value)
 
 
 def construire_paquet(paquets: list[bytes]) -> bytes:
