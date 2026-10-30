@@ -2,7 +2,6 @@ from utilitaires import aleatoire_dans_dir
 from types_musique import TypesMusique
 from ursina import *
 
-
 class Musique(Audio):
     def __init__(
             self,
@@ -22,7 +21,7 @@ class Musique(Audio):
         if repeter_aleatoire:
            boucle = False
 
-        self.__audio = super().__init__(sound_file_name, volume, loop=boucle, autoplay=autoplay, **kwargs)
+        super().__init__(sound_file_name, volume, loop=boucle, autoplay=autoplay, **kwargs)
 
         self.__type_musique: TypesMusique = type_musique
         self.__repeter_aleatoire = repeter_aleatoire
@@ -57,6 +56,11 @@ class Musique(Audio):
             return "ressources/sons/erreur.mp3"
 
         return CHEMIN_MUSIQUE + chemin + choix
+
+
+    def arreter(self):
+        if self.playing == False: return
+        self.stop(False)
 
 
 

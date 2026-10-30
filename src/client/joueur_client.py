@@ -8,6 +8,10 @@ from ursina import *
 import __main__ as principale
 from types_musique import TypesMusique
 from musique import Musique
+import paquet as Pq
+import struct
+from type_paquet import *
+from config import Config
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -35,16 +39,32 @@ class JoueurClient(FirstPersonController):
         self.musique.fade_in(0.7)
 
     def __creer_id(self) -> int:
+        """
         _resultat = self.__client.envoyer_message(json.dumps({
                 "Type": "CREER ID"
             }))
         _donnee = json.loads(_resultat)
-        return _donnee['ID']
+        """
+
+        _mdp_hache = Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8")
+        _nom_utilisateur = Config.json()["Client"]["nom_utilisateur"].encode("utf-8")
+
+        _hache = self.__client.envoyer_message(struct.pack(
+            formats_clients_par_type[TypePaquetClient.CONNEXION.value],
+            TypePaquetClient.CONNEXION.value, 
+            _nom_utilisateur, 
+            _mdp_hache)
+        )["Connexion"]
+
+        if _hache == None: exit()
+        #return _donnee['ID']
+        return 8
 
     def __obtenir_temps(self) -> float:
         return time.time()
 
-    def __emballer_les_donnees(self) -> str:
+    def __emballer_les_donnees(self) -> bytes:
+        """
         return json.dumps({
             "Type": "MAJ",
             "ID": self.__id,
@@ -54,12 +74,27 @@ class JoueurClient(FirstPersonController):
                 self.position.z
             ]
         })
+        """
+        #TODO! Convertir en struct
+        return struct.pack(
+                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value],
+                #NOTE VIEUX TypePaquetClient.MAJ_JOUEUR.value[0],
+                TypePaquetClient.MAJ_JOUEUR.value,
+                Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8"), #TODO! Confirmer ce que veut dire "hache clé"
+                self.position.x,
+                self.position.y,
+                self.position.z,
+                self.vie.value,
+                3 # TODO Animations
+            )
 
     def joueurs(self) -> list[joueur.Joueur]:
         return self.__joueurs
 
-    def lire_donnee(self, donnee_texte: str):
-        _donnee = json.loads(donnee_texte)
+    def lire_donnee(self, donnee_texte: dict):
+        #NOTE VEUX_donnee = json.loads(donnee_texte)
+        _donnee = donnee_texte
+        print("DONNEES LUES")
 
         _joueurs = _donnee["Joueurs"]
         for i, _ in enumerate(_joueurs):
@@ -78,6 +113,7 @@ class JoueurClient(FirstPersonController):
         super().update()
         temps_en_ce_moment = self.__obtenir_temps()
         if temps_en_ce_moment - self.__dernier_temps > 1 / 12:
+            #NOTE VIEUX self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())), TypePaquetServeur.MAJ_JOUEUR)
             self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
         
         #print(self.position)
