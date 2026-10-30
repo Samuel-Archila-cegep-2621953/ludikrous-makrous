@@ -23,7 +23,7 @@ class Client:
 
         #self.__ecrire.write(message.encode('utf-8'))
 
-        print(f"MESSAGE DANS __ENVOYER_MESsAGE: {message}")
+        print(f"MESSAGE ENVOYÉ: {message}")
 
         self.__ecrire.write(message)
         await self.__ecrire.drain()

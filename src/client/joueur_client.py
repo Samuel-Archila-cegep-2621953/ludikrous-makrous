@@ -46,8 +46,10 @@ class JoueurClient(FirstPersonController):
         _donnee = json.loads(_resultat)
         """
 
-        _mdp_hache = Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8")
-        _nom_utilisateur = Config.json()["Client"]["nom_utilisateur"].encode("utf-8")
+        #_mdp_hache = Config.json()["Client"]["mot_de_passe_hache"].encode("ascii")
+        _mdp_hache = bytes.fromhex(Config.json()["Client"]["mot_de_passe_hache"].strip())
+        _nom_utilisateur = Config.json()["Client"]["nom_utilisateur"].encode("ascii")
+        print(_mdp_hache)
 
         _hache = self.__client.envoyer_message(struct.pack(
             formats_clients_par_type[TypePaquetClient.CONNEXION.value],
@@ -80,7 +82,7 @@ class JoueurClient(FirstPersonController):
                 formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value],
                 #NOTE VIEUX TypePaquetClient.MAJ_JOUEUR.value[0],
                 TypePaquetClient.MAJ_JOUEUR.value,
-                Config.json()["Client"]["mot_de_passe_hache"].encode("utf-8"), #TODO! Confirmer ce que veut dire "hache clé"
+                Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"), #TODO! Confirmer ce que veut dire "hache clé"
                 self.position.x,
                 self.position.y,
                 self.position.z,

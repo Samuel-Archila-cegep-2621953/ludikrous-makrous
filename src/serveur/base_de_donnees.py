@@ -1,10 +1,11 @@
 import sqlite3
 from pathlib import Path
+import journal
 
 class BaseDeDonnees:
     def __init__(self):
         # bd = base de donnée
-        self.__bd = sqlite3.connect(Path(__file__).parent / "serveur.db")
+        #self.__bd = sqlite3.connect(Path(__file__).parent / "serveur.db")
         # BUG: sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread. The object was created in thread id 25840 and this is thread id 8524.
         # UNSAFE FIX  ?
         self.__bd = sqlite3.connect(Path(__file__).parent / "serveur.db", check_same_thread = False)
@@ -57,7 +58,15 @@ class BaseDeDonnees:
         if self.__verifier_personne_existe(nom):
             self.__curseur.execute("SELECT mot_de_passe FROM utilisateurs WHERE pseudonyme = ?", (nom,))
             _resultat = self.__curseur.fetchone()
+
+            # NOTE Enlever du produit final; Seulement pour le débogage
+            journal.inserer_erreur(f"Mot de passe de la personne {nom} est invalide")
+
             return mot_de_passe_hache == _resultat[0]
+
+        # NOTE Enlever du produit final; Seulement pour le débogage
+        journal.inserer_erreur(f"PERSONNE {nom} N'EXISTE PAS")
+
         return False
 
     def retirer(self, nom: str) -> bool:
