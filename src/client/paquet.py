@@ -68,6 +68,11 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
                 "Connexion": tuple_paquet[1][0]
             }
 
+        case TypePaquetServeur.DECONNEXION:
+            return {
+                "Connexion": tuple_paquet[1][0]
+            }
+
         case TypePaquetServeur.MAJ_OBSTACLE:
             type_obstacle, position = tuple_paquet[1]
             return {
@@ -87,6 +92,7 @@ def longueur_paquet(b: int) -> int:
             case TypePaquetServeur.MAJ_JOUEUR.value:        return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value]) -1
             case TypePaquetServeur.CONNEXION_REUSSIT.value: return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value]) -1
             case TypePaquetServeur.CONNEXION_RATE.value:    return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value]) -1
+            case TypePaquetServeur.DECONNEXION.value:    return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value]) -1
             case TypePaquetServeur.MAJ_OBSTACLE.value:      return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_OBSTACLE.value]) -1
     except Exception as e:
         print(f"DANS LONGUEUR {e}")
@@ -94,5 +100,22 @@ def longueur_paquet(b: int) -> int:
 
 
 def deconstruire_superpaquet(superpaquet: list[tuple[TypePaquetServeur, bytes]]) -> dict[str, any]:
-    pass
+    _joueurs: list[dict[str, any]] = []
+    _obstacles: list[dict[str, any]] = []
+    _connexion: dict[str, any] = {}
+    for p in superpaquet:
+        _dict_paquet: dict[str, any] = interpreter_paquet(lire_paquet(p))
+
+        if "Joueur" in _dict_paquet:       _joueurs.append(_dict_paquet["Joueur"])
+        elif "Obstacle" in _dict_paquet:   _obstacles.append(_dict_paquet["Obstacle"])
+        elif "Connexion" in _dict_paquet:  _connexion = _dict_paquet["Connexion"]
+
+    return {
+        "Joueurs": _joueurs,
+        "Obstacles": _obstacles,
+        "Connexion": _connexion
+    }
+
+
+        
 
