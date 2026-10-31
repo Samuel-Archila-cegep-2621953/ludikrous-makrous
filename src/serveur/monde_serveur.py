@@ -178,10 +178,11 @@ class MondeServeur:
         Entrée: `B16s32s`\n
         Sortie: `B32s` | `B`\n
         """
-        if self.base_donnee.connexion(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
+        _nom = donnee[1].decode().replace('\0', '')
+        if self.base_donnee.connexion(_nom, hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
-            _id = self.base_donnee.obtenir_id(donnee[1].decode())
+            _id = self.base_donnee.obtenir_id(_nom)
 
             _joueur = JoueurAbstrait()
             _joueur.id = _id
@@ -198,10 +199,11 @@ class MondeServeur:
         Entrée: `B16s32s`\n
         Sortie: `B32s` | `B`\n
         """
-        if self.base_donnee.creer_utilisateur(donnee[1].decode(), hashlib.sha256(donnee[2]).hexdigest()):
+        _nom = donnee[1].decode().replace('\0', '')
+        if self.base_donnee.creer_utilisateur(_nom, hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
-            _id = self.base_donnee.obtenir_id(donnee[1].decode())
+            _id = self.base_donnee.obtenir_id(_nom)
         
             _joueur = JoueurAbstrait()
             _joueur.id = _id
