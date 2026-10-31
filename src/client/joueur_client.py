@@ -18,7 +18,6 @@ class JoueurClient(FirstPersonController):
         super().__init__(height, **kwargs)
         self.__client = client
         self.__id = self.__creer_id()
-        #print(self.__id)
         self.__dernier_temps = self.__obtenir_temps()
         self.__joueurs: list[joueur.Joueur] = []
         self.vie = HealthBar(
@@ -59,6 +58,7 @@ class JoueurClient(FirstPersonController):
         )["Connexion"]
 
         if _hache == None: exit()
+        print(_hache)
         #return _donnee['ID']
         return 8
 

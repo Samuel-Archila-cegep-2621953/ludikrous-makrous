@@ -49,26 +49,15 @@ class Serveur:
         _temps_entre_update = 0.0
         _debut = 0.0
         _fin = 0.0
-
-        entrees = [_serveur]
-        sorties = []
         
         while self.__ouvert:
-            _lisable, _ecrivable, _exceptionelles = select.select(entrees, sorties, entrees, 1)
-            for s in _lisable:
-                if s is _serveur:
-                    _client, _addresse = s.accept()
-                    _client.setblocking(0)
-                    entrees.append(_client)
-                    _gerant_de_client = threading.Thread(target=self.__gerer_client, args=(_client,))
-                    _gerant_de_client.start()
-                
-                
-                    _temps_entre_update = _fin - _debut
-                
-                    _debut = time.time()
-                    self.__monde_serveur.mise_a_jour_jeu(_temps_entre_update)
-                    _fin = time.time()
+            _client, _addresse = _serveur.accept()
+            _gerant_de_client = threading.Thread(target=self.__gerer_client, args=(_client,))
+            _gerant_de_client.start()
+            _temps_entre_update = _fin - _debut
+            _debut = time.time()
+            self.__monde_serveur.mise_a_jour_jeu(_temps_entre_update)
+            _fin = time.time()
 
     def __fermer(self, langue, commande):
         self.__ouvert = False

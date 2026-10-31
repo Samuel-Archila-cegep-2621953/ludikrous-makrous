@@ -37,8 +37,9 @@ class BaseDeDonnees:
         return False
 
     def __verifier_personne_existe(self, nom: str) -> bool:
-        self.__curseur.execute("SELECT pseudonyme FROM utilisateurs WHERE pseudonyme = ?", (nom,))
+        self.__curseur.execute("SELECT id FROM utilisateurs WHERE pseudonyme = ?", (nom,))
         _resultat = self.__curseur.fetchone()
+        print(_resultat)
         return _resultat != None
 
     def obtenir_id(self, nom: str) -> int:
@@ -59,8 +60,9 @@ class BaseDeDonnees:
             self.__curseur.execute("SELECT mot_de_passe FROM utilisateurs WHERE pseudonyme = ?", (nom,))
             _resultat = self.__curseur.fetchone()
 
-            # NOTE Enlever du produit final; Seulement pour le débogage
-            journal.inserer_erreur(f"Mot de passe de la personne {nom} est invalide")
+            if mot_de_passe_hache == _resultat[0]:
+                # NOTE Enlever du produit final; Seulement pour le débogage
+                journal.inserer_erreur(f"Mot de passe de la personne {nom} est invalide")
 
             return mot_de_passe_hache == _resultat[0]
 
