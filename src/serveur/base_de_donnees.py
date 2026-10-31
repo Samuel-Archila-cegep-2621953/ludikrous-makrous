@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-import journal
+from debogage import Debogage as Dbg
 
 class BaseDeDonnees:
     def __init__(self):
@@ -61,15 +61,15 @@ class BaseDeDonnees:
             _resultat = self.__curseur.fetchone()
 
             if mot_de_passe_hache != _resultat[0]:
-                journal.inserer_erreur(
+                Dbg.err(
 f"""MDP:      '{mot_de_passe_hache}' / {len(mot_de_passe_hache)}
   Expected: '{_resultat[0]}' / {len(_resultat[0])}"""
                 )
 
             return mot_de_passe_hache == _resultat[0]
 
-        # NOTE Enlever du produit final; Seulement pour le débogage
-        journal.inserer_erreur(f"PERSONNE {nom} N'EXISTE PAS")
+        # NOTE Test de la class Debogage
+        Dbg.err(f"PERSONNE {nom} N'EXISTE PAS")
 
         return False
 

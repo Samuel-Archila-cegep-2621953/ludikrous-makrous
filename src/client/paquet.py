@@ -84,28 +84,10 @@ def longueur_paquet(b: int) -> int:
     """
     Prend 1 byte est retourne la grandeur du message qui le suit selon son type, sans inclure l'en-tête
     """
-    # uh?
-    """
-    match b:
-        case TypePaquetServeur.MAJ_JOUEUR.value:        
-            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value]) -1
-        case TypePaquetServeur.CONNEXION_REUSSIT.value: 
-            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value]) -1
-        case TypePaquetServeur.CONNEXION_RATE.value:    
-            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value]) -1
-        case TypePaquetServeur.DECONNEXION.value:       
-            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value]) -1
-        case TypePaquetServeur.MAJ_OBSTACLE.value:      
-            return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_OBSTACLE.value]) -1
-        case _ : 
-            print(f"IN: {b} AUCUN CASE DE FONCTIONNE")
-            exit()
-    print(f"BE ES {b}")
-    print("QUE PASO AQUI")
-    """
     # 30-10-2026 >> changé la façon de calculer la taille d'un paquet, en utilisant moins de nests – gardé l'ancien code en cas d'échec.
-    if b >= TypePaquetServeur.MAX.value:
-        print("Aucun paquet de ce type.")
+    # 31-10-2026 >> Changement de MAX pour une fonction, car ça fait un peu plus de sens
+    if b > TypePaquetServeur.max():
+        print(f"Aucun paquet de ce type. Valeur: {b}.")
         exit(1)
     _longueur = struct.calcsize(formats_serveur_par_type[b]) - 1
     print(_longueur)
