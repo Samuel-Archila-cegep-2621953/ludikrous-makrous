@@ -28,7 +28,7 @@ formats_serveur_par_type = [
     'BIfff16sBB',
     'B32s',
     'B',
-    #TODO FORMAT DECONNEXION
+    'B32s'
     #TODO FORMAT OBSTACLE
 ]
 
