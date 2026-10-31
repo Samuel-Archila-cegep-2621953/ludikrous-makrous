@@ -84,6 +84,8 @@ def longueur_paquet(b: int) -> int:
     """
     Prend 1 byte est retourne la grandeur du message qui le suit selon son type, sans inclure l'en-tête
     """
+    # uh?
+    """
     match b:
         case TypePaquetServeur.MAJ_JOUEUR.value:        
             return struct.calcsize(formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value]) -1
@@ -100,6 +102,14 @@ def longueur_paquet(b: int) -> int:
             exit()
     print(f"BE ES {b}")
     print("QUE PASO AQUI")
+    """
+    # 30-10-2026 >> changé la façon de calculer la taille d'un paquet, en utilisant moins de nests – gardé l'ancien code en cas d'échec.
+    if b >= TypePaquetServeur.MAX.value:
+        print("Aucun paquet de ce type.")
+        exit(1)
+    _longueur = struct.calcsize(formats_serveur_par_type[b]) - 1
+    print(_longueur)
+    return _longueur
  
 
 def deconstruire_superpaquet(superpaquet: list[tuple[TypePaquetServeur, bytes]]) -> dict[str, any]:

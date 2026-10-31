@@ -60,9 +60,11 @@ class BaseDeDonnees:
             self.__curseur.execute("SELECT mot_de_passe FROM utilisateurs WHERE pseudonyme = ?", (nom,))
             _resultat = self.__curseur.fetchone()
 
-            if mot_de_passe_hache == _resultat[0]:
-                # NOTE Enlever du produit final; Seulement pour le débogage
-                journal.inserer_erreur(f"Mot de passe de la personne {nom} est invalide")
+            if mot_de_passe_hache != _resultat[0]:
+                journal.inserer_erreur(
+f"""MDP:      '{mot_de_passe_hache}' / {len(mot_de_passe_hache)}
+  Expected: '{_resultat[0]}' / {len(_resultat[0])}"""
+                )
 
             return mot_de_passe_hache == _resultat[0]
 
