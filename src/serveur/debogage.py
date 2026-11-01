@@ -4,20 +4,40 @@ class Debogage:
     NIVEAU_VERBOSITE: int = 1
 
     @staticmethod
-    def err(msg: str, niveau: int = 1, avertissement: bool = False):
+    def err(msg: str, niveau: int = 1):
         """
         Montre les erreurs selon le niveau de verbosité actuel
         Args:
-            msg (str): Le message d'erreur ou d'avertissement
-            niveau (int): Le niveau de danger associé à cette erreur/avertissement
-            avertissement (bool): Si le message est un avertissement ou non
+            msg (str): Le message d'erreur
+            niveau (int): Le niveau de danger associé à cette erreur
         """
-        if avertissement:
-             journal.inserer_avertissement(msg)
-             return
-
         if Debogage.NIVEAU_VERBOSITE == niveau:
                 journal.inserer_erreur(msg)
+
+
+    @staticmethod
+    def avis(msg: str, niveau: int = 1):
+        """
+        Montre les avertissements selon le niveau de verbosité actuel
+        Args:
+            msg (str): Le message d'avertissement
+            niveau (int): Le niveau de danger associé à cet avertissement
+        """
+        if Debogage.NIVEAU_VERBOSITE == niveau:
+                journal.inserer_avertissement(msg)
+
+
+    @staticmethod
+    def info(msg: str, niveau: int = 1):
+        """
+        Montre un message selon le niveau de verbosité actuel
+        Args:
+            msg (str): Le message
+            niveau (int): Le niveau de verbosité associé au message
+        """
+        if Debogage.NIVEAU_VERBOSITE == niveau:
+                journal.inserer_info(msg)
+
 
 
     @staticmethod
