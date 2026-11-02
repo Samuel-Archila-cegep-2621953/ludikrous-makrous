@@ -9,7 +9,7 @@ from musique import Musique
 from types_musique import TypesMusique
 from sons import Son
 from menus import QuelquesMenus
-from gestionnaire_menus import GestionnaireMenus as GM
+from gestionnaire_menus import GestionnaireMenus as Gm
 
 #if __name__ == "__main__":
 _client = Client()
@@ -37,7 +37,7 @@ def terminer_jeu():
 
 
 def commencer_jeu():
-    GM.maintenant().cacher()
+    Gm.maintenant().cacher()
     #musique.fade_out(duration=0.7)
 
     ciel_texte = load_texture("ressources/textures/ciel")
@@ -50,9 +50,9 @@ def commencer_jeu():
     #_moi.musique.fade_in(duration=0.7)
 
 
-GM.ajouter_et_montrer(QuelquesMenus.menu_principal())
+Gm.ajouter_et_montrer(QuelquesMenus.menu_principal())
 #print(Langues.trouver_clef("Paramètres"))
-#GM.montrer()
+#Gm.montrer()
 #_principal = QuelquesMenus.menu_principal()
 
 
@@ -64,26 +64,26 @@ pivot = Entity()
 DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
 def input(key):
-    if GM.nom_maintenant() == "config" and GM.nom_passe() == "principal":
+    """
+    if Gm.nom_maintenant() == "config" and Gm.nom_passe() == "principal":
         if key == "escape":
-            GM.retourner_et_montrer(True)
+            Gm.retourner_et_montrer(True)
 
-    elif GM.nom_maintenant() == "multijoueur" and GM.nom_passe() == "principal":
+    elif Gm.nom_maintenant() == "multijoueur" and Gm.nom_passe() == "principal":
         if key == "escape":
-            GM.retourner_et_montrer(True)
+            Gm.retourner_et_montrer(True)
 
-    elif GM.nom_maintenant() == "heberger" and GM.nom_passe() == "principal":
+    elif Gm.nom_maintenant() == "heberger" and Gm.nom_passe() == "principal":
         if key == "escape":
-            GM.retourner_et_montrer(True)
+            Gm.retourner_et_montrer(True)
+
+    """
+    if Gm.nom_passe() is not None and Gm.nom_passe() == "principal":
+        if key == "escape":
+            Gm.retourner_et_montrer()
 
     if held_keys['t'] and held_keys["shift"] and held_keys["control"]:
-    #if key == "t":
-        GM.remplacer_musique("principal")
-    """
-    if GM.nom_passe() == "principal":
-        if key == "escape":
-            GM.retourner_et_montrer()
-    """
+        Gm.remplacer_musique("principal")
 
 app.run()
 

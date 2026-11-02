@@ -2,8 +2,9 @@ from menu import Menu
 from array import array
 from ursina import *
 from gestionnaire_langues import GestionnaireLangues as Langues
+from debogage import Debogage as Dbg
 
-# Peut-être ça sera utilisé
+type Gm = GestionnaireMenus
 
 class GestionnaireMenus:
     liste: list[Menu] = [None, None]
@@ -34,7 +35,6 @@ class GestionnaireMenus:
 
     @staticmethod
     def montrer():
-
         if GestionnaireMenus.liste[GestionnaireMenus.ptr] is None:
             print("Aucun menu à montrer. Fin du jeu.")
             application.quit()
@@ -69,8 +69,8 @@ class GestionnaireMenus:
         GestionnaireMenus.ajouter(menu)
         GestionnaireMenus.avancer()
         GestionnaireMenus.montrer()
-        print(GestionnaireMenus.liste)
-        #GestionnaireMenus.liste[1]
+
+        Dbg.info(GestionnaireMenus.liste, 4)
 
 
     @staticmethod
@@ -86,10 +86,7 @@ class GestionnaireMenus:
 
     @staticmethod
     def avancer(n: int = 1):
-        #print("ptr avance")
         GestionnaireMenus.ptr += n
-        #print(GestionnaireMenus.ptr)
-
 
 
     @staticmethod
@@ -110,8 +107,10 @@ class GestionnaireMenus:
 
 
     @staticmethod
-    def nom_passe() -> str:
-        return GestionnaireMenus.liste[GestionnaireMenus.ptr - 1].nom
+    def nom_passe() -> str | None:
+        if GestionnaireMenus.liste[GestionnaireMenus.ptr - 1] is not None:
+            return GestionnaireMenus.liste[GestionnaireMenus.ptr - 1].nom
+        return None
 
 
     @staticmethod
@@ -129,3 +128,10 @@ class GestionnaireMenus:
     @staticmethod
     def __idx_prochain() -> int:
         return GestionnaireMenus.ptr + 1
+
+
+    @staticmethod
+    def chercher_nom(nom: str) -> int | None:
+        for m, idx in enumerate(GestionnaireMenus.liste):
+            if m is not None and m.nom == nom: return idx
+        return None
