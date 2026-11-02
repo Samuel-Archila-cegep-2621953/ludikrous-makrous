@@ -24,17 +24,21 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         print(f"DANS LIRE_PAQUET TYPE EST {_type}")
 
         if _type.value <= TypePaquetServeur.max():
+            _format = formats_serveur_par_type[_type.value][1:] # Enleve le char de format
+            print(f"DANS LIRE_PAQUET FORMAT EST {_format}, d'une longueur de {struct.calcsize(_format)},\n len paquet est {len(_paquet)}")
 
             return (
                 _type,
                 struct.unpack(
-                    formats_serveur_par_type[_type.value][1:], # Enleve le char de format
+                    _format,
                     _paquet # Le paquet n'inclue pas le u8 de format au début
                 )
             )
 
     except Exception as e:
+        print("Dans paquet.lire_paquet():")
         print(f"Erreur: le format du paquet n'est pas compatible, paquet: '{_paquet}'")
+        print(f"Len paquet: {len(_paquet)}")
         print(e)
         exit(1)
 
@@ -47,10 +51,11 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
     match _type:
         case TypePaquetServeur.MAJ_JOUEUR:
             print(f"Paquet MAJ JOUEUR: {tuple_paquet}")
-            x, y, z, nom, vie, animation = tuple_paquet[1]
+            id, nom, x, y, z, vie, animation = tuple_paquet[1]
+            # CHANGE: 2-11-2026. Samuel.
             return {
                 "Joueur": {
-                    "ID": 123,
+                    "ID": id,
                     "Position": [x, y, z],
                     "Nom": nom,
                     "En_vie": vie,
@@ -95,8 +100,9 @@ def longueur_paquet(b: int) -> int:
     if b > TypePaquetServeur.max():
         print(f"Aucun paquet de ce type. Valeur: {b}.")
         exit(1)
+
     _longueur = struct.calcsize(formats_serveur_par_type[b]) - 1
-    print(_longueur)
+    print(f"DANS paquet.longueur_paquet: Un paquet de type {b} a une longueur de {_longueur} selon type_paquet.py")
     return _longueur
  
 

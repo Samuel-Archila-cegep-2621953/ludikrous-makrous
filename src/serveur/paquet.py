@@ -27,7 +27,8 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
     return struct.pack(
         formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value], # FORMAT
             TypePaquetServeur.MAJ_JOUEUR.value, # TYPE
-            joueur.id,
+            #joueur.id,
+            1,
             joueur.nom.encode("ascii"),
             joueur.position[0], joueur.position[1], joueur.position[2],
             joueur.vie,
