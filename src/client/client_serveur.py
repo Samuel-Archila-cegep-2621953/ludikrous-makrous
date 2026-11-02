@@ -32,6 +32,7 @@ class Client:
 
         _aw_nb_paquets = await self.__lire.readexactly(2) # Lire le nombre de paquets
         _nb_paquets = struct.unpack('H', _aw_nb_paquets)[0] # u16
+        print(f"Le nombre de paquets dans __ENVOYER_MESSAGE EST: {_nb_paquets}")
 
         _liste_paquets: list[tuple[TypePaquetServeur, bytes]] = []
 

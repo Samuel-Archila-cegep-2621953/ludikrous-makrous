@@ -12,6 +12,7 @@ import paquet as Pq
 import struct
 from type_paquet import *
 from config import Config
+from math import isnan as is_nan
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -101,11 +102,17 @@ class JoueurClient(FirstPersonController):
 
         _joueurs = _donnee["Joueurs"]
         for i, _ in enumerate(_joueurs):
-            _position = _['Position']
+            _position: list[float] = _['Position']
+            for p in _position:
+                if is_nan(p):
+                    print(f"ERREUR: Position d'un joueur est NaN. Position: {_position}")
+                    p = 0.0
+
             if i >= len(self.__joueurs):
                 _joueur = joueur.Joueur(_joueurs[i]["ID"], '', (_position[0], _position[1], _position[2]))
                 self.__joueurs.append(_joueur)
-            else:
+            #else:
+            elif _["ID"] != self.__id:
                 self.__joueurs[i].position = (_position[0], _position[1] + 1.25, _position[2])
         
         for jq in _donnee['Joueurs quittés']:

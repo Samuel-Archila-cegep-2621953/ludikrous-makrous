@@ -6,7 +6,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
     """
     Lit un paquet et l'exporte en tuple.
     """
-    print(f"LEN PAQUET {len(tuple_paquet)}")
+    #print(f"LEN PAQUET {len(tuple_paquet)}")
     try:
         _type: TypePaquetServeur = tuple_paquet[0]
         if _type == TypePaquetServeur.CONNEXION_RATE:
@@ -40,7 +40,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         print(f"Erreur: le format du paquet n'est pas compatible, paquet: '{_paquet}'")
         print(f"Len paquet: {len(_paquet)}")
         print(e)
-        exit(1)
+        #exit(1)
 
 
 def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> dict[str, any]:
@@ -115,9 +115,9 @@ def deconstruire_superpaquet(superpaquet: list[tuple[TypePaquetServeur, bytes]])
     for p in superpaquet:
         _dict_paquet: dict[str, any] = interpreter_paquet(lire_paquet(p))
 
-        if "Joueur" in _dict_paquet:       _joueurs.append(_dict_paquet["Joueur"])
-        elif "Obstacle" in _dict_paquet:   _obstacles.append(_dict_paquet["Obstacle"])
-        elif "Connexion" in _dict_paquet:  _connexion = _dict_paquet["Connexion"]
+        if   "Joueur" in _dict_paquet:           _joueurs.append(_dict_paquet["Joueur"])
+        elif "Obstacle" in _dict_paquet:         _obstacles.append(_dict_paquet["Obstacle"])
+        elif "Connexion" in _dict_paquet:        _connexion = _dict_paquet["Connexion"]
         elif "Joueurs quittés" in _dict_paquet:  _joueurs_quittes = _dict_paquet["Joueurs quittés"]
 
     return {
