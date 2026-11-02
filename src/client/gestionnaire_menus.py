@@ -92,3 +92,13 @@ class GestionnaireMenus:
         #print(GestionnaireMenus.liste[1].nom)
         for m in GestionnaireMenus.liste:
             if m is not None and m.nom == nom: m.musique.arreter()
+
+
+    @staticmethod
+    def __idx_maintenant() -> int:
+        return len(GestionnaireMenus.liste) - 2
+
+
+    @staticmethod
+    def __idx_prochain() -> int:
+        return len(GestionnaireMenus.liste) + 1

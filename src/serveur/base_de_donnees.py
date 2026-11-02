@@ -39,7 +39,7 @@ class BaseDeDonnees:
     def __verifier_personne_existe(self, nom: str) -> bool:
         self.__curseur.execute("SELECT id FROM utilisateurs WHERE pseudonyme = ?", (nom,))
         _resultat = self.__curseur.fetchone()
-        print(_resultat)
+        Dbg.info(f"Résultat de __verifier_personne_existe: {_resultat}", 2)
         return _resultat != None
 
     def obtenir_id(self, nom: str) -> int:
@@ -62,14 +62,15 @@ class BaseDeDonnees:
 
             if mot_de_passe_hache != _resultat[0]:
                 Dbg.err(
-f"""MDP:      '{mot_de_passe_hache}' / {len(mot_de_passe_hache)}
-  Expected: '{_resultat[0]}' / {len(_resultat[0])}"""
+                    f"""MDP:      '{mot_de_passe_hache}' / {len(mot_de_passe_hache)}
+                    Expected: '{_resultat[0]}' / {len(_resultat[0])}""",
+                    2
                 )
 
             return mot_de_passe_hache == _resultat[0]
 
         # NOTE Test de la class Debogage
-        Dbg.err(f"PERSONNE {nom} N'EXISTE PAS")
+        Dbg.err(f"PERSONNE {nom} N'EXISTE PAS", 2)
 
         return False
 

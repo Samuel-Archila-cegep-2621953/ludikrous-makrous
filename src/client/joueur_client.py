@@ -60,7 +60,7 @@ class JoueurClient(FirstPersonController):
         if _hache == None: exit()
         print(_hache)
         #return _donnee['ID']
-        return 8
+        return _hache
 
     def __obtenir_temps(self) -> float:
         return time.time()

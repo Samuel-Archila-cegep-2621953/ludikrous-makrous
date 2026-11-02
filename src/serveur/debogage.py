@@ -1,7 +1,7 @@
 import journal
 
 class Debogage:
-    NIVEAU_VERBOSITE: int = 1
+    NIVEAU_VERBOSITE: int = 2
 
     @staticmethod
     def err(msg: str, niveau: int = 1):
@@ -12,7 +12,7 @@ class Debogage:
             niveau (int): Le niveau de danger associé à cette erreur
         """
         if Debogage.NIVEAU_VERBOSITE == niveau:
-                journal.inserer_erreur(msg)
+                journal.inserer_erreur(msg + '\n')
 
 
     @staticmethod
@@ -24,7 +24,7 @@ class Debogage:
             niveau (int): Le niveau de danger associé à cet avertissement
         """
         if Debogage.NIVEAU_VERBOSITE == niveau:
-                journal.inserer_avertissement(msg)
+                journal.inserer_avertissement(msg +'\n')
 
 
     @staticmethod
@@ -36,8 +36,7 @@ class Debogage:
             niveau (int): Le niveau de verbosité associé au message
         """
         if Debogage.NIVEAU_VERBOSITE == niveau:
-                journal.inserer_info(msg)
-
+                journal.inserer_info(msg + '\n')
 
 
     @staticmethod
