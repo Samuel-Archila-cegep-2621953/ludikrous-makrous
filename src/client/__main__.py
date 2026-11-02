@@ -50,7 +50,7 @@ def commencer_jeu():
     #_moi.musique.fade_in(duration=0.7)
 
 
-GM.ajouter(QuelquesMenus.menu_principal())
+GM.ajouter_et_montrer(QuelquesMenus.menu_principal())
 #print(Langues.trouver_clef("Paramètres"))
 #GM.montrer()
 #_principal = QuelquesMenus.menu_principal()
@@ -76,7 +76,7 @@ def input(key):
         if key == "escape":
             GM.retourner_et_montrer(True)
 
-    if held_keys['t'] and held_keys["shift"]:
+    if held_keys['t'] and held_keys["shift"] and held_keys["control"]:
     #if key == "t":
         GM.remplacer_musique("principal")
     """
