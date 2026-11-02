@@ -70,7 +70,7 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
                 "Connexion": tuple_paquet[1][0]
             }
 
-        case TypePaquetServeur.DECONNEXION:
+        case TypePaquetServeur.DECONNEXION: # NOTE ASSUMER JOUEUR QUITTES
             print("\033[91mDeconnexion")
             return {
                 "Connexion": tuple_paquet[1][0]
@@ -102,6 +102,7 @@ def longueur_paquet(b: int) -> int:
 
 def deconstruire_superpaquet(superpaquet: list[tuple[TypePaquetServeur, bytes]]) -> dict[str, any]:
     _joueurs: list[dict[str, any]] = []
+    _joueurs_quittes: list[int] = []
     _obstacles: list[dict[str, any]] = []
     _connexion: dict[str, any] = {}
     for p in superpaquet:
@@ -110,9 +111,11 @@ def deconstruire_superpaquet(superpaquet: list[tuple[TypePaquetServeur, bytes]])
         if "Joueur" in _dict_paquet:       _joueurs.append(_dict_paquet["Joueur"])
         elif "Obstacle" in _dict_paquet:   _obstacles.append(_dict_paquet["Obstacle"])
         elif "Connexion" in _dict_paquet:  _connexion = _dict_paquet["Connexion"]
+        elif "Joueurs quittés" in _dict_paquet:  _joueurs_quittes = _dict_paquet["Joueurs quittés"]
 
     return {
         "Joueurs": _joueurs,
         "Obstacles": _obstacles,
-        "Connexion": _connexion
+        "Connexion": _connexion,
+        "Joueurs quittés": _joueurs_quittes
     }

@@ -79,10 +79,11 @@ class JoueurClient(FirstPersonController):
         """
         #TODO! Convertir en struct
         return struct.pack(
-                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value],
+                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value], # FORMAT
                 #NOTE VIEUX TypePaquetClient.MAJ_JOUEUR.value[0],
-                TypePaquetClient.MAJ_JOUEUR.value,
-                Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"),
+                TypePaquetClient.MAJ_JOUEUR.value,                            # TYPE
+                #NOTE VIEUX Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"),
+                self.__id, # hache clé
                 self.position.x,
                 self.position.y,
                 self.position.z,
@@ -106,9 +107,10 @@ class JoueurClient(FirstPersonController):
                 self.__joueurs.append(_joueur)
             else:
                 self.__joueurs[i].position = (_position[0], _position[1] + 1.25, _position[2])
-        for _ in _donnee['Joueurs quittés']:
-            destroy(self.__joueurs[_])
-            del self.__joueurs[_]
+        
+        for jq in _donnee['Joueurs quittés']:
+            destroy(self.__joueurs[jq])
+            del self.__joueurs[jq]
 
 
     def update(self):
