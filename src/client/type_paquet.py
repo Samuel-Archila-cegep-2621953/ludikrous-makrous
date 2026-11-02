@@ -1,11 +1,13 @@
 import enum
 
 class TypePaquetServeur(enum.Enum):
-    MAJ_JOUEUR = 0
+    MAJ_JOUEUR =        0
     CONNEXION_REUSSIT = 1
-    CONNEXION_RATE = 2
-    DECONNEXION = 3
-    MAJ_OBSTACLE = 4
+    CONNEXION_RATE =    2
+    #DECONNEXION =       3
+    #MAJ_OBSTACLE =      4
+    MAJ_OBSTACLE =      3
+    DECONNEXION =       4
 
     @staticmethod
     def depuis_int(n: int) -> "TypePaquetServeur":
@@ -13,8 +15,10 @@ class TypePaquetServeur(enum.Enum):
             case 0: return TypePaquetServeur.MAJ_JOUEUR
             case 1: return TypePaquetServeur.CONNEXION_REUSSIT
             case 2: return TypePaquetServeur.CONNEXION_RATE
-            case 3: return TypePaquetServeur.DECONNEXION
-            case 4: return TypePaquetServeur.MAJ_OBSTACLE
+            #case 3: return TypePaquetServeur.DECONNEXION
+            #case 4: return TypePaquetServeur.MAJ_OBSTACLE
+            case 3: return TypePaquetServeur.MAJ_OBSTACLE
+            case 4: return TypePaquetServeur.DECONNEXION
 
     @staticmethod
     def max() -> int:
@@ -28,10 +32,13 @@ class TypePaquetClient(enum.Enum):
     MAX = 3
 
 formats_serveur_par_type = [
-    'BIfff16sBB',
+    #'BIfff16sBB', NOTE Apparement changé coté serveur pour \/
+    'BI16sfffBB',
     'B32s',
     'B',
-    'B32s'
+    #'B32s' NOTE ?
+    '',
+    'B'
     #TODO FORMAT OBSTACLE
 ]
 

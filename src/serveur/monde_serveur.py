@@ -230,7 +230,7 @@ class MondeServeur:
         Sortie: `H(BIfff16sBB+...)`\n
         """
         if donnee[1] not in self.__joueurs_hache:
-            Dbg.avis("Un joueur a tenté de mettre à jour un joueur qui n'existe pas.")
+            Dbg.avis("Un joueur a tenté de mettre à jour un joueur qui n'existe pas. Ce joueur sera déconnecté.", 1)
             return paquet.construire_paquet([paquet.creer_paquet_deconnexion()])
         _id = self.__joueurs_hache[donnee[1]]
 

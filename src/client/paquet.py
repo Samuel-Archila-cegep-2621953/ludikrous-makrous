@@ -12,7 +12,12 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         if _type == TypePaquetServeur.CONNEXION_RATE:
             return (
                 _type,
-                None
+                "Ratee"
+            )
+        elif _type == TypePaquetServeur.DECONNEXION:
+            return (
+                _type,
+                "Deconnexion"
             )
 
         _paquet: bytes = tuple_paquet[1]
@@ -56,7 +61,7 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
         case TypePaquetServeur.CONNEXION_RATE:
             print("\033[91mErreur de connexion")
             return {
-                "Connexion": None
+                "Connexion": "Ratee"
             }
 
         case TypePaquetServeur.CONNEXION_REUSSIT:
@@ -66,6 +71,7 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
             }
 
         case TypePaquetServeur.DECONNEXION:
+            print("\033[91mDeconnexion")
             return {
                 "Connexion": tuple_paquet[1][0]
             }
