@@ -112,6 +112,7 @@ class MondeServeur:
 
         _fichier_json["Joueurs quittés"] = joueurs_quitte
 
+        Dbg.info(f"Fichier JSON dabs MondeServeur.__formatter_dict: {_fichier_json}", 3)
         return _fichier_json
 
     def __demarrer_nouvelle_partie(self):
@@ -124,6 +125,7 @@ class MondeServeur:
         self.__partie_en_cours = True
         self.effacer_tout_obstacle()
 
+        Dbg.info("Nouvelle partie commencée", 2)
         self.__liste_message.append("partie_commence")
 
     def __recevoir_creer_id(self, donnee: dict) -> str:

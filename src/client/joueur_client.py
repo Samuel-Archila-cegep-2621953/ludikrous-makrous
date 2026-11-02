@@ -57,9 +57,9 @@ class JoueurClient(FirstPersonController):
             _mdp_hache)
         )["Connexion"]
 
-        if _hache == None: exit()
-        print(_hache)
+        print(f"[+] Hache obtenue: {_hache}")
         #return _donnee['ID']
+        if _hache == None: exit(1)
         return _hache
 
     def __obtenir_temps(self) -> float:
@@ -82,7 +82,7 @@ class JoueurClient(FirstPersonController):
                 formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value],
                 #NOTE VIEUX TypePaquetClient.MAJ_JOUEUR.value[0],
                 TypePaquetClient.MAJ_JOUEUR.value,
-                Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"), #TODO! Confirmer ce que veut dire "hache clé"
+                Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"),
                 self.position.x,
                 self.position.y,
                 self.position.z,

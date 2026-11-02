@@ -18,7 +18,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         _paquet: bytes = tuple_paquet[1]
         print(f"DANS LIRE_PAQUET TYPE EST {_type}")
 
-        if _type < TypePaquetServeur.MAX.value:
+        if _type.value <= TypePaquetServeur.max():
 
             return (
                 _type,
@@ -31,7 +31,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
     except Exception as e:
         print(f"Erreur: le format du paquet n'est pas compatible, paquet: '{_paquet}'")
         print(e)
-        exit()
+        exit(1)
 
 
 def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> dict[str, any]:

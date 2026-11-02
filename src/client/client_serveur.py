@@ -28,9 +28,10 @@ class Client:
         self.__ecrire.write(message)
         await self.__ecrire.drain()
 
+        # SECTION RECEVOIR MESSAGE
 
         _aw_nb_paquets = await self.__lire.readexactly(2) # Lire le nombre de paquets
-        _nb_paquets = struct.unpack('H', _aw_nb_paquets)[0] # BIG ENDIAN u16
+        _nb_paquets = struct.unpack('H', _aw_nb_paquets)[0] # u16
 
         _liste_paquets: list[tuple[TypePaquetServeur, bytes]] = []
 
@@ -48,16 +49,19 @@ class Client:
                 _ce_paquet
             ))
 
+        # BUG Je ne pense pas que ce code fait quelque chose. Je le lasse pour le moment au cas ou c'était important
+        """
         print(f"LEN MSG EXPECT {_longueur_message}")
         try: 
             donnee = await self.__lire.readexactly(_longueur_message)
         except Exception as e:
-            print(f"EXCEPT DANS __ENVOYER_MESSAGE: {e}")
+            print(f"ERREUR DANS __ENVOYER_MESSAGE: {e}")
             print(time.time())
-            exit()
+            #exit(1)
+        """
 
 
-        print("\033[91mDonnees lues" + str(donnee))
+        #print("\033[91mDonnees lues" + str(donnee))
         return _liste_paquets
 
     async def __fermer(self):

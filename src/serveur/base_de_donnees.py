@@ -39,7 +39,7 @@ class BaseDeDonnees:
     def __verifier_personne_existe(self, nom: str) -> bool:
         self.__curseur.execute("SELECT id FROM utilisateurs WHERE pseudonyme = ?", (nom,))
         _resultat = self.__curseur.fetchone()
-        Dbg.info(f"Résultat de __verifier_personne_existe: {_resultat}", 2)
+        Dbg.info(f"Résultat de __verifier_personne_existe: {_resultat != None} ", 2)
         return _resultat != None
 
     def obtenir_id(self, nom: str) -> int:
