@@ -8,7 +8,7 @@ class JoueurAbstrait:
         self.position = (0,0,0)
         self.vie = 100
         self.en_vie = True
-        #NOTE CHANGé vers un int pour tester. 2-11-2026. Samuel. self.animation = "pause"
+        #NOTE Changé vers un int pour tester. 2-11-2026. Samuel. self.animation = "pause"
         self.animation = 0
         self.dernier_paquet = time.time()
 

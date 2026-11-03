@@ -20,7 +20,9 @@ class Serveur:
     def __gerer_client(self, socket_client: socket.socket):
         _requete = socket_client.recv(1024)
 
-        socket_client.send(self.__monde_serveur.recevoir_client_paquets(_requete))
+        _dbg_msg = self.__monde_serveur.recevoir_client_paquets(_requete)
+        #print(f"Msg {_dbg_msg}")
+        socket_client.send(_dbg_msg)
 
         socket_client.close()
 
@@ -125,6 +127,8 @@ class Serveur:
                     journal.inserer_erreur(f"Command \"{_commande[0]}\" doesn't exist, write the command \"help\" for the commands list")
             except KeyboardInterrupt:
                 self.__ouvert = False
+
+
     def __boucle_principale_avec_graphiques(self, commandes: dict[tuple]):
         _fenetre = ctk.CTk()
         _fenetre.title("Ludikrous Makrous")

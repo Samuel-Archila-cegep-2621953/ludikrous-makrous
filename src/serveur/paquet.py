@@ -3,6 +3,7 @@ import joueur_abstrait
 import monde_serveur
 from type_paquet import TypePaquetServeur, TypePaquetClient, formats_serveur_par_type, formats_clients_par_type
 import hashlib
+from debogage import Debogage as Dbg
 
 def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
     #NOTE Format: `BIfff16sBB` changé. 2-11-2026
@@ -43,6 +44,7 @@ def creer_paquet_deconnexion() -> bytes:
     Returns:
         bytes: paquet
     """
+    Dbg.info("Création d'un paquet de déconnexion", 2)
     return struct.pack(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value], TypePaquetServeur.DECONNEXION.value)
 
 def creer_paquet_connexion_reussit(code: bytes) -> bytes:
@@ -50,15 +52,17 @@ def creer_paquet_connexion_reussit(code: bytes) -> bytes:
     Formatte la réponse lorsqu'une connexion est réussit
     Format: `B32s`
     """
+    Dbg.info("Création d'un paquet de connexion réussie", 2)
     return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value],
                        TypePaquetServeur.CONNEXION_REUSSIT.value,
                        code)
 
 def creer_paquet_connexion_rate() -> bytes:
     """
-    Formatte la réponse lorsqu'une connexion est raté
+    Formatte la réponse lorsqu'une connexion est ratée
     Format: `B`
     """
+    Dbg.info("Création d'un paquet de connexion ratée", 2)
     return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_RATE.value], TypePaquetServeur.CONNEXION_RATE.value)
 
 

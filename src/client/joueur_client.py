@@ -104,9 +104,9 @@ class JoueurClient(FirstPersonController):
         for i, _ in enumerate(_joueurs):
             _position: list[float] = _['Position']
 
-            for p, p_idx in enumerate(_position):
+            for p_idx, p in enumerate(_position):
                 if is_nan(p):
-                    print(f"ERREUR: Position d'un joueur est NaN. Position: {_position}")
+                    print(f"ERREUR0: Position d'un joueur est NaN. Position: {_position}")
                     _position[p_idx] = 0.0
 
             if i >= len(self.__joueurs):
@@ -115,7 +115,14 @@ class JoueurClient(FirstPersonController):
             
             #else:
             elif _["ID"] != self.__id:  # Ne pas se mettre à jour soi-même?
-                self.__joueurs[i].position = (_position[0], _position[1] + 1.25, _position[2])
+                _pos = (_position[0], _position[1] + 1.25, _position[2])
+                print(_pos)
+                for p_idx, p in enumerate(_pos):
+                    if is_nan(p):
+                        print(f"ERREUR1: Position d'un joueur est NaN. Position: {_position}")
+                        _position[p_idx] = 0.0
+                        print(f"Position corrigée: {_pos}")
+                self.__joueurs[i].position = _pos
         
         for jq in _donnee['Joueurs quittés']:
             destroy(self.__joueurs[jq])
