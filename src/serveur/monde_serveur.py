@@ -208,7 +208,7 @@ class MondeServeur:
         _nom = donnee[1].decode().replace('\0', '')
         if self.base_donnee.creer_utilisateur(_nom, hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
-            _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
+            _clef = os.urandom(32)
             _id = self.base_donnee.obtenir_id(_nom)
         
             _joueur = JoueurAbstrait()
