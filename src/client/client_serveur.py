@@ -39,6 +39,7 @@ class Client:
         for _ in range(_nb_paquets):
             _entete = await self.__lire.readexactly(1) # Lire l'en-tête pour déterminer le type de paquet
             _type_paquet: int = struct.unpack('!B', _entete)[0] # u8, est un tuple duquel il faut extraire la valeur
+            if _type_paquet > TypePaquetServeur.max(): _type_paquet = 0
 
             print(f"Le type de paquet dans __ENVOYER_MESSAGE EST: {_type_paquet}")
             #if _type_paquet > 65:
