@@ -23,22 +23,28 @@ class Client:
 
         #self.__ecrire.write(message.encode('utf-8'))
 
-        print(f"MESSAGE ENVOYÉ: {message}")
+        #print(f"MESSAGE ENVOYÉ: {message}")
 
         self.__ecrire.write(message)
         await self.__ecrire.drain()
 
+        # SECTION RECEVOIR MESSAGE
 
         _aw_nb_paquets = await self.__lire.readexactly(2) # Lire le nombre de paquets
-        _nb_paquets = struct.unpack('H', _aw_nb_paquets)[0] # BIG ENDIAN u16
+        _nb_paquets = struct.unpack('H', _aw_nb_paquets)[0] # u16
+        print(f"Le nombre de paquets dans le superpaquet dans __ENVOYER_MESSAGE EST: {_nb_paquets}")
 
         _liste_paquets: list[tuple[TypePaquetServeur, bytes]] = []
 
         for _ in range(_nb_paquets):
             _entete = await self.__lire.readexactly(1) # Lire l'en-tête pour déterminer le type de paquet
-            _type_paquet: int = struct.unpack('B', _entete)[0] # u8, est un tuple qu'il duquel il faut extraire la valeur
+            _type_paquet: int = struct.unpack('!B', _entete)[0] # u8, est un tuple duquel il faut extraire la valeur
+
+            if _type_paquet > TypePaquetServeur.max(): _type_paquet = 0
 
             print(f"Le type de paquet dans __ENVOYER_MESSAGE EST: {_type_paquet}")
+            #if _type_paquet > 65:
+            #    _type_paquet = 0
 
             _longueur_message: int = longueur_paquet(_type_paquet)
             
@@ -48,16 +54,19 @@ class Client:
                 _ce_paquet
             ))
 
+        # BUG Je ne pense pas que ce code fait quelque chose. Je le lasse pour le moment au cas ou c'était important
+        """
         print(f"LEN MSG EXPECT {_longueur_message}")
         try: 
             donnee = await self.__lire.readexactly(_longueur_message)
         except Exception as e:
-            print(f"EXCEPT DANS __ENVOYER_MESSAGE: {e}")
+            print(f"ERREUR DANS __ENVOYER_MESSAGE: {e}")
             print(time.time())
-            exit()
+            #exit(1)
+        """
 
 
-        print("\033[91mDonnees lues" + str(donnee))
+        #print("\033[91mDonnees lues" + str(donnee))
         return _liste_paquets
 
     async def __fermer(self):

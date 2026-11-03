@@ -12,6 +12,7 @@ import paquet as Pq
 import struct
 from type_paquet import *
 from config import Config
+from math import isnan as is_nan
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -57,10 +58,10 @@ class JoueurClient(FirstPersonController):
             _mdp_hache)
         )["Connexion"]
 
-        if _hache == None: exit()
-        print(_hache)
+        print(f"[+] Hache obtenue: {_hache}")
         #return _donnee['ID']
-        return 8
+        if _hache == None: exit(1)
+        return _hache
 
     def __obtenir_temps(self) -> float:
         return time.time()
@@ -79,10 +80,11 @@ class JoueurClient(FirstPersonController):
         """
         #TODO! Convertir en struct
         return struct.pack(
-                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value],
+                formats_clients_par_type[TypePaquetClient.MAJ_JOUEUR.value], # FORMAT
                 #NOTE VIEUX TypePaquetClient.MAJ_JOUEUR.value[0],
-                TypePaquetClient.MAJ_JOUEUR.value,
-                Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"), #TODO! Confirmer ce que veut dire "hache clé"
+                TypePaquetClient.MAJ_JOUEUR.value,                            # TYPE
+                #NOTE VIEUX Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"),
+                self.__id, # hache clé
                 self.position.x,
                 self.position.y,
                 self.position.z,
@@ -100,15 +102,31 @@ class JoueurClient(FirstPersonController):
 
         _joueurs = _donnee["Joueurs"]
         for i, _ in enumerate(_joueurs):
-            _position = _['Position']
+            _position: list[float] = _['Position']
+
+            for p_idx, p in enumerate(_position):
+                if is_nan(p):
+                    print(f"ERREUR0: Position d'un joueur est NaN. Position: {_position}")
+                    _position[p_idx] = 0.0
+
             if i >= len(self.__joueurs):
                 _joueur = joueur.Joueur(_joueurs[i]["ID"], '', (_position[0], _position[1], _position[2]))
                 self.__joueurs.append(_joueur)
-            else:
-                self.__joueurs[i].position = (_position[0], _position[1] + 1.25, _position[2])
-        for _ in _donnee['Joueurs quittés']:
-            destroy(self.__joueurs[_])
-            del self.__joueurs[_]
+            
+            #else:
+            elif _["ID"] != self.__id:  # Ne pas se mettre à jour soi-même?
+                _pos = (_position[0], _position[1] + 1.25, _position[2])
+                print(_pos)
+                for p_idx, p in enumerate(_pos):
+                    if is_nan(p):
+                        print(f"ERREUR1: Position d'un joueur est NaN. Position: {_position}")
+                        _position[p_idx] = 0.0
+                        print(f"Position corrigée: {_pos}")
+                self.__joueurs[i].position = _pos
+        
+        for jq in _donnee['Joueurs quittés']:
+            destroy(self.__joueurs[jq])
+            del self.__joueurs[jq]
 
 
     def update(self):

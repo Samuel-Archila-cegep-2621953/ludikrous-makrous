@@ -7,6 +7,7 @@ from signal_serveur_client import SignalServeurClient
 from joueur_abstrait import JoueurAbstrait
 import joueur_abstrait
 import journal
+from debogage import Debogage as Dbg
 
 import struct
 import json
@@ -111,6 +112,7 @@ class MondeServeur:
 
         _fichier_json["Joueurs quittés"] = joueurs_quitte
 
+        Dbg.info(f"Fichier JSON dabs MondeServeur.__formatter_dict: {_fichier_json}", 3)
         return _fichier_json
 
     def __demarrer_nouvelle_partie(self):
@@ -123,6 +125,7 @@ class MondeServeur:
         self.__partie_en_cours = True
         self.effacer_tout_obstacle()
 
+        Dbg.info("Nouvelle partie commencée", 2)
         self.__liste_message.append("partie_commence")
 
     def __recevoir_creer_id(self, donnee: dict) -> str:
@@ -182,7 +185,7 @@ class MondeServeur:
         """
         _nom = donnee[1].decode().replace('\0', '')
         if self.base_donnee.connexion(_nom, hashlib.sha256(donnee[2]).hexdigest()):
-            journal.inserer_info(f"[+] {_nom} s'est connecté.")
+            Dbg.info(f"[+] {_nom} s'est connecté.")
             self.__compteur += 1
             # hashlib c bien mais aléatoire c mieux
             # _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
@@ -195,7 +198,8 @@ class MondeServeur:
 
             self.__joueurs_hache[_clef] = _id
             return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef)])
-        journal.inserer_avertissement(f"{_nom} a tenté une connexion, hash: {hashlib.sha256(donnee[2]).hexdigest()}")
+
+        Dbg.avis(f"{_nom} a tenté une connexion, hash: {hashlib.sha256(donnee[2]).hexdigest()}")
         return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
 
 
@@ -208,7 +212,7 @@ class MondeServeur:
         _nom = donnee[1].decode().replace('\0', '')
         if self.base_donnee.creer_utilisateur(_nom, hashlib.sha256(donnee[2]).hexdigest()):
             self.__compteur += 1
-            _clef = os.urandom(32)
+            _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
             _id = self.base_donnee.obtenir_id(_nom)
         
             _joueur = JoueurAbstrait()
@@ -226,7 +230,7 @@ class MondeServeur:
         Sortie: `H(BIfff16sBB+...)`\n
         """
         if donnee[1] not in self.__joueurs_hache:
-            journal.inserer_avertissement("Un joueur a tenté de mettre à jour un joueur qui n'existe pas.")
+            Dbg.avis("Un joueur a tenté de mettre à jour un joueur qui n'existe pas. Ce joueur sera déconnecté.", 1)
             return paquet.construire_paquet([paquet.creer_paquet_deconnexion()])
         _id = self.__joueurs_hache[donnee[1]]
 
@@ -241,7 +245,7 @@ class MondeServeur:
     def recevoir_client_paquets(self, requete: bytes) -> bytes:
         _paquet = paquet.lire_paquet(requete)
         _resultat = self.__REQUETES_PAQUETS[_paquet[0]](_paquet)
-        print(_resultat)
+        Dbg.info(f"Résultat de recevoir_client_paquets: {_resultat}", 2)
         return _resultat
 
 
@@ -255,7 +259,7 @@ class MondeServeur:
         """
         _donnee = json.loads(requete)
         _resultat = self.__REQUETES[_donnee['Type']](_donnee)
-        print(_resultat)
+        Dbg.info(f"Résultat de recevoir_client: {_resultat}", 2)
         return _resultat
 
     

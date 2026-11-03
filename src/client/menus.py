@@ -78,6 +78,7 @@ class QuelquesMenus:
             Musique(TypesMusique.MENU_PRINCIPAL, autoplay= False), 
             _btn,
             [_logo_titre],
+            enabled = False
         )
 
 
