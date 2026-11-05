@@ -37,7 +37,7 @@ class MondeServeur:
 
         self.__liste_messages = []
 
-        self.__liste_obstacle = []
+        self.__liste_obstacle: list[Obstacle] = []
         self.__personnes_a_ajoute: list[tuple[int,str]] = []
         self.__derniere_id = 0
 
@@ -115,6 +115,7 @@ class MondeServeur:
         Dbg.info(f"Fichier JSON dabs MondeServeur.__formatter_dict: {_fichier_json}", 3)
         return _fichier_json
 
+
     def __demarrer_nouvelle_partie(self):
         """
         Commencer une nouvelle partie
@@ -172,8 +173,8 @@ class MondeServeur:
         return json.dumps(self.__formatter_dict(_joueurs_quittes))
 
     def __obtenir_joueur_par_id(self, id: int):
-        for _ in self.__joueurs:
-            if _.id == id:
+        for j in self.__joueurs:
+            if j.id == id:
                 return _
         return None
 
@@ -346,6 +347,10 @@ class MondeServeur:
         self.__liste_obstacle = []
 
         #TODO delete tout les obstacles
+
+
+    def __cases_inoccupees_obstacles(self) -> list:
+        pass
 
 
 
