@@ -40,6 +40,7 @@ class Client:
         for _ in range(_nb_paquets):
             _entete = await self.__lire.readexactly(1) # Lire l'en-tête pour déterminer le type de paquet
             _type_paquet: int = struct.unpack('!B', _entete)[0] # u8, est un tuple duquel il faut extraire la valeur
+            _repack_type_obstacle: bytes = None
 
             if _type_paquet > TypePaquetServeur.max(): _type_paquet = 0 #HACK Ignore / remplace les paquets >= 61
 
@@ -50,18 +51,26 @@ class Client:
 
             if _type_paquet == TypePaquetServeur.MAJ_OBSTACLE:
                 print("OBSTACLES REçUS!")
-                _type_obstacle: int = await self.__lire.readexactly(1) # u8 indiquant le type d'obstacle
+                _bytes_type_obstacle: bytes = await self.__lire.readexactly(1) # u8 indiquant le type d'obstacle
+                _type_obstacle: int = struct.unpack('!B', _bytes_type_obstacle)
 
                 if _type_obstacle == TypeObstacle.TRAIN.value:
-                    _bytes_longueur_train = await self.__lire.readexactly(1) 
+                    _bytes_longueur_train: bytes = await self.__lire.readexactly(1) 
                     _longueur_train: int = struct.unpack('!B', _bytes_longueur_train)[0] # Le train a une longueur variable
                     _longueur_message: int = 2 + 2 * _longueur_train # Pour chaque longueur_train_u, lire 2 octets (coord x y) + 2 (Coord initiale x y)
 
+                    _repack_type_obstacle = _bytes_type_obstacle + _bytes_longueur_train
+
                 else:
                     _longueur_message: int = TypeObstacle.nb_bytes(_type_obstacle)
+                    _repack_type_obstacle = _bytes_type_obstacle
 
             
             _ce_paquet = await self.__lire.readexactly(_longueur_message)
+
+            if _repack_type_obstacle is not None: # Rattacher le type d'obstacle pour plus tard, car sinon _ce_paquet contiendrait seulement des octets d'obstacle sans le type d'obstacle
+                _ce_paquet = _repack_type_obstacle + _ce_paquet
+
             _liste_paquets.append((
                 TypePaquetServeur.depuis_int(_type_paquet),
                 _ce_paquet
