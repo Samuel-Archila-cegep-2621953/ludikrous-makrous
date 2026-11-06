@@ -11,6 +11,7 @@ from sons import Son
 from menus import QuelquesMenus
 from gestionnaire_menus import GestionnaireMenus as Gm
 
+
 #if __name__ == "__main__":
 _client = Client()
 
@@ -25,6 +26,9 @@ Langues.de_config()
 LANGUE = Langues.LANGUE
 
 app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
+
+pivot = Entity()
+DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
 #menu_principal = Entity(parent=camera.ui)
 
@@ -60,8 +64,7 @@ Gm.ajouter_et_montrer(QuelquesMenus.menu_principal())
 
 #musique_titre = Musique(TypesMusique.MENU_PRINCIPAL)
 #TODO WHY WAS THIS UNCOMMENTED ^ ^ ^ ^ ^ 
-pivot = Entity()
-DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
+# jsp, bonne question
 
 def input(key):
     """
