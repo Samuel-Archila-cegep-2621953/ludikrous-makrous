@@ -28,7 +28,13 @@ class MondeServeur:
         self.__compteur = 0
 
         self.__difficulte_globale = 0
-        self.__dimensions: list[int] = dimensions # grandeur de la grille, par défaux 8x8
+        self.__tuiles: list[list] = [] # grandeur de la grille, par défaux 8x8
+
+        for i in range(dimensions[0]):
+            self.__tuiles.append([])
+            for _ in range(dimensions[1]):
+                self.__tuiles[i].append(None)
+
         self.__joueurs: list[JoueurAbstrait] = [] # Liste de joueurs
         self.__joueurs_hache: dict[bytes,int] = {}
         self.__liste_modificateur = []
@@ -37,7 +43,7 @@ class MondeServeur:
 
         self.__liste_messages = []
 
-        self.__liste_obstacle = []
+        self.__liste_obstacle: list[Obstacle] = []
         self.__personnes_a_ajoute: list[tuple[int,str]] = []
         self.__derniere_id = 0
 
@@ -115,6 +121,7 @@ class MondeServeur:
         Dbg.info(f"Fichier JSON dabs MondeServeur.__formatter_dict: {_fichier_json}", 3)
         return _fichier_json
 
+
     def __demarrer_nouvelle_partie(self):
         """
         Commencer une nouvelle partie
@@ -172,9 +179,9 @@ class MondeServeur:
         return json.dumps(self.__formatter_dict(_joueurs_quittes))
 
     def __obtenir_joueur_par_id(self, id: int):
-        for _ in self.__joueurs:
-            if _.id == id:
-                return _
+        for j in self.__joueurs:
+            if j.id == id:
+                return j
         return None
 
     def __recevoir_connexion_paquets(self, donnee: tuple) -> bytes:
@@ -323,7 +330,7 @@ class MondeServeur:
         _nouveaux_obstacles: list[TypeObstacle] = []
 
         while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
-            _rand_obstacle: TypeObstacle = random.randint(1, TypeObstacle.max())
+            _rand_obstacle: TypeObstacle = random.randint(0, TypeObstacle.max())
             
             _difficulte_atteinte += _rand_obstacle.difficulte
             _nouveaux_obstacles.append(_rand_obstacle)
@@ -346,6 +353,10 @@ class MondeServeur:
         self.__liste_obstacle = []
 
         #TODO delete tout les obstacles
+
+
+    def __cases_inoccupees_obstacles(self) -> list:
+        pass
 
 
 

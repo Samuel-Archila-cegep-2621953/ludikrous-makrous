@@ -37,7 +37,7 @@ formats_serveur_par_type = [
     'B32s',
     'B',
     #'B32s' NOTE ?
-    '',
+    'B', # Obstacle: Ceci + format spécifique au type
     'B'
     #TODO FORMAT OBSTACLE
 ]
