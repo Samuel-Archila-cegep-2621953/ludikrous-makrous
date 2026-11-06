@@ -28,7 +28,13 @@ class MondeServeur:
         self.__compteur = 0
 
         self.__difficulte_globale = 0
-        self.__dimensions: list[int] = dimensions # grandeur de la grille, par défaux 8x8
+        self.__tuiles: list[list] = [] # grandeur de la grille, par défaux 8x8
+
+        for i in range(dimensions[0]):
+            self.__tuiles.append([])
+            for _ in range(dimensions[1]):
+                self.__tuiles[i].append(None)
+
         self.__joueurs: list[JoueurAbstrait] = [] # Liste de joueurs
         self.__joueurs_hache: dict[bytes,int] = {}
         self.__liste_modificateur = []
@@ -175,7 +181,7 @@ class MondeServeur:
     def __obtenir_joueur_par_id(self, id: int):
         for j in self.__joueurs:
             if j.id == id:
-                return _
+                return j
         return None
 
     def __recevoir_connexion_paquets(self, donnee: tuple) -> bytes:
@@ -324,7 +330,7 @@ class MondeServeur:
         _nouveaux_obstacles: list[TypeObstacle] = []
 
         while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
-            _rand_obstacle: TypeObstacle = random.randint(1, TypeObstacle.max())
+            _rand_obstacle: TypeObstacle = random.randint(0, TypeObstacle.max())
             
             _difficulte_atteinte += _rand_obstacle.difficulte
             _nouveaux_obstacles.append(_rand_obstacle)

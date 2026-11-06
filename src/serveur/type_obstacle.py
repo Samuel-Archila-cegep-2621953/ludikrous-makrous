@@ -27,11 +27,11 @@ class TypeObstacle(Enum):
             type_obstacle = TypeObstacle.comme_int(type_obstacle)
 
         _formats = [
-            '',
-            'B BB B(B...)', #Format, COORD, initiale, NB COORDONNEES, liste de coordonnees
-            'B BB f', # Type, coord, hauteur
-            'B BB f', # Type, coord, rayon
-            'B B f', # Type, direction, hauteur
+            None,
+            'B BB B(B...)', #type obstacle, COORD, initiale, NB COORDONNEES, liste de coordonnees
+            'B BB f', # Type obs, coord, hauteur
+            'B BB f', # Type obs, coord, rayon
+            'B B f', # Type obs, direction, hauteur
         ]
         return _formats[type_obstacle]
 

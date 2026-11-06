@@ -6,6 +6,7 @@ from paquet import *
 import type_paquet
 from type_paquet import TypePaquetServeur
 import time
+from type_obstacle import TypeObstacle
 
 class Client:
     def __init__(self):
@@ -40,13 +41,25 @@ class Client:
             _entete = await self.__lire.readexactly(1) # Lire l'en-tête pour déterminer le type de paquet
             _type_paquet: int = struct.unpack('!B', _entete)[0] # u8, est un tuple duquel il faut extraire la valeur
 
-            if _type_paquet > TypePaquetServeur.max(): _type_paquet = 0
+            if _type_paquet > TypePaquetServeur.max(): _type_paquet = 0 #HACK Ignore / remplace les paquets >= 61
 
             print(f"Le type de paquet dans __ENVOYER_MESSAGE EST: {_type_paquet}")
-            #if _type_paquet > 65:
-            #    _type_paquet = 0
 
             _longueur_message: int = longueur_paquet(_type_paquet)
+
+
+            if _type_paquet == TypePaquetServeur.MAJ_OBSTACLE:
+                print("OBSTACLES REçUS!")
+                _type_obstacle: int = await self.__lire.readexactly(1) # u8 indiquant le type d'obstacle
+
+                if _type_obstacle == TypeObstacle.TRAIN.value:
+                    _bytes_longueur_train = await self.__lire.readexactly(1) 
+                    _longueur_train: int = struct.unpack('!B', _bytes_longueur_train)[0] # Le train a une longueur variable
+                    _longueur_message: int = 2 + 2 * _longueur_train # Pour chaque longueur_train_u, lire 2 octets (coord x y) + 2 (Coord initiale x y)
+
+                else:
+                    _longueur_message: int = TypeObstacle.nb_bytes(_type_obstacle)
+
             
             _ce_paquet = await self.__lire.readexactly(_longueur_message)
             _liste_paquets.append((

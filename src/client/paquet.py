@@ -1,5 +1,6 @@
 import struct
 from type_paquet import *
+from type_obstacle import TypeObstacle
 
 
 def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaquetServeur, tuple[any]]:
@@ -25,7 +26,13 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
 
         if _type.value <= TypePaquetServeur.max():
             _format = formats_serveur_par_type[_type.value][1:] # Enleve le char de format
-            print(f"DANS LIRE_PAQUET FORMAT EST {_format}, d'une longueur de {struct.calcsize(_format)},\n len paquet est {len(_paquet)}")
+
+            if _type == TypePaquetServeur.MAJ_OBSTACLE:
+                _type_obstacle: int = _paquet[0] # Extraire  le type d'obstacle
+                _format = TypeObstacle.format(_type_obstacle)
+                # ret tuple[int, any..]
+
+            #print(f"DANS LIRE_PAQUET FORMAT EST {_format}, d'une longueur de {struct.calcsize(_format)},\n len paquet est {len(_paquet)}")
 
             return (
                 _type,

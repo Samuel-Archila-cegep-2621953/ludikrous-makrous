@@ -17,7 +17,7 @@ formats_serveur_par_type = [
     'BI16sfffBB',
     'B32s',
     'B',
-    '',
+    'B', # Obstacle: Ceci + format spécifique au type
     'B'
 ]
 
