@@ -1,6 +1,10 @@
 from ursina import *
-from ursina.shaders import lit_with_shadows_shader 
+from ursina.shaders import lit_with_shadows_shader
+import config
+
+tuile = load_model('ressources/modeles/tuile.glb')
+tuile_texture = load_texture('ressources/textures/plateforme.png')
 
 class Tuile(Entity):
     def __init__(self, x, y):
-        super().__init__(model='cube', color=rgb(128/255,128/255,128/255), scale=(10,1,10), position=(x*11,-2,y*11),collider='box', shader=lit_with_shadows_shader)
+        super().__init__(model=copy(tuile), texture=tuile_texture, color=rgb(128/255,128/255,128/255), rotation=(-90, 0, 0), position=(x*5,-5,y*5), scale=(0.5, 0.5, 0.5), collider='box')
