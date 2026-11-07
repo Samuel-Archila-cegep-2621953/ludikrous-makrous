@@ -33,7 +33,7 @@ class TypePaquetClient(enum.Enum):
 
 formats_serveur_par_type = [
     #'BIfff16sBB', NOTE Apparement changé coté serveur pour \/
-    'BI16sfffBB',
+    'BI16siiiBB',
     'B32s',
     'B',
     #'B32s' NOTE ?
@@ -43,7 +43,7 @@ formats_serveur_par_type = [
 ]
 
 formats_clients_par_type = [
-    "B32sfffBB", # Type, hache clé, x, y, z, vie, animation; TODO! Confirmer "hache clé"
+    "B32siiiBB", # Type, hache clé, x * 100, y * 100, z * 100, vie, animation; TODO! Confirmer "hache clé"
     "B16s32s", # Type, nom, mdp haché
     "B16s32s" # Type, nom, mdp haché
 ]
