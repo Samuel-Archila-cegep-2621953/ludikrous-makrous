@@ -110,7 +110,8 @@ def longueur_paquet(b: int) -> int:
         print(f"Aucun paquet de ce type. Valeur: {b}.")
         exit(1)
 
-    _longueur = struct.calcsize('' + formats_serveur_par_type[b]) - 1 # NOTE Samuel: 2-11-2026: Ajout de '>' au format pour que struct.calcsize retourne la valeur correcte en forçant BIG ENDIAN
+    _str_format = '>' + formats_serveur_par_type[b]
+    _longueur = struct.calcsize(_str_format) - 1 # NOTE Samuel: 2-11-2026: Ajout de '>' au format pour que struct.calcsize retourne la valeur correcte en forçant BIG ENDIAN
     #NOTE VIEUX _longueur = struct.calcsize(formats_serveur_par_type[b]) - 1
     print(f"DANS paquet.longueur_paquet: Un paquet de type {b} a une longueur de {_longueur} selon type_paquet.py")
     return _longueur

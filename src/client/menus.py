@@ -97,6 +97,9 @@ class QuelquesMenus:
 
         _changements: dict[str, str] = {}
 
+        def __changer_illumination(mode: str):
+            pass
+
         def __changer_langue(l: str):
             _changements["langue"] = l
 
