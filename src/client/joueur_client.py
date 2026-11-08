@@ -85,9 +85,9 @@ class JoueurClient(FirstPersonController):
                 TypePaquetClient.MAJ_JOUEUR.value,                            # TYPE
                 #NOTE VIEUX Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"),
                 self.__id, # hache clé
-                self.position.x,
-                self.position.y,
-                self.position.z,
+                floor(self.position.x * 100),
+                floor(self.position.y * 100),
+                floor(self.position.z * 100),
                 self.vie.value,
                 3 # TODO Animations
             )
@@ -115,7 +115,7 @@ class JoueurClient(FirstPersonController):
             
             #else:
             elif _["ID"] != self.__id:  # Ne pas se mettre à jour soi-même?
-                _pos = (_position[0], _position[1] + 1.25, _position[2])
+                _pos = (_position[0] / 100, _position[1] + 1.25, _position[2] / 100)
                 print(_pos)
                 for p_idx, p in enumerate(_pos):
                     if is_nan(p):
