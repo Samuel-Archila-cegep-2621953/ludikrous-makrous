@@ -255,6 +255,8 @@ class MondeServeur:
         Dbg.info(f"Résultat de recevoir_client_paquets: {_resultat}", 2)
         return _resultat
 
+    def joueurs(self) -> list:
+        return [f'{j.nom} {j.position[0]}, {j.position[1]}, {j.position[2]}' for j in self.__joueurs]
 
     def recevoir_client(self, requete: str) -> str:
         """

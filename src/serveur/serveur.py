@@ -156,7 +156,7 @@ class Serveur:
             _joueurs = ctkl.CTkListbox(_conteneur_gauche, width=300, height=170)
             _joueurs.pack(fill='both')
 
-            _joueurs.insert(0, "Test1234")
+            #_joueurs.insert(0, "Test1234")
 
             _conteneur_gauche.grid(row=0,column=0, sticky='n')
 
@@ -233,7 +233,9 @@ class Serveur:
                     for i, d in enumerate(donnee_brutes_ram):
                                     if i > 0:
                                         _graphique_ram.create_line(i*(300/20), 200-(d*2), (i-1)*(300/20), 200-(donnee_brutes_ram[i-1]*2), fill='blue', width=3)
-
+                for i, _ in enumerate(self.__monde_serveur.joueurs()):
+                    del _joueurs[i]
+                    _joueurs.insert(i, _)
                 _fenetre.update()
             except KeyboardInterrupt:
                 self.__ouvert = False

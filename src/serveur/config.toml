@@ -1,4 +1,4 @@
 [Serveur]
-ip = "127.0.0.1"
-port = 24113
+ip = "192.168.18.66"
+port = 9005
 joueurs_max = 16
