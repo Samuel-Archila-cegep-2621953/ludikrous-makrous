@@ -14,15 +14,15 @@ class TypePaquetClient(enum.Enum):
     MAX = 3
 
 formats_serveur_par_type = [
-    'BI16siiiBB',
-    'B32s',
-    'B',
-    'B', # Obstacle: Ceci + format spécifique au type
-    'B'
+    '!BI16siiiBB',
+    '!B32s',
+    '!B',
+    '!B', # Obstacle: Ceci + format spécifique au type
+    '!B'
 ]
 
 formats_clients_par_type = [
-    "B32siiiBB", # Type, hache clé, x, y, z, vie, animation
-    "B16s32s", # Type, nom, mdp haché
-    "B16s32s" # Type, nom, mdp haché
+    "!B32siiiBB", # Type, hache clé, x, y, z, vie, animation
+    "!B16s32s", # Type, nom, mdp haché
+    "!B16s32s" # Type, nom, mdp haché
 ]

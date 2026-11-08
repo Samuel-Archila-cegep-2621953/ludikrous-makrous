@@ -83,7 +83,7 @@ def construire_paquet(paquets: list[bytes]) -> bytes:
     Returns:
         bytes: le paquet final
     """
-    _format = 'H'
+    _format = '!H'
     _taille = struct.pack(_format, len(paquets))
     _paquet = _taille
     for _ in paquets:
@@ -96,7 +96,7 @@ def lire_paquet(paquet: bytes) -> tuple[any]:
     Lit un paquet et l'exporte en tuple.
     """
     try:
-        _type = struct.unpack('B', paquet[:1])[0]
+        _type = struct.unpack('!B', paquet[:1])[0]
         if _type < TypePaquetClient.MAX.value:
             return struct.unpack(formats_clients_par_type[_type], paquet)
     except:
