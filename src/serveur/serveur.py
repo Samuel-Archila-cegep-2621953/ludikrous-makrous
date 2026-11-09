@@ -153,7 +153,7 @@ class Serveur:
             _joueurs_texte = ctk.CTkLabel(_conteneur_gauche, text='Joueurs')
             _joueurs_texte.pack()
 
-            _joueurs = ctkl.CTkListbox(_conteneur_gauche, width=300, height=170)
+            _joueurs = ctk.CTkTextbox(_conteneur_gauche, width=300, height=170)
             _joueurs.pack(fill='both')
 
             #_joueurs.insert(0, "Test1234")
@@ -202,6 +202,8 @@ class Serveur:
         donnee_brutes = []
         donnee_brutes_ram = []
 
+        _fait = []
+
         while self.__ouvert:
             try:
                 journal.obtenir_texte(_journal)
@@ -233,12 +235,15 @@ class Serveur:
                     for i, d in enumerate(donnee_brutes_ram):
                                     if i > 0:
                                         _graphique_ram.create_line(i*(300/20), 200-(d*2), (i-1)*(300/20), 200-(donnee_brutes_ram[i-1]*2), fill='blue', width=3)
-                for i, _ in enumerate(self.__monde_serveur.joueurs()):
-                    del _joueurs[i]
-                    _joueurs.insert(i, _)
+                    _joueurs.delete('1.0', "end")
+                    for _ in self.__monde_serveur.joueurs():
+                        _joueurs.insert('end', _ + '\n')
+                    #_joueurs.update()
                 _fenetre.update()
             except KeyboardInterrupt:
                 self.__ouvert = False
+            except Exception as e:
+                print(e)
 
     def boucle_principale(self):
         _commandes = {
