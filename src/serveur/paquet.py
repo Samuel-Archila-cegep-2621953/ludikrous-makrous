@@ -26,9 +26,7 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
     #TODO!: Je pense que "s" devrait être remplacé par "<longueur_nom_utlisateur_max>s" pour qu'il soit interprété comme n * nb_chars. Il faudrait aussi soit: 1) Limiter les caractères permis a ascii ou 2) Compter le nombres de bytes (non de caractères) saisis de l'utlisateur avant de confirmer le nom d'utilisateur
     # 2026-10-26: J'ai changé pour rajouter un maximum de 16 caractère
 
-    print(f"{joueur.id} {joueur.position}")
-
-    res = struct.pack(
+    return struct.pack(
         formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value], # FORMAT
             TypePaquetServeur.MAJ_JOUEUR.value, # TYPE
             joueur.id,
@@ -37,8 +35,6 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
             joueur.vie,
             joueur.animation
         )
-    print(res)
-    return res
 
 def creer_paquet_deconnexion() -> bytes:
     """
