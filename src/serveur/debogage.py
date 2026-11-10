@@ -1,7 +1,7 @@
 import journal
 
 class Debogage:
-    NIVEAU_VERBOSITE: int = 5
+    NIVEAU_VERBOSITE: int = 1
 
     @staticmethod
     def err(msg: str, niveau: int = 1):

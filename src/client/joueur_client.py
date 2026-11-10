@@ -2,7 +2,6 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.prefabs.health_bar import HealthBar
 import client_serveur
 import time
-import json
 import joueur
 from ursina import *
 import __main__ as principale
@@ -14,6 +13,8 @@ from type_paquet import *
 from config import Config
 from math import isnan as is_nan
 from debogage import Debogage as Dbg
+from monde import Monde
+from type_obstacle import TypeObstacle as TyOb
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -38,6 +39,8 @@ class JoueurClient(FirstPersonController):
 
         self.musique = Musique(TypesMusique.PERTE)
         self.musique.fade_in(0.7)
+
+        self.monde = Monde(8, 8)
 
     def __creer_id(self) -> int:
         """
@@ -129,8 +132,17 @@ class JoueurClient(FirstPersonController):
             destroy(self.__joueurs[jq])
             del self.__joueurs[jq]
 
-        _obstacles = _donnee["Obstacles"]
-        #for j, obs in enumerate(_obstacles):
+        _obstacles: list[dict] = _donnee["Obstacles"]
+        for j, obs in enumerate(_obstacles):
+            try:
+                match obs["Type"]:
+                    case TyOb.TRAIN.value: pass # TODO Difficile
+                    case TyOb.PILIER.value:
+                        _coord: tuple[int, int] = obs["Coord"]
+                        self.monde.tuile(_coord[0], _coord[1]).y = obs["Hauteur"]
+            except Exception as e:
+                pass
+            
 
 
 
@@ -140,6 +152,7 @@ class JoueurClient(FirstPersonController):
         if temps_en_ce_moment - self.__dernier_temps > 1 / 12:
             #NOTE VIEUX self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())), TypePaquetServeur.MAJ_JOUEUR)
             self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
+
         
         #print(self.position)
         if self.position.y < -10:

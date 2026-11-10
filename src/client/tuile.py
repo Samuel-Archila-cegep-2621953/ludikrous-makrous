@@ -10,6 +10,7 @@ tuile_texture = load_texture('ressources/textures/plateforme.png')
 class Tuile(Entity):
     def __init__(self, x, y):
         h = random.uniform(-7, -3)
+        H_DEFAUT: float = -5
         super().__init__(
             model=copy(tuile), 
             texture=tuile_texture, 
