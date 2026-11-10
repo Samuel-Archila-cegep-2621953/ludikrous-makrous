@@ -132,11 +132,10 @@ class JoueurClient(FirstPersonController):
             destroy(self.__joueurs[jq])
             del self.__joueurs[jq]
 
-        _obstacles = _donnee["Obstacles"]
+        _obstacles: list[dict] = _donnee["Obstacles"]
         for j, obs in enumerate(_obstacles):
-            pass
-            #match obs:
-            #    case ""
+            match obs["Type"]:
+                case 1: pass
             
 
 
