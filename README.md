@@ -9,12 +9,12 @@ Ludikrous Makrous est un jeu multijoueur en temps réel où il faut survivre dan
 - Comptes
 - Interface graphique pour le serveur avec des graphiques en temps réel
 
-## 🖋 Auteurs 🖋
+## 🖋 Auteurs
 - Émerick Brault — Directeur créatif / Modeleur 3D / Artiste 2D / Tests de qualité / Polissage / Programmeur
 - Samuel Archila — Directeur des interfaces graphique / Programmeur / Débogage / Traducteur
 - William Laplante — Directeur du jeu / Programmeur / Débogage / Artiste 2D / Artiste audio
 
-## 💻 Comment lancer le programme 💻
+## 💻 Comment lancer le programme
 
 1) Dans le dossier principal, lancez `installation_dependances.py` pour télécharger toutes les librairies externes.
 2) Dans le dossier serveur, lancez `__main__.py` pour lancer le serveur. Il y a plusieurs paramètres :
