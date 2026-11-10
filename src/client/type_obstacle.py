@@ -78,4 +78,3 @@ class TypeObstacle(Enum):
 
             case TypeObstacle.TRAIN.value:
                 pass #TODO
-
