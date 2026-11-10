@@ -17,6 +17,7 @@ _client = Client()
 
 window.borderless = False
 window.vsync = False
+window.size = (1280, 720)
 #window.fullscreen = True
 #window.main_monitor = window.monit
 #window.show_ursina_splash = True

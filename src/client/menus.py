@@ -64,10 +64,10 @@ class QuelquesMenus:
 
         _logo_titre = Entity(
             texture="ressources/textures/titre_vrai",
-            origin=(0, 0),
-            y=0.2,
+            origin=(1, -1),
+            position=(0.6,0.05),
             model="quad",
-            scale=(1, 0.5),
+            scale=(1, 0.3),
         )
 
         _btn = ordonner_boutons([_btn_commencer, _btn_en_ligne, _btn_heberger, _btn_config, _btn_fermer], D_BOUTONS, H_BOUTON, L_BOUTON, DEBUT_Y_BOUTONS, COULEUR_BASE, COULEUR_SURVOL, 0)
