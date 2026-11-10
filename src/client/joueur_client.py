@@ -13,6 +13,7 @@ import struct
 from type_paquet import *
 from config import Config
 from math import isnan as is_nan
+from debogage import Debogage as Dbg
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -49,7 +50,7 @@ class JoueurClient(FirstPersonController):
         #_mdp_hache = Config.json()["Client"]["mot_de_passe_hache"].encode("ascii")
         _mdp_hache = bytes.fromhex(Config.json()["Client"]["mot_de_passe_hache"].strip())
         _nom_utilisateur = Config.json()["Client"]["nom_utilisateur"].encode("ascii")
-        print(_mdp_hache)
+        Dbg.info(_mdp_hache, 3)
 
         _hache = self.__client.envoyer_message(struct.pack(
             formats_clients_par_type[TypePaquetClient.CONNEXION.value],
@@ -58,7 +59,7 @@ class JoueurClient(FirstPersonController):
             _mdp_hache)
         )["Connexion"]
 
-        print(f"[+] Hache obtenue: {_hache}")
+        Dbg.info(f"[+] Hache obtenue: {_hache}", 3)
         #return _donnee['ID']
         if _hache == None: exit(1)
         return _hache
@@ -98,7 +99,7 @@ class JoueurClient(FirstPersonController):
     def lire_donnee(self, donnee_texte: dict):
         #NOTE VEUX_donnee = json.loads(donnee_texte)
         _donnee = donnee_texte
-        print("DONNEES LUES")
+        Dbg.info("DONNEES LUES", 5)
 
         _joueurs = _donnee["Joueurs"]
         for i, _ in enumerate(_joueurs):
@@ -106,7 +107,7 @@ class JoueurClient(FirstPersonController):
 
             for p_idx, p in enumerate(_position):
                 if is_nan(p):
-                    print(f"ERREUR0: Position d'un joueur est NaN. Position: {_position}")
+                    Dbg.err(f"ERREUR0: Position d'un joueur est NaN. Position: {_position}")
                     _position[p_idx] = 0.0
 
             if i >= len(self.__joueurs):
@@ -116,12 +117,12 @@ class JoueurClient(FirstPersonController):
             #else:
             elif _["ID"] != self.__id:  # Ne pas se mettre à jour soi-même?
                 _pos = (_position[0] / 100, _position[1] / 100 + 1.25, _position[2] / 100)
-                print(_pos)
+                Dbg.info(_pos, 4)
                 for p_idx, p in enumerate(_pos):
                     if is_nan(p):
-                        print(f"ERREUR1: Position d'un joueur est NaN. Position: {_position}")
+                        Dbg.err(f"ERREUR1: Position d'un joueur est NaN. Position: {_position}")
                         _position[p_idx] = 0.0
-                        print(f"Position corrigée: {_pos}")
+                        Dbg.err(f"Position corrigée: {_pos}")
                 self.__joueurs[i].position = _pos
         
         for jq in _donnee['Joueurs quittés']:
