@@ -31,22 +31,20 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         Dbg.info(f"DANS LIRE_PAQUET TYPE EST {_type}", 3)
 
         if _type.value <= TypePaquetServeur.max():
-            print(f"DANS lire_paquet LE PAQUET: {_paquet}")
+            Dbg.info(f"DANS lire_paquet LE PAQUET: {_paquet}", 3)
             _format = formats_serveur_par_type[_type.value][1:] # Enleve le char de format
 
                 # ret tuple[int, any..]
 
             #print(f"DANS LIRE_PAQUET FORMAT EST {_format}, d'une longueur de {struct.calcsize(_format)},\n len paquet est {len(_paquet)}")
 
-            res = (
+            return (
                 _type,
                 struct.unpack(
                     _format,
                     _paquet # Le paquet n'inclue pas le u8 de format au début
                 )
             )
-            print(res)
-            return res
 
     except Exception as e:
         Dbg.err("Dans paquet.lire_paquet():")
@@ -88,7 +86,7 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
                 "Connexion": tuple_paquet[1][0]
             }
 
-        case TypePaquetServeur.DECONNEXION: # NOTE ASSUMER JOUEUR QUITTES
+        case TypePaquetServeur.DECONNEXION: # NOTE ASSUMER JOUEUR QUITTES ? 
             print("\033[91mDeconnexion")
             return {
                 "Connexion": tuple_paquet[1][0]
