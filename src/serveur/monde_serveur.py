@@ -332,7 +332,11 @@ class MondeServeur:
         _nouveaux_obstacles: list[TypeObstacle] = []
 
         while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
-            _rand_obstacle: TypeObstacle = random.randint(0, TypeObstacle.max())
+            _rand_obstacle: int = random.randint(0, TypeObstacle.max())
+            if _rand_obstacle == TypeObstacle.RIEN.value:
+                _chance = random.randint(0, 2)
+                if _chance != 0:
+                    continue
             
             _difficulte_atteinte += _rand_obstacle.difficulte
             _nouveaux_obstacles.append(_rand_obstacle)
