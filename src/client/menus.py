@@ -11,6 +11,7 @@ from utilitaires import (ordonner_boutons)
 from config import Config
 from constantes import LEN_MAX_NOM
 import socket
+import hashlib
 
 class QuelquesMenus:
     COULEUR_BASE = color.rgba(130/255, 69/255, 16/255, 0.6)
@@ -97,6 +98,14 @@ class QuelquesMenus:
 
         _changements: dict[str, str] = {}
 
+        def __changer_nom_utilisateur(nom: str):
+            _changements["nom_utilisateur"] = nom
+
+        def __changer_mdp(mdp: str):
+            if mdp == '':
+                return
+            _changements["mot_de_passe_hache"] = hashlib.sha256(hashlib.sha256(mdp.encode("utf-8")).digest).hexdigest()
+
         def __changer_illumination(mode: str):
             pass
 
@@ -107,14 +116,26 @@ class QuelquesMenus:
             _changements["nom_affichage"] = nom
 
         def __appliquer_changements():
-            __changer_nom_affichage(_saisir.text)
+            __changer_nom_affichage(_saisir_nom_affichage.text)
+            __changer_nom_utilisateur(_saisir_nom_utilisateur.text)
+            __changer_mdp(_saisir_mdp.text)
             try:
                 Langues.changer(_changements["langue"])
             except:
                 pass
 
             try:
-                Config.changer_nom(_changements["nom_affichage"])
+                Config.changer_nom_affichage(_changements["nom_affichage"])
+            except:
+                pass
+
+            try:
+                Config.changer_nom_utilisateur(_changements["nom_utilisateur"])
+            except:
+                pass
+
+            try:
+                Config.changer_mdp(_changements["mot_de_passe_hache"])
             except:
                 pass
                 
@@ -139,7 +160,7 @@ class QuelquesMenus:
         _deroulant_langue.x = -0.25
         _deroulant_langue.y = -0.2
 
-        _saisir = InputField(
+        _saisir_nom_affichage = InputField(
             default_value = Config.json()["Client"]["nom_affichage"],
             origin = (0,0),
             position = (0, -0.15),
@@ -147,10 +168,39 @@ class QuelquesMenus:
             tooltip = Tooltip(Langues.obtenir("menu_config.texte.nom_affichage", Langues.LANGUE))
             #scale = (L_BOUTON, H_BOUTON)
         )
-        _etiquette_saisir = Text(
+        _etiquette_saisir_nom_affichage = Text(
             Langues.obtenir("menu_config.texte.nom_affichage", Langues.LANGUE),
             origin = (0,0),
-            position = (_saisir.x - 0.15, _saisir.y + 0.05)
+            position = (_saisir_nom_affichage.x - 0.15, _saisir_nom_affichage.y + 0.05)
+        )
+
+        _saisir_nom_utilisateur = InputField(
+            default_value = Config.json()["Client"]["nom_utilisateur"],
+            origin = (0,0),
+            position = (0, 0.05), # TODO
+            character_limit = LEN_MAX_NOM,
+            tooltip = Tooltip(Langues.obtenir("menu_config.texte.nom_utilisateur", Langues.LANGUE))
+            #scale = (L_BOUTON, H_BOUTON)
+        )
+        _etiquette_saisir_nom_utilisateur = Text(
+            Langues.obtenir("menu_config.texte.nom_utilisateur", Langues.LANGUE),
+            origin = (0,0),
+            position = (_saisir_nom_utilisateur.x - 0.15, _saisir_nom_utilisateur.y + 0.05)
+        )
+
+        _saisir_mdp = InputField(
+            #default_value = Config.json()["Client"]["mot_de_passe_hache"],
+            hide_content = True,
+            origin = (0,0),
+            position = (0, -0.05), # TODO
+            character_limit = LEN_MAX_NOM,
+            tooltip = Tooltip(Langues.obtenir("menu_config.texte.mot_de_passe", Langues.LANGUE))
+            #scale = (L_BOUTON, H_BOUTON)
+        )
+        _etiquette_saisir_mdp = Text(
+            Langues.obtenir("menu_config.texte.mot_de_passe", Langues.LANGUE),
+            origin = (0,0),
+            position = (_saisir_mdp.x - 0.15, _saisir_mdp.y + 0.05)
         )
 
         """
@@ -183,7 +233,16 @@ class QuelquesMenus:
         )
         
         #return Menu("config", "matte-black", Musique(TypesMusique.MENU_PRINCIPAL, autoplay = False), [_btn_confirmer], [_saisir], [_etiquette_saisir], [_deroulant_langue], False)
-        return Menu("config", "matte-black", None, [_btn_confirmer], [_saisir], [_etiquette_saisir], [_deroulant_langue], False)
+        return Menu(
+            "config",
+            "matte-black",
+            None,
+            [_btn_confirmer], 
+            [_saisir_nom_affichage, _saisir_nom_utilisateur, _saisir_mdp], 
+            [_etiquette_saisir_nom_affichage, _etiquette_saisir_nom_utilisateur, _etiquette_saisir_mdp], 
+            [_deroulant_langue], 
+            False
+        )
 
 
     @staticmethod
