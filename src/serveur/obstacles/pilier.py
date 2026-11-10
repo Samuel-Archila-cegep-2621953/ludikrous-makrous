@@ -14,3 +14,5 @@ class Pilier(Obstacle):
         self.transparent = False
 
     
+
+    

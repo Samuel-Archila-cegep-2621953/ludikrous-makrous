@@ -313,7 +313,6 @@ class MondeServeur:
                     _liste_joueurs.insert(idx, j)
         # TODO tester
                     
-                    
 
     def __difficulte_actuelle(self) -> float:
         """
@@ -333,6 +332,7 @@ class MondeServeur:
 
         while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
             _rand_obstacle: int = random.randint(0, TypeObstacle.max())
+
             if _rand_obstacle == TypeObstacle.RIEN.value:
                 _chance = random.randint(0, 2)
                 if _chance != 0:
