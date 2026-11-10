@@ -316,6 +316,7 @@ class QuelquesMenus:
             invoke(_cacher_texte, _texte_erreur, delay = 2)
 
         def __changer_infos():
+            import __main__ as main
             if not verifier_ip(_saisir_ip.text.strip()): # Vérifier si l'addresse ip est valide. Montre un message d'erreur si elle ne l'est pas
                 _afficher_erreur("menu_multijoueur.texte.erreur_ip")
                 return
@@ -326,6 +327,8 @@ class QuelquesMenus:
             Config.changer_ip(_saisir_ip.text.strip())
             Config.changer_port(int(_saisir_port.text.strip()))
             GM.ajouter_et_montrer(QuelquesMenus.menu_attente(), True)
+            main.commencer_jeu()
+            
             
 
         _btn_connection = Button(

@@ -252,7 +252,7 @@ class MondeServeur:
     def recevoir_client_paquets(self, requete: bytes) -> bytes:
         _paquet = paquet.lire_paquet(requete)
         _resultat = self.__REQUETES_PAQUETS[_paquet[0]](_paquet)
-        Dbg.info(f"Résultat de recevoir_client_paquets: {_resultat}", 2)
+        Dbg.info(f"Résultat de recevoir_client_paquets: {_resultat}", 5)
         return _resultat
 
     def joueurs(self) -> list:
