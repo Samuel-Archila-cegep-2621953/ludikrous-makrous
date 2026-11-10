@@ -103,8 +103,21 @@ class QuelquesMenus:
 
         def __changer_mdp(mdp: str):
             if mdp == '':
+                _changements["mot_de_passe_hache"] = Config.json()["Client"]["mot_de_passe_hache"]
                 return
-            _changements["mot_de_passe_hache"] = hashlib.sha256(hashlib.sha256(mdp.encode("utf-8")).digest).hexdigest()
+
+            #print(mdp)
+            #mpd = "Password1"
+            """
+            _ = hashlib.sha256(
+                hashlib.sha256(
+                    mpd.encode()
+                ).digest
+            ).hexdigest()
+            """
+            #_changements["mot_de_passe_hache"] = hashlib.sha256(hashlib.sha256(mdp.encode()).digest()).hexdigest()
+            _changements["mot_de_passe_hache"] = hashlib.sha256(mdp.encode()).hexdigest()
+            # _changements["mot_de_passe_hache"] = hash
 
         def __changer_illumination(mode: str):
             pass
