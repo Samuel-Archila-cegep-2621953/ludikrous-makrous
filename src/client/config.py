@@ -35,7 +35,7 @@ class Config:
 
 
     @staticmethod
-    def changer_nom(nom: str):
+    def changer_nom_affichage(nom: str):
         _cfg = Config.json()
         _cfg["Client"]["nom_affichage"] = nom
         Config.modifier(_cfg)
@@ -52,4 +52,18 @@ class Config:
     def changer_port(port: int):
         _cfg = Config.json()
         _cfg["Client"]["port"] = port
+        Config.modifier(_cfg)
+
+
+    @staticmethod
+    def changer_nom_utilisateur(nom: int):
+        _cfg = Config.json()
+        _cfg["Client"]["nom_utilisateur"] = nom
+        Config.modifier(_cfg)
+
+
+    @staticmethod
+    def changer_mdp(mdp: int):
+        _cfg = Config.json()
+        _cfg["Client"]["mot_de_passe_hache"] = mdp
         Config.modifier(_cfg)

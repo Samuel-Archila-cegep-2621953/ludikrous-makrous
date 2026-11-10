@@ -252,7 +252,7 @@ class MondeServeur:
     def recevoir_client_paquets(self, requete: bytes) -> bytes:
         _paquet = paquet.lire_paquet(requete)
         _resultat = self.__REQUETES_PAQUETS[_paquet[0]](_paquet)
-        Dbg.info(f"Résultat de recevoir_client_paquets: {_resultat}", 2)
+        Dbg.info(f"Résultat de recevoir_client_paquets: {_resultat}", 5)
         return _resultat
 
     def joueurs(self) -> list:
@@ -332,7 +332,11 @@ class MondeServeur:
         _nouveaux_obstacles: list[TypeObstacle] = []
 
         while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
-            _rand_obstacle: TypeObstacle = random.randint(0, TypeObstacle.max())
+            _rand_obstacle: int = random.randint(0, TypeObstacle.max())
+            if _rand_obstacle == TypeObstacle.RIEN.value:
+                _chance = random.randint(0, 2)
+                if _chance != 0:
+                    continue
             
             _difficulte_atteinte += _rand_obstacle.difficulte
             _nouveaux_obstacles.append(_rand_obstacle)
