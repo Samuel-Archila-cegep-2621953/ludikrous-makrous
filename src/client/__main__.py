@@ -46,7 +46,7 @@ def commencer_jeu():
 
     ciel_texte = load_texture("ressources/textures/ciel")
     _ciel = Sky(texture=ciel_texte)
-    _monde = monde.Monde(8, 8)
+    #_monde = monde.Monde(8, 8)
 
 
 
