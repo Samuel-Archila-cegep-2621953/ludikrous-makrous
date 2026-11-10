@@ -107,6 +107,8 @@ def ordonner_boutons(
         for b in boutons:
             b.color = couleur_base
             b.highlight_color = couleur_survol
+            b.text_color = (0, 0, 10/255, 1)
+            b.highlight_text_color = (0, 0, 60 / 255, 1)
 
     return boutons
 

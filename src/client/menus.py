@@ -27,8 +27,8 @@ class QuelquesMenus:
         DEBUT_Y_BOUTONS: float = -0.13
         D_BOUTONS = 0.07
         #COULEUR_BASE = color.rgba(130/255, 69/255, 16/255, 0.6)
-        COULEUR_BASE = color.rgba(0, 0, 0, 0.6)
-        COULEUR_SURVOL = color.rgba(251/255, 119/255, 5/255, 0.8)
+        COULEUR_BASE = color.rgba(0, 0, 0, 0.0)
+        COULEUR_SURVOL = color.rgba(251/255, 119/255, 5/255, 0.0)
         ALPHA = 0.9
 
         _btn_commencer = Button(
