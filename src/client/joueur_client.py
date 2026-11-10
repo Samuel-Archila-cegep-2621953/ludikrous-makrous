@@ -129,8 +129,8 @@ class JoueurClient(FirstPersonController):
             del self.__joueurs[jq]
 
         _obstacles = _donnee["Obstacles"]
-        for j, obs in enumerate(_obstacles):
-            
+        #for j, obs in enumerate(_obstacles):
+
 
 
     def update(self):
