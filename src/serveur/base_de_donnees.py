@@ -45,7 +45,7 @@ class BaseDeDonnees:
     def obtenir_id(self, nom: str) -> int:
         self.__curseur.execute("SELECT id FROM utilisateurs WHERE pseudonyme = ?", (nom,))
         _resultat = self.__curseur.fetchone()
-        return _resultat
+        return _resultat[0]
 
     def connexion(self, nom: str, mot_de_passe_hache: str) -> bool:
         """

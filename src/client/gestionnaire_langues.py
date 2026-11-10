@@ -41,7 +41,7 @@ class GestionnaireLangues:
             case "fr": _code_lang = "fr_CA"
             case "en": _code_lang = "en_US"
             case "es": _code_lang = "es_419"
-            case _: raise Exception("Code de langue non valide")
+            case _   : raise Exception("Code de langue non valide")
 
         return _code_lang
 

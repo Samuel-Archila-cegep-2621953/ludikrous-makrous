@@ -115,7 +115,7 @@ class JoueurClient(FirstPersonController):
             
             #else:
             elif _["ID"] != self.__id:  # Ne pas se mettre à jour soi-même?
-                _pos = (_position[0] / 100, _position[1] + 1.25, _position[2] / 100)
+                _pos = (_position[0] / 100, _position[1] / 100 + 1.25, _position[2] / 100)
                 print(_pos)
                 for p_idx, p in enumerate(_pos):
                     if is_nan(p):
@@ -127,6 +127,10 @@ class JoueurClient(FirstPersonController):
         for jq in _donnee['Joueurs quittés']:
             destroy(self.__joueurs[jq])
             del self.__joueurs[jq]
+
+        _obstacles = _donnee["Obstacles"]
+        #for j, obs in enumerate(_obstacles):
+
 
 
     def update(self):

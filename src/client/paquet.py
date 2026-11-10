@@ -30,19 +30,22 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         print(f"DANS LIRE_PAQUET TYPE EST {_type}")
 
         if _type.value <= TypePaquetServeur.max():
+            print(f"DANS lire_paquet LE PAQUET: {_paquet}")
             _format = formats_serveur_par_type[_type.value][1:] # Enleve le char de format
 
                 # ret tuple[int, any..]
 
             #print(f"DANS LIRE_PAQUET FORMAT EST {_format}, d'une longueur de {struct.calcsize(_format)},\n len paquet est {len(_paquet)}")
 
-            return (
+            res = (
                 _type,
                 struct.unpack(
                     _format,
                     _paquet # Le paquet n'inclue pas le u8 de format au début
                 )
             )
+            print(res)
+            return res
 
     except Exception as e:
         print("Dans paquet.lire_paquet():")
@@ -110,8 +113,8 @@ def longueur_paquet(b: int) -> int:
         print(f"Aucun paquet de ce type. Valeur: {b}.")
         exit(1)
 
-    _str_format = '>' + formats_serveur_par_type[b]
-    _longueur = struct.calcsize(_str_format) - 1 # NOTE Samuel: 2-11-2026: Ajout de '>' au format pour que struct.calcsize retourne la valeur correcte en forçant BIG ENDIAN
+    _str_format = formats_serveur_par_type[b][1:]
+    _longueur = struct.calcsize(_str_format) # NOTE Samuel: 2-11-2026: Ajout de '>' au format pour que struct.calcsize retourne la valeur correcte en forçant BIG ENDIAN
     #NOTE VIEUX _longueur = struct.calcsize(formats_serveur_par_type[b]) - 1
     print(f"DANS paquet.longueur_paquet: Un paquet de type {b} a une longueur de {_longueur} selon type_paquet.py")
     return _longueur

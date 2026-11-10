@@ -1,4 +1,6 @@
 import tuile
+from ursina import Entity
+
 
 class Monde:
     def __init__(self, longueur: int, hauteur: int):
@@ -9,4 +11,8 @@ class Monde:
                 _tuile = tuile.Tuile(x, y)
                 _colonne_tuile.append(_tuile)
             self.__monde.append(_colonne_tuile)
+
+    def tuile(self, x: int, y: int) -> tuile.Tuile:
+        return self.__monde[y][x]
+
             

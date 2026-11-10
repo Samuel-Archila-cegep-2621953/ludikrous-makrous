@@ -233,8 +233,8 @@ class MondeServeur:
     def __recevoir_maj_paquets(self, donnee: tuple) -> bytes:
         """
         Lit un paquet de mise à jour et envoit une mise à jour de chaque joueurs\n
-        Entrée: `B32sfffBB`\n
-        Sortie: `H(BIfff16sBB+...)`\n
+        Entrée: `B32siiiBB`\n
+        Sortie: `H(BIiii16sBB+...)`\n
         """
         if donnee[1] not in self.__joueurs_hache:
             Dbg.avis("Un joueur a tenté de mettre à jour un joueur qui n'existe pas. Ce joueur sera déconnecté.", 1)
@@ -332,7 +332,11 @@ class MondeServeur:
         _nouveaux_obstacles: list[TypeObstacle] = []
 
         while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
-            _rand_obstacle: TypeObstacle = random.randint(0, TypeObstacle.max())
+            _rand_obstacle: int = random.randint(0, TypeObstacle.max())
+            if _rand_obstacle == TypeObstacle.RIEN.value:
+                _chance = random.randint(0, 2)
+                if _chance != 0:
+                    continue
             
             _difficulte_atteinte += _rand_obstacle.difficulte
             _nouveaux_obstacles.append(_rand_obstacle)
