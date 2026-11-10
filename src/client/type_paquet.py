@@ -33,12 +33,13 @@ class TypePaquetClient(enum.Enum):
 
 formats_serveur_par_type = [
     #'BIfff16sBB', NOTE Apparement changé coté serveur pour \/
-    'BI16siiiBB',
-    'B32s',
-    'B',
+    'B!I16siiiBB',
+    'B!32s',
+    'B!',
+
     #'B32s' NOTE ?
-    'B', # Obstacle: Ceci + format spécifique au type
-    'B'
+    'B!', # Obstacle: Ceci + format spécifique au type
+    'B!'
     #TODO FORMAT OBSTACLE
 ]
 

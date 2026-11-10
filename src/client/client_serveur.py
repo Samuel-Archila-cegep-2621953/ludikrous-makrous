@@ -15,6 +15,7 @@ class Client:
     async def __gerer_envoyer_message(self, message: str) -> dict:
         _message: list[tuple[TypePaquetServeur, bytes]] = await self.__envoyer_message(message)
         await self.__fermer()
+        print(_message)
         _decode: dict[str, any] = deconstruire_superpaquet(_message)
         print(_decode)
         return _decode

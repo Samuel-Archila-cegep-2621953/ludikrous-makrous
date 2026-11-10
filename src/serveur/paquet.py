@@ -9,13 +9,13 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
     #NOTE Format: `BIfff16sBB` changé. 2-11-2026
     """
     Formatte un joueur abstrait en paquet binaire. \n
-    Format: `BI16sfffBB`
+    Format: `BI16siiiBB`
     - type         (`uint8_t`)
     - ID           (`uint32_t`)
     - nom          (`char[16]`)
-    - position X   (`float`)
-    - position Y   (`float`)
-    - position Z   (`float`)
+    - position X   (`int`)
+    - position Y   (`int`)
+    - position Z   (`int`)
     - vie          (`uint8_t`)
     - animation    (`uint8_t`)
     Args:
@@ -24,17 +24,21 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
         bytes: paquet
     """
     #TODO!: Je pense que "s" devrait être remplacé par "<longueur_nom_utlisateur_max>s" pour qu'il soit interprété comme n * nb_chars. Il faudrait aussi soit: 1) Limiter les caractères permis a ascii ou 2) Compter le nombres de bytes (non de caractères) saisis de l'utlisateur avant de confirmer le nom d'utilisateur
-    # 2026-10-26: J'ai changé pour rajouter un maximum de 16 caractères
-    return struct.pack(
+    # 2026-10-26: J'ai changé pour rajouter un maximum de 16 caractère
+
+    print(f"{joueur.id} {joueur.position}")
+
+    res = struct.pack(
         formats_serveur_par_type[TypePaquetServeur.MAJ_JOUEUR.value], # FORMAT
             TypePaquetServeur.MAJ_JOUEUR.value, # TYPE
-            #joueur.id,
-            1,
+            joueur.id,
             joueur.nom.encode("ascii"),
             joueur.position[0], joueur.position[1], joueur.position[2],
             joueur.vie,
             joueur.animation
         )
+    print(res)
+    return res
 
 def creer_paquet_deconnexion() -> bytes:
     """

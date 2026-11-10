@@ -233,8 +233,8 @@ class MondeServeur:
     def __recevoir_maj_paquets(self, donnee: tuple) -> bytes:
         """
         Lit un paquet de mise à jour et envoit une mise à jour de chaque joueurs\n
-        Entrée: `B32sfffBB`\n
-        Sortie: `H(BIfff16sBB+...)`\n
+        Entrée: `B32siiiBB`\n
+        Sortie: `H(BIiii16sBB+...)`\n
         """
         if donnee[1] not in self.__joueurs_hache:
             Dbg.avis("Un joueur a tenté de mettre à jour un joueur qui n'existe pas. Ce joueur sera déconnecté.", 1)
