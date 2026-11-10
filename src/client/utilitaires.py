@@ -94,6 +94,7 @@ def ordonner_boutons(
 
     for idx_b in range(len(boutons)):
         boutons[idx_b].scale = (L_bouton, H_bouton)
+        boutons[idx_b].x = -0.3
         boutons[idx_b].y = debut - idx_b * d_boutons
         boutons[idx_b].text_entity.text = boutons[idx_b].text
         boutons[idx_b].radius = rayon

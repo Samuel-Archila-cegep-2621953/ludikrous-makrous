@@ -35,6 +35,22 @@ class JoueurClient(FirstPersonController):
             scale=(0.3, 0.05),
             show_text=False
         )
+        self.vie_logo = Entity(
+            parent=camera.ui,
+            texture='ressources/textures/hud/vie',
+            y=0.425,
+            x=-0.83,
+            scale=(0.05, 0.05),
+            model='quad'
+        )
+        self.pointeur = Entity(
+            parent=camera.ui,
+            texture='ressources/textures/hud/pointeur',
+            y=0,
+            x=0,
+            scale=(0.02, 0.02),
+            model='quad'
+        )
         self.cursor.visible = False
 
         self.musique = Musique(TypesMusique.PERTE)
