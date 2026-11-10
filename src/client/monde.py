@@ -14,5 +14,3 @@ class Monde:
 
     def tuile(self, x: int, y: int) -> tuile.Tuile:
         return self.__monde[y][x]
-
-            
