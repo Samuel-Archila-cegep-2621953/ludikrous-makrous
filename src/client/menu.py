@@ -28,7 +28,7 @@ class Menu(Entity):
         """
         super().__init__()
         self.menu = Entity(parent = camera.ui)
-        self.fond = Entity(parent = self.menu, model = 'quad', scale = (window.aspect_ratio, 1), texture = f"ressources/videos/temp.mp4", enabled = enabled, z=1)
+        self.fond = Entity(parent = self.menu, model = 'quad', scale = (window.aspect_ratio, 1), texture = f"ressources/videos/menu_principal.mkv", enabled = enabled, z=1)
         self.musique = musique
         self.nom = nom
 
