@@ -7,6 +7,7 @@ import type_paquet
 from type_paquet import TypePaquetServeur
 import time
 from type_obstacle import TypeObstacle
+from debogage import Debogage as Dbg
 
 class Client:
     def __init__(self):
@@ -15,9 +16,9 @@ class Client:
     async def __gerer_envoyer_message(self, message: str) -> dict:
         _message: list[tuple[TypePaquetServeur, bytes]] = await self.__envoyer_message(message)
         await self.__fermer()
-        print(_message)
+        Dbg.info(_message, 5)
         _decode: dict[str, any] = deconstruire_superpaquet(_message)
-        print(_decode)
+        Dbg.info(_decode, 5)
         return _decode
     
     async def __envoyer_message(self, message: bytes) -> list[tuple[TypePaquetServeur, bytes]]:
@@ -34,7 +35,7 @@ class Client:
 
         _aw_nb_paquets = await self.__lire.readexactly(2) # Lire le nombre de paquets
         _nb_paquets = struct.unpack('!H', _aw_nb_paquets)[0] # u16
-        print(f"Le nombre de paquets dans le superpaquet dans __ENVOYER_MESSAGE EST: {_nb_paquets}")
+        Dbg.info(f"Le nombre de paquets dans le superpaquet dans __ENVOYER_MESSAGE EST: {_nb_paquets}", 2)
 
         _liste_paquets: list[tuple[TypePaquetServeur, bytes]] = []
 
@@ -45,13 +46,13 @@ class Client:
 
             if _type_paquet > TypePaquetServeur.max(): _type_paquet = 0 #HACK Ignore / remplace les paquets >= 61
 
-            print(f"Le type de paquet dans __ENVOYER_MESSAGE EST: {_type_paquet}")
+            Dbg.info(f"Le type de paquet dans __ENVOYER_MESSAGE EST: {_type_paquet}", 3)
 
             _longueur_message: int = longueur_paquet(_type_paquet)
 
 
             if _type_paquet == TypePaquetServeur.MAJ_OBSTACLE:
-                print("OBSTACLES REçUS!")
+                Dbg.info("OBSTACLES REçUS!", 2)
                 _bytes_type_obstacle: bytes = await self.__lire.readexactly(1) # u8 indiquant le type d'obstacle
                 _type_obstacle: int = struct.unpack('!B', _bytes_type_obstacle)
 

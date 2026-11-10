@@ -1,6 +1,7 @@
 import struct
 from type_paquet import *
 from type_obstacle import TypeObstacle
+from debogage import Debogage as Dbg
 
 
 def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaquetServeur, tuple[any]]:
@@ -27,7 +28,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
             _format = TypeObstacle.format(_type_obstacle)
 
         _paquet: bytes = tuple_paquet[1]
-        print(f"DANS LIRE_PAQUET TYPE EST {_type}")
+        Dbg.info(f"DANS LIRE_PAQUET TYPE EST {_type}", 3)
 
         if _type.value <= TypePaquetServeur.max():
             print(f"DANS lire_paquet LE PAQUET: {_paquet}")
@@ -48,21 +49,21 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
             return res
 
     except Exception as e:
-        print("Dans paquet.lire_paquet():")
-        print(f"Erreur: le format du paquet n'est pas compatible, paquet: '{_paquet}'")
-        print(f"Len paquet: {len(_paquet)}")
-        print(e)
+        Dbg.err("Dans paquet.lire_paquet():")
+        Dbg.err(f"Erreur: le format du paquet n'est pas compatible, paquet: '{_paquet}'")
+        Dbg.err(f"Len paquet: {len(_paquet)}", 2)
+        Dbg.err(e)
         #exit(1)
 
 
 def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> dict[str, any]:
-    if tuple_paquet is None: print("PAQUET EST NONe")
+    if tuple_paquet is None: Dbg.err("PAQUET EST NONE")
 
     _type: TypePaquetServeur = tuple_paquet[0]
 
     match _type:
         case TypePaquetServeur.MAJ_JOUEUR:
-            print(f"Paquet MAJ JOUEUR: {tuple_paquet}")
+            Dbg.info(f"Paquet MAJ JOUEUR: {tuple_paquet}", 3)
             id, nom, x, y, z, vie, animation = tuple_paquet[1]
             # CHANGE: 2-11-2026. Samuel.
             return {
@@ -110,13 +111,13 @@ def longueur_paquet(b: int) -> int:
     # 30-10-2026 >> changé la façon de calculer la taille d'un paquet, en utilisant moins de nests – gardé l'ancien code en cas d'échec.
     # 31-10-2026 >> Changement de MAX pour une fonction, car ça fait un peu plus de sens
     if b > TypePaquetServeur.max():
-        print(f"Aucun paquet de ce type. Valeur: {b}.")
+        Dbg.err(f"Aucun paquet de ce type. Valeur: {b}.")
         exit(1)
 
     _str_format = formats_serveur_par_type[b][1:]
     _longueur = struct.calcsize(_str_format) # NOTE Samuel: 2-11-2026: Ajout de '>' au format pour que struct.calcsize retourne la valeur correcte en forçant BIG ENDIAN
     #NOTE VIEUX _longueur = struct.calcsize(formats_serveur_par_type[b]) - 1
-    print(f"DANS paquet.longueur_paquet: Un paquet de type {b} a une longueur de {_longueur} selon type_paquet.py")
+    Dbg.info(f"DANS paquet.longueur_paquet: Un paquet de type {b} a une longueur de {_longueur} selon type_paquet.py", 3)
     return _longueur
  
 
