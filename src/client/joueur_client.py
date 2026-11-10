@@ -151,7 +151,7 @@ class JoueurClient(FirstPersonController):
         
         #print(self.position)
         if self.position.y < -10:
-            self.position = (60, 0, 60)
+            self.position = (0, 0, 0)
 
 
     def reduire_vie(self, quantite: float):
