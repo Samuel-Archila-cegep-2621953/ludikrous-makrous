@@ -33,7 +33,7 @@ class TypeObstacle(Enum):
 
         _formats = [
             None,
-            'B B BB', #type obstacle, NB COORDONNEES, Coord initiale, liste de coordonnees
+            'B BB BB', #type obstacle, Coord initiale, Coord finale
             'B BB f', # Type obs, coord, hauteur
             'B BB f', # Type obs, coord, rayon
             'B B f', # Type obs, direction, hauteur
@@ -77,4 +77,9 @@ class TypeObstacle(Enum):
                 }
 
             case TypeObstacle.TRAIN.value:
-                pass #TODO
+                _, coord_i_x, coord_i_y, coord_f_x, coord_f_y = donnees[1]
+                return {
+                    "Type": _type,
+                    "Coord initiale": (coord_i_x, coord_i_y),
+                    "Coord finale": (coord_f_x, coord_f_y)
+                }

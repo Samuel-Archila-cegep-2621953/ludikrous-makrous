@@ -25,7 +25,15 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
 
         elif _type == TypePaquetServeur.MAJ_OBSTACLE:
             _type_obstacle: int = _paquet[0] # Extraire  le type d'obstacle
-            _format = TypeObstacle.format(_type_obstacle)
+            _format: str = TypeObstacle.format(_type_obstacle)
+
+            return (
+                _type_obstacle,
+                struct.unpack(
+                    _format,
+                    _paquet[1]
+                )
+            )
 
         _paquet: bytes = tuple_paquet[1]
         Dbg.info(f"DANS LIRE_PAQUET TYPE EST {_type}", 3)

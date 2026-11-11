@@ -56,19 +56,20 @@ class Client:
                 _bytes_type_obstacle: bytes = await self.__lire.readexactly(1) # u8 indiquant le type d'obstacle
                 _type_obstacle: int = struct.unpack('!B', _bytes_type_obstacle)
 
+                """
                 if _type_obstacle == TypeObstacle.TRAIN.value:
                     _bytes_longueur_train: bytes = await self.__lire.readexactly(1) 
                     _longueur_train: int = struct.unpack('!B', _bytes_longueur_train)[0] # Le train a une longueur variable
                     _longueur_message: int = 2 + 2 * _longueur_train # Pour chaque longueur_train_u, lire 2 octets (coord x y) + 2 (Coord initiale x y)
 
                     _repack_type_obstacle = _bytes_type_obstacle + _bytes_longueur_train
-
-                else:
-                    _longueur_message: int = TypeObstacle.nb_bytes(_type_obstacle)
-                    _repack_type_obstacle = _bytes_type_obstacle
+                """
+                #else:
+                _longueur_message: int = TypeObstacle.nb_bytes(_type_obstacle)
+                _repack_type_obstacle = _bytes_type_obstacle
 
             
-            _ce_paquet = await self.__lire.readexactly(_longueur_message)
+            _ce_paquet: bytes = await self.__lire.readexactly(_longueur_message)
 
             if _repack_type_obstacle is not None: # Rattacher le type d'obstacle pour plus tard, car sinon _ce_paquet contiendrait seulement des octets d'obstacle sans le type d'obstacle
                 _ce_paquet = _repack_type_obstacle + _ce_paquet

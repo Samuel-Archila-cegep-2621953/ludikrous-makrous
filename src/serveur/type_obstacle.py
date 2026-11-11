@@ -28,7 +28,7 @@ class TypeObstacle(Enum):
 
         _formats = [
             None,
-            'B BB B(B...)', #type obstacle, COORD, initiale, NB COORDONNEES, liste de coordonnees
+            'B BB BB', #type obstacle, COORD initiale, Coord finale
             'B BB f', # Type obs, coord, hauteur
             'B BB f', # Type obs, coord, rayon
             'B B f', # Type obs, direction, hauteur
