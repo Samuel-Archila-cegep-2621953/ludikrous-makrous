@@ -15,6 +15,8 @@ from math import isnan as is_nan
 from debogage import Debogage as Dbg
 from monde import Monde
 from type_obstacle import TypeObstacle as TyOb
+#from obstacles import pilier
+import pilier
 
 class JoueurClient(FirstPersonController):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
@@ -149,14 +151,17 @@ class JoueurClient(FirstPersonController):
             del self.__joueurs[jq]
 
         _obstacles: list[dict] = _donnee["Obstacles"]
+
         for j, obs in enumerate(_obstacles):
             try:
                 match obs["Type"]:
-                    case TyOb.TRAIN.value: pass # TODO Difficile
+                    case TyOb.TRAIN.value: pass
                     case TyOb.PILIER.value:
                         _coord: tuple[int, int] = obs["Coord"]
-                        self.monde.tuile(_coord[0], _coord[1]).y = obs["Hauteur"]
+                        _hauteur = pilier.Pilier.hauteur_depuis_mode(obs["Hauteur"])
+                        self.monde.changer_hauteur_tuile(_coord[0], _coord[1], _hauteur)
             except Exception as e:
+                print("Err obs")
                 pass
             
 
@@ -173,6 +178,7 @@ class JoueurClient(FirstPersonController):
         #print(self.position)
         if self.position.y < -10:
             self.position = (0, 0, 0)
+
 
 
     def reduire_vie(self, quantite: float):

@@ -27,6 +27,8 @@ class TypeObstacle(Enum):
         if isinstance(type_obstacle, TypeObstacle):
             type_obstacle = TypeObstacle.comme_int(type_obstacle)
 
+        #print(f"ty {type_obstacle}")
+
         _formats = [
             None,
             'B BB B', #type obstacle, COORD initiale, Direction

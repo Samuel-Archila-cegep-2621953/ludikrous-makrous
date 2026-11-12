@@ -28,17 +28,20 @@ class Pilier(Obstacle):
             `float`: La difficultà de cet obstacle
             `None`: Si il n'est pas possible de placer cet obstacle nulle part
         """
+        #print(monde)
         for y, rangees in enumerate(monde):
-            for x, t in rangees:
+            for x, t in enumerate(rangees):
                 if t is None: #NOTE None -> La tuile n'a aucun obstacle
-                    t = Pilier(x, y)
-                    return (t.difficulte, t.comme_bytes())
+                    monde[y][x] = Pilier(x, y)
+                    return (monde[y][x].difficulte, monde[y][x].comme_bytes())
 
 
     def comme_bytes(self) -> bytes:
-        _format: str = TypeObstacle.format(self.type_obstacle().value)
+        _format: str = TypeObstacle.format(self.__type_obstacle.value)
+        #print(f"format {_format}")
         return struct.pack(
             _format,
+            self.__type_obstacle.value,
             self.position[0],
             self.position[1],
             self.mode_hauteur
