@@ -15,7 +15,7 @@ import json
 import time
 from modificateur_difficulte import ModificateurDifficulte
 
-from type_paquet import TypePaquetClient
+from type_paquet import TypePaquetClient, TypePaquetServeur
 import paquet
 import base_de_donnees
 import hashlib
@@ -24,7 +24,7 @@ import os
 
 from collections.abc import Callable
 
-import obstacles
+from obstacles import (laser, pilier, reservation, train, vague)
 
 class MondeServeur:
     def __init__(self):
@@ -44,7 +44,7 @@ class MondeServeur:
         self.__joueurs_hache: dict[bytes,int] = {}
         self.__liste_modificateur = []
         self.__temps_de_jeu = 0.0
-        self.__partie_en_cours = False
+        self.__partie_en_cours = True
 
         self.__liste_messages = []
 
@@ -260,8 +260,20 @@ class MondeServeur:
             joueur.vie = donnee[5]
             joueur.animation = donnee[6]
 
-        _joueurs = [paquet.creer_paquet_joueur(joueur) for joueur in self.__joueurs]
-        return paquet.construire_paquet(_joueurs)
+        _joueurs: list[bytes] = [paquet.creer_paquet_joueur(joueur) for joueur in self.__joueurs]
+        #print("here")
+        TEMPS_UPDATE: float = 0.01
+        self.__temps_de_jeu += TEMPS_UPDATE
+        self.__creer_obstacles()
+        #self.__maj_difficulte(TEMPS_UPDATE)
+        self.maj_compteur()
+
+        if len(self.__nouveaux_obstacles) != 0:
+            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 3)
+            self.__nouveaux_obstacles = []
+
+        #return paquet.construire_paquet(_joueurs)
+        return paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
 
     def recevoir_client_paquets(self, requete: bytes) -> bytes:
         _paquet = paquet.lire_paquet(requete)
@@ -301,20 +313,31 @@ class MondeServeur:
 
 
     def mise_a_jour_jeu(self, temps_entre_update: float):
+        #Dbg.info("Maj jeu")
 
-        if self.__partie_en_cours == True:
+        if self.__partie_en_cours == False:
             
             self.__temps_de_jeu += temps_entre_update
 
-            for obstacle1 in self.__liste_obstacle:
+            """
+            for obstacle in self.__liste_obstacle:
 
                 obstacle1.mise_a_jour(temps_entre_update)
+            """
+            #Dbg.info(f"tt{temps_entre_update}", 3)
+
+            self.__nettoyer_tuiles(temps_entre_update)
                 
             self.__maj_difficulte(temps_entre_update)
 
             self.__creer_obstacles()
 
-                
+            self.maj_compteur()
+
+    def maj_compteur(self, max = 50):
+        MAX_COMPTEUR: int = max
+        self.__compteur += 1
+        if self.__compteur == MAX_COMPTEUR: self.__compteur = 0
             
     def __joueurs_ordonnes(self) -> list[JoueurAbstrait]:
         """
@@ -340,6 +363,8 @@ class MondeServeur:
 
 
     def __creer_obstacles(self):
+        if self.__compteur != 0: return
+
         _difficulte_cible = self.__difficulte_globale        
         _difficulte_atteinte = 0.0 + self.__difficulte_actuelle()
         #_nouveaux_obstacles: list[TypeObstacle] = []
@@ -351,18 +376,26 @@ class MondeServeur:
                 _chance = random.randint(0, 2)
                 if _chance != 0:
                     continue
+
+            if _rand_obstacle != TypeObstacle.PILIER.value:
+                #print("pas pilier")
+                continue # HACK: Les autres obstacles n'existent pas encore
             
             _fn_creer_obstacle: Callable = MondeServeur.__constructeur_obstacle_depuis_type(_rand_obstacle)
             _resultat_creer_obs: tuple[float, bytes] | None = _fn_creer_obstacle(self.__tuiles)
+            #print(_resultat_creer_obs)
 
             if _resultat_creer_obs is None:
                 continue
 
-            
+            _format_paquet_obstacle: bytes = struct.pack(
+                paquet.formats_serveur_par_type[TypePaquetServeur.OBSTACLE.value],
+                TypePaquetServeur.OBSTACLE.value
+            )
             
             _difficulte_atteinte += _resultat_creer_obs[0]
-            self.__nouveaux_obstacles.append(_resultat_creer_obs[1])
-            print("Obs")
+            self.__nouveaux_obstacles.append(_format_paquet_obstacle + _resultat_creer_obs[1])
+            #print(self.__tuiles)
 
         
     @staticmethod
@@ -379,10 +412,10 @@ class MondeServeur:
 
         match t:
             case TypeObstacle.RIEN.value: return None
-            case TypeObstacle.TRAIN.value: return obstacles.train.Train.creer
-            case TypeObstacle.PILIER.value: return obstacles.pilier.Pilier.creer
-            case TypeObstacle.LASER_CENTRE.value: return obstacles.laser.Laser.creer
-            case TypeObstacle.VAGUE_FEU.value: return obstacles.vague.Vague.creer
+            case TypeObstacle.TRAIN.value: return train.Train.creer
+            case TypeObstacle.PILIER.value: return pilier.Pilier.creer
+            case TypeObstacle.LASER_CENTRE.value: return laser.Laser.creer
+            case TypeObstacle.VAGUE_FEU.value: return vague.Vague.creer
 
     """
     def __creer_obstacles(self, nouveaux_obstacles: list[TypeObstacle]):
@@ -405,9 +438,15 @@ class MondeServeur:
         #TODO delete tout les obstacles
 
 
-    def __cases_inoccupees_obstacles(self) -> list:
-        pass
+    def __nettoyer_tuiles(self, temps_entre_updates: float):
+        for idx_rangee in range(len(self.__tuiles)):
+            for idx_t in range(len(self.__tuiles[idx_rangee])):
+                if self.__tuiles[idx_rangee][idx_t] is None: continue
 
+                self.__tuiles[idx_rangee][idx_t].duree -= temps_entre_updates
+                
+                if self.__tuiles[idx_rangee][idx_t].duree <= 0:
+                    self.__tuiles[idx_rangee][idx_t] = None
 
 
 

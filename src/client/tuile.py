@@ -16,7 +16,7 @@ class Tuile(Entity):
             texture=tuile_texture, 
             color=rgb(128/255,128/255,128/255), 
             rotation=(-90, 0, 0), 
-            position=(x*5, h,y*5), 
+            position=(x*5, H_DEFAUT,y*5), 
             scale=(0.5, 0.5, 0.5), 
             collider='box'
         )

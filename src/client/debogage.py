@@ -10,7 +10,7 @@ class Debogage:
             niveau (int): Le niveau de danger associé à cette erreur
         """
         if Debogage.NIVEAU_VERBOSITE >= niveau:
-                print(msg + '\n')
+                print(str(msg) + '\n')
 
 
     @staticmethod
@@ -22,7 +22,7 @@ class Debogage:
             niveau (int): Le niveau de danger associé à cet avertissement
         """
         if Debogage.NIVEAU_VERBOSITE >= niveau:
-                print(msg +'\n')
+                print(str(msg) +'\n')
 
 
     @staticmethod
@@ -34,7 +34,7 @@ class Debogage:
             niveau (int): Le niveau de verbosité associé au message
         """
         if Debogage.NIVEAU_VERBOSITE >= niveau:
-                print(msg + '\n')
+                print(str(msg) + '\n')
 
 
     @staticmethod

@@ -26,6 +26,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         elif _type == TypePaquetServeur.MAJ_OBSTACLE:
             _type_obstacle: int = _paquet[0] # Extraire  le type d'obstacle
             _format: str = TypeObstacle.format(_type_obstacle)
+            print("obstacle lire paquet")
 
             return (
                 _type_obstacle,
@@ -101,12 +102,10 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
             }
 
         case TypePaquetServeur.MAJ_OBSTACLE:
-            type_obstacle, position = tuple_paquet[1]
+            #type_obstacle, position = tuple_paquet[1]
+            print("Paquet obs")
             return {
-                "Obstacle": {
-                    "Type": type_obstacle,
-                    "Position": position
-                }
+                "Obstacle": TypeObstacle.dict_depuis_tuple(tuple_paquet[1])
             }
 
 

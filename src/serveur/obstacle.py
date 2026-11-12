@@ -1,8 +1,9 @@
 from type_obstacle import TypeObstacle
 from abc import ABC, abstractmethod
+from tuile import Tuile
 
 class Obstacle:
-    def __init__(self, arg):
+    def __init__(self):
 
         self.__temps_en_vie = 0 #Combien de temps cet obstacle a éxisté
         self.__type_obstacle = TypeObstacle.RIEN
@@ -18,12 +19,8 @@ class Obstacle:
     def type_obstacle(self) -> TypeObstacle:
         return self.__type_obstacle
 
-    def mise_a_jour(self, temps) -> float:
-        self.__temps_en_vie += temps
-
-
     @abstractmethod
-    def creer(self) -> tuple[float, bytes] | None:
+    def creer(monde: list[list[Tuile]]) -> tuple[float, bytes] | None:
         pass
 
     def detruire(self):
