@@ -8,6 +8,7 @@ from joueur_abstrait import JoueurAbstrait
 import joueur_abstrait
 import journal
 from debogage import Debogage as Dbg
+from tuile import Tuile
 
 import struct
 import json
@@ -20,6 +21,10 @@ import base_de_donnees
 import hashlib
 
 import os
+
+from collections.abc import Callable
+
+import obstacles
 
 class MondeServeur:
     def __init__(self):
@@ -44,8 +49,9 @@ class MondeServeur:
         self.__liste_messages = []
 
         self.__liste_obstacle: list[Obstacle] = []
-        self.__personnes_a_ajoute: list[tuple[int,str]] = []
+        self.__personnes_a_ajouter: list[tuple[int,str]] = []
         self.__derniere_id = 0
+        self.__nouveaux_obstacles: list[bytes] = []
 
         self.__REQUETES = {
             'CREER ID': self.__recevoir_creer_id,
@@ -69,10 +75,7 @@ class MondeServeur:
                 },
 
                 "Nouveaux Obstacles": [
-                    {
-                        "Type": <type>
-                        "Position": <position>
-                    }
+                    <bytes>
                 ],
 
                 "Joueurs": [ # Envoyer en ordre de leur classement selon leur score
@@ -90,6 +93,8 @@ class MondeServeur:
         """
         _fichier_json = {}
 
+        #_fichier_json["Obstacles"]: list[bytes] = []
+
         _fichier_json["Général"] = {}
 
         _fichier_json["Général"]["Temps de jeu"] = self.__temps_de_jeu
@@ -104,15 +109,21 @@ class MondeServeur:
 
         _fichier_json["Nouveaux obstacles"] = []
 
-        for o in self.__liste_obstacle:
+        #NOTE Samuel, 12-11-2026: Changement vers l'utilisation des bytes directement pour les obstacles.
+        """
+        for o in self.__nouveaux_obstacles:
 
+            
             _nouveau_obstacle = {}
 
-            _nouveau_obstacle["Type"] = o.__type_obstacle
+            _nouveau_obstacle["Type"] = o.__type_obstacle.value
             _nouveau_obstacle["Position"] = [o.__position[0], o.__position[1], o.__position[2]]
 
             _fichier_json["Nouveaux obstacles"].append(_nouveau_obstacle)
+        """
 
+        _fichier_json["Obstacles"] = self.__nouveaux_obstacles.copy()
+        self.__nouveaux_obstacles = [] # Remettre à 0
 
         _fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
 
@@ -140,12 +151,15 @@ class MondeServeur:
         for idx, _ in enumerate(self.__joueurs):
             if _temps - _.dernier_paquet > 10:
                 self.__joueurs.remove(_)
+
         if len(self.__joueurs) == 0: self.__derniere_id = 0
+
         _joueur = JoueurAbstrait()
         _joueur.id = self.__derniere_id
+
         self.__joueurs.append(_joueur)
         _resultat = json.dumps({'ID': self.__derniere_id})
-        print(f"[+] Joueur {self.__derniere_id}")
+        Dbg.info(f"[+] Joueur {self.__derniere_id}")
         self.__derniere_id += 1
         return _resultat
 
@@ -232,7 +246,7 @@ class MondeServeur:
 
     def __recevoir_maj_paquets(self, donnee: tuple) -> bytes:
         """
-        Lit un paquet de mise à jour et envoit une mise à jour de chaque joueurs\n
+        Lit un paquet de mise à jour et envoit une mise à jour de chaque joueur\n
         Entrée: `B32siiiBB`\n
         Sortie: `H(BIiii16sBB+...)`\n
         """
@@ -298,7 +312,7 @@ class MondeServeur:
                 
             self.__maj_difficulte(temps_entre_update)
 
-            self.__choisir_obstacles()
+            self.__creer_obstacles()
 
                 
             
@@ -325,10 +339,10 @@ class MondeServeur:
         return _difficulte_actuelle
 
 
-    def __choisir_obstacles(self) -> list[TypeObstacle]:
+    def __creer_obstacles(self):
         _difficulte_cible = self.__difficulte_globale        
         _difficulte_atteinte = 0.0 + self.__difficulte_actuelle()
-        _nouveaux_obstacles: list[TypeObstacle] = []
+        #_nouveaux_obstacles: list[TypeObstacle] = []
 
         while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
             _rand_obstacle: int = random.randint(0, TypeObstacle.max())
@@ -338,15 +352,45 @@ class MondeServeur:
                 if _chance != 0:
                     continue
             
-            _difficulte_atteinte += _rand_obstacle.difficulte
-            _nouveaux_obstacles.append(_rand_obstacle)
+            _fn_creer_obstacle: Callable = MondeServeur.__constructeur_obstacle_depuis_type(_rand_obstacle)
+            _resultat_creer_obs: tuple[float, bytes] | None = _fn_creer_obstacle(self.__tuiles)
 
-        return _nouveaux_obstacles
+            if _resultat_creer_obs is None:
+                continue
+
+            
+            
+            _difficulte_atteinte += _resultat_creer_obs[0]
+            self.__nouveaux_obstacles.append(_resultat_creer_obs[1])
+            print("Obs")
+
         
-        
+    @staticmethod
+    def __constructeur_obstacle_depuis_type(t: int | TypeObstacle) -> Callable:
+        """
+        Args:
+            t (int | TypeObstacle): Le type d'obstacle
+        Returns:
+            Le constructeur de ce type d'obstacle
+
+        """
+        if isinstance(t, TypeObstacle): t = TypeObstacle.comme_int(t)
+        #TODO importer les constructeurs
+
+        match t:
+            case TypeObstacle.RIEN.value: return None
+            case TypeObstacle.TRAIN.value: return obstacles.train.Train.creer
+            case TypeObstacle.PILIER.value: return obstacles.pilier.Pilier.creer
+            case TypeObstacle.LASER_CENTRE.value: return obstacles.laser.Laser.creer
+            case TypeObstacle.VAGUE_FEU.value: return obstacles.vague.Vague.creer
+
+    """
     def __creer_obstacles(self, nouveaux_obstacles: list[TypeObstacle]):
         # TODO Compléter
-        pass
+        for type_o in nouveaux_obstacles:
+            self.__nouveaux_obstacles.append()
+    """
+
 
     def __maj_difficulte(self, temps_entre_update: float):
         self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)

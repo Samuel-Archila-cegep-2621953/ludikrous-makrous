@@ -14,3 +14,7 @@ class Reservation(Obstacle):
         self.__position = coord
         self.est_global = False
         self.transparent = True
+
+
+    def creer():
+        pass

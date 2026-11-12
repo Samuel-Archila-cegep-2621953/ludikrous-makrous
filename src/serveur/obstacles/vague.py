@@ -11,3 +11,7 @@ class Vague(Obstacle):
         self.__position = coord
         self.est_global = True
         self.transparent = True
+
+
+    def creer():
+        pass

@@ -2,17 +2,44 @@ from obstacle import Obstacle
 from type_obstacle import TypeObstacle
 from coord import Coord
 import random
+import struct
+from tuile import Tuile
 
 class Pilier(Obstacle):
-    def __init__(self, coord: Coord):
+    def __init__(self, x: int, y: int):
         super().__init__()
-        self.difficulte: float = 0.1 * coord.z
+        self.mode_hauteur: int = random.randint(1, 5)
+        self.difficulte: float = 0.1 * self.mode_hauteur
         self.__type_obstacle = TypeObstacle.PILIER
-        self.__position: Coord = coord
-        self.duree: float = random.uniform(1, 15) 
+        self.position: tuple[int, int] = (x, y)
+        #self.duree: float = random.uniform(1, 15) 
+        self.duree: int = 7
         self.est_global = False
         self.transparent = False
 
-    
 
-    
+    @staticmethod
+    def creer(monde: list[list[Tuile]]) -> tuple[float, bytes] | None:
+        """
+        Args:
+            monde (`&list[list[Tuile]]`): Le mond du serveur. Permet de vérifier s'il existe une position adéquate pour l'obstacle.
+        Returns:
+            `bytes`: L'obstacle comme paquet, en `bytes`  
+            `float`: La difficultà de cet obstacle
+            `None`: Si il n'est pas possible de placer cet obstacle nulle part
+        """
+        for y, rangees in enumerate(monde):
+            for x, t in rangees:
+                if t is None: #NOTE None -> La tuile n'a aucun obstacle
+                    t = Pilier(x, y)
+                    return (t.difficulte, t.comme_bytes())
+
+
+    def comme_bytes(self) -> bytes:
+        _format: str = TypeObstacle.format(self.type_obstacle().value)
+        return struct.pack(
+            _format,
+            self.position[0],
+            self.position[1],
+            self.mode_hauteur
+        )

@@ -19,3 +19,6 @@ class Train(Obstacle):
 
     def calculer_duree() -> float:
         pass
+
+    def creer():
+        pass

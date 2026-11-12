@@ -12,9 +12,6 @@ class Obstacle:
         self.est_global = None # Détermine si cet obstacle est nécessairement lié à une case spécifique
         self.transparent = None # Détermine si un autre obstacle peut passe à travers de cet obstacle
 
-    def position(self) -> tuple[float,float]:
-        return self.__position
-
     def temps_en_vie(self) -> int:
         return self.__temps_en_vie
 
@@ -24,12 +21,10 @@ class Obstacle:
     def mise_a_jour(self, temps) -> float:
         self.__temps_en_vie += temps
 
+
     @abstractmethod
-    def creer(self) -> bytes:
+    def creer(self) -> tuple[float, bytes] | None:
         pass
 
     def detruire(self):
         pass
-
-
-    #def 

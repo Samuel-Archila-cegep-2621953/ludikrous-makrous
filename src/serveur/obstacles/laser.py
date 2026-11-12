@@ -14,3 +14,6 @@ class Laser(Obstacle):
         self.__position = coord
         self.est_global = False
         self.transparent = False
+
+    def creer(self) -> bytes:
+        pass

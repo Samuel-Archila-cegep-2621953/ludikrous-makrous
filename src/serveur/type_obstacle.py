@@ -12,6 +12,7 @@ class TypeObstacle(Enum):
         return 4
 
 
+    @staticmethod
     def comme_int(type_obstacle: 'TypeObstacle') -> int:
         match type_obstacle:
             case TypeObstacle.RIEN:         return 0
@@ -28,8 +29,8 @@ class TypeObstacle(Enum):
 
         _formats = [
             None,
-            'B BB BB', #type obstacle, COORD initiale, Coord finale
-            'B BB f', # Type obs, coord, hauteur
+            'B BB B', #type obstacle, COORD initiale, Direction
+            'B BB B', # Type obs, coord, mode hauteur
             'B BB f', # Type obs, coord, rayon
             'B B f', # Type obs, direction, hauteur
         ]
