@@ -11,20 +11,15 @@ import variable_globale
 import journal
 import psutil
 import CTkListbox as ctkl
+import subprocess
+import platform
+
+print(str((Path(__file__).parent.parent / 'fermeture_serveur.py')))
 
 class Serveur:
     def __init__(self):
         self.__ouvert = True
         self.__monde_serveur = monde_serveur.MondeServeur()
-
-    def __gerer_client(self, socket_client: socket.socket):
-        _requete = socket_client.recv(1024)
-
-        _dbg_msg = self.__monde_serveur.recevoir_client_paquets(_requete)
-        #print(f"Msg {_dbg_msg}")
-        socket_client.send(_dbg_msg)
-
-        socket_client.close()
 
     def __serveur(self):
         _fichier_toml = open(Path(__file__).parent / "config.toml", 'rb')
@@ -54,15 +49,33 @@ class Serveur:
         
         while self.__ouvert:
             _client, _addresse = _serveur.accept()
-            _gerant_de_client = threading.Thread(target=self.__gerer_client, args=(_client,))
-            _gerant_de_client.start()
+            #_gerant_de_client = threading.Thread(target=self.__gerer_client, args=(_client,_addresse))
+            #self.__gerer_client(_client, _addresse)
+            #_gerant_de_client.start()
+            ### TEST
+            _requete = _client.recv(1024)
+            
+            if _requete == 'fermer'.encode():
+                print(_addresse[0])
+                print(self.__config["Serveur"]["ip"])
+                if _addresse[0] == self.__config["Serveur"]["ip"]:
+                    _client.send(b'\x01')
+                    _client.close()
+                    self.__ouvert = False
+                    break
+            _dbg_msg = self.__monde_serveur.recevoir_client_paquets(_requete)
+            #print(f"Msg {_dbg_msg}")
+            _client.send(_dbg_msg)
+            
+            _client.close()
+            ### FIN TEST
             _temps_entre_update = _fin - _debut
             _debut = time.time()
             self.__monde_serveur.mise_a_jour_jeu(_temps_entre_update)
             _fin = time.time()
 
     def __fermer(self, langue, commande):
-        self.__ouvert = False
+        self.__destruction(None)
 
     def __aide(self, langue, commande):
         if langue == 'fr':
@@ -126,18 +139,19 @@ class Serveur:
                     journal.inserer_erreur(f"Commande « {_commande[0]} » n'éxiste pas, écrivez la commande « aide » pour la liste des commandes")
                     journal.inserer_erreur(f"Command \"{_commande[0]}\" doesn't exist, write the command \"help\" for the commands list")
             except KeyboardInterrupt:
-                self.__ouvert = False
+                self.__destruction(None)
 
+    def __destruction(self, _):
+        # créer une connection pour fermer le programme
+        _commande = "py" if platform.system() == "Windows" else "python3"
+        subprocess.Popen([_commande, Path(__file__).parent / 'fermeture_serveur.py', self.__config["Serveur"]["ip"], str(self.__config["Serveur"]["port"])])
 
     def __boucle_principale_avec_graphiques(self, commandes: dict[tuple]):
         _fenetre = ctk.CTk()
         _fenetre.title("Ludikrous Makrous")
         _fenetre.resizable(False, False)
-
-        def _destruction(_):
-            self.__ouvert = False
         
-        _fenetre.bind('<Destroy>', _destruction)
+        _fenetre.bind('<Destroy>', self.__destruction)
 
         try:
 
@@ -196,7 +210,7 @@ class Serveur:
         except Exception as e:
             journal.inserer_erreur("Échec lors de la création de l'interface graphique.")
             journal.inserer_erreur(f"{repr(e)}")
-            self.__ouvert = False
+            self.__destruction(None)
 
         _ancien = time.time()
         donnee_brutes = []
@@ -241,7 +255,7 @@ class Serveur:
                     #_joueurs.update()
                 _fenetre.update()
             except KeyboardInterrupt:
-                self.__ouvert = False
+                self.__destruction(None)
             except Exception as e:
                 print(e)
 

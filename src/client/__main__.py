@@ -27,6 +27,7 @@ Langues.de_config()
 LANGUE = Langues.LANGUE
 
 app = Ursina(icon=obtenir_ressources() / "logo.ico", title="Ludikrous Makrous")
+window.color = rgb(0, 0, 0)
 
 pivot = Entity()
 DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
