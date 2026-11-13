@@ -24,15 +24,18 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
             )
 
         elif _type == TypePaquetServeur.MAJ_OBSTACLE:
-            _type_obstacle: int = _paquet[0] # Extraire  le type d'obstacle
+            _paquet: bytes = tuple_paquet[1]
+            _type_obstacle_bytes: int = _paquet[0] # Extraire  le type d'obstacle
+            _type_obstacle: int = struct.unpack("!B", _type_obstacle_bytes)
             _format: str = TypeObstacle.format(_type_obstacle)
+
             print("obstacle lire paquet")
 
             return (
                 _type_obstacle,
                 struct.unpack(
                     _format,
-                    _paquet[1]
+                    _paquet
                 )
             )
 

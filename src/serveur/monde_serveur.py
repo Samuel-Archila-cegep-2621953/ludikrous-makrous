@@ -53,6 +53,8 @@ class MondeServeur:
         self.__personnes_a_ajouter: list[tuple[int,str]] = []
         self.__derniere_id = 0
         self.__nouveaux_obstacles: list[bytes] = []
+        self.__debut = time.time()
+        self.niveau_difficulte = 3
 
         self.__REQUETES = {
             'CREER ID': self.__recevoir_creer_id,
@@ -65,7 +67,7 @@ class MondeServeur:
         }
         
 
-    def __formatter_dict(self, joueurs_quitte: list[int]):
+    def __obsolète____formatter_dict(self, joueurs_quitte: list[int]):
         """
         Formatte le monde du serveur en json pour l'envoyer au client.
         Style:
@@ -123,8 +125,8 @@ class MondeServeur:
             _fichier_json["Nouveaux obstacles"].append(_nouveau_obstacle)
         """
 
-        _fichier_json["Obstacles"] = self.__nouveaux_obstacles.copy()
-        self.__nouveaux_obstacles = [] # Remettre à 0
+        #_fichier_json["Obstacles"] = self.__nouveaux_obstacles.copy()
+        #self.__nouveaux_obstacles = [] # Remettre à 0
 
         _fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
 
@@ -267,14 +269,21 @@ class MondeServeur:
         self.__temps_de_jeu += TEMPS_UPDATE
         self.__creer_obstacles()
         self.__maj_difficulte(TEMPS_UPDATE)
+        #self.__difficulte_globale += 0.2
         self.maj_compteur()
 
-        if len(self.__nouveaux_obstacles) != 0:
-            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 3)
-            self.__nouveaux_obstacles = []
 
         #return paquet.construire_paquet(_joueurs)
-        return paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
+        if len(self.__nouveaux_obstacles) != 0: print("OBSCTALEES")
+
+
+        _paquet_final = paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
+
+        if len(self.__nouveaux_obstacles) != 0:
+            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 1)
+            #self.__nouveaux_obstacles = []
+
+        return _paquet_final
 
     def recevoir_client_paquets(self, requete: bytes) -> bytes:
         _paquet = paquet.lire_paquet(requete)
@@ -364,13 +373,21 @@ class MondeServeur:
 
 
     def __creer_obstacles(self):
-        if self.__compteur != 0: return
+        if self.__compteur != 0: 
+            Dbg.info(str(self.__compteur), 4)
+            return
 
         _difficulte_cible = self.__difficulte_globale        
         _difficulte_atteinte = 0.0 + self.__difficulte_actuelle()
         #_nouveaux_obstacles: list[TypeObstacle] = []
 
-        while _difficulte_atteinte < _difficulte_cible: # Continue à ajouter des obstacles jusqu'à la difficulté globale
+        MAX_LOOPS = 32
+
+        #_i = 0
+        #while _difficulte_atteinte < _difficulte_cible or _i > MAX_LOOPS: # Continue à ajouter des obstacles jusqu'à la difficulté globale
+        for _ in range(MAX_LOOPS):
+            if _difficulte_atteinte > _difficulte_cible : break
+            #_i += 1
             _rand_obstacle: int = random.randint(0, TypeObstacle.max())
 
             if _rand_obstacle == TypeObstacle.RIEN.value:
@@ -384,6 +401,7 @@ class MondeServeur:
             
             _fn_creer_obstacle: Callable = MondeServeur.__constructeur_obstacle_depuis_type(_rand_obstacle)
             _resultat_creer_obs: tuple[float, bytes] | None = _fn_creer_obstacle(self.__tuiles)
+            #print(_resultat_creer_obs[1])
             #print(_resultat_creer_obs)
 
             if _resultat_creer_obs is None:
@@ -397,6 +415,7 @@ class MondeServeur:
             _difficulte_atteinte += _resultat_creer_obs[0]
             self.__nouveaux_obstacles.append(_format_paquet_obstacle + _resultat_creer_obs[1])
             #print(self.__tuiles)
+        #print(len(self.__nouveaux_obstacles))
 
         
     @staticmethod
@@ -430,9 +449,10 @@ class MondeServeur:
         #self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
         if self.__compteur == 0:
             #print(self.__temps_de_jeu)
-            #self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(0)(math.ceil(self.__temps_de_jeu))
-            self.__difficulte_globale +=  0.2
-            print(self.__difficulte_globale)
+
+            self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(self.niveau_difficulte)((time.time() - self.__debut))
+            #self.__difficulte_globale +=  0.2
+            #print(self.__difficulte_globale)
 
     def __effacer_tout_obstacle(self):
 
@@ -453,11 +473,3 @@ class MondeServeur:
                 
                 if self.__tuiles[idx_rangee][idx_t].duree <= 0:
                     self.__tuiles[idx_rangee][idx_t] = None
-
-
-
-    
-
-
-    
-    

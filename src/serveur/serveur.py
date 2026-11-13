@@ -63,6 +63,7 @@ class Serveur:
                     _client.close()
                     self.__ouvert = False
                     break
+
             _dbg_msg = self.__monde_serveur.recevoir_client_paquets(_requete)
             #print(f"Msg {_dbg_msg}")
             _client.send(_dbg_msg)
