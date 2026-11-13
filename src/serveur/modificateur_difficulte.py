@@ -1,5 +1,6 @@
 from collections.abc import Callable
 #from constantes import TICKS_JEU_PAR_SECONDE
+import math
 
 class ModificateurDifficulte:
     #TODO: Playtest

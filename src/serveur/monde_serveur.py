@@ -25,6 +25,7 @@ import os
 from collections.abc import Callable
 
 from obstacles import (laser, pilier, reservation, train, vague)
+import math
 
 class MondeServeur:
     def __init__(self):
@@ -427,7 +428,11 @@ class MondeServeur:
 
     def __maj_difficulte(self, temps_entre_update: float):
         #self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
-        self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(0)(temps_entre_update + self.__temps_de_jeu)
+        if self.__compteur == 0:
+            #print(self.__temps_de_jeu)
+            #self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(0)(math.ceil(self.__temps_de_jeu))
+            self.__difficulte_globale +=  0.2
+            print(self.__difficulte_globale)
 
     def __effacer_tout_obstacle(self):
 
