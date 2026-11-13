@@ -42,13 +42,11 @@ class Menu(Entity):
         self.autres = autres
         print(self.nom)
 
-
     def jouer_musique(self):
         if self.musique is not None and self.musique.status == False:
             #print(self.nom)
             #print("Joueur musique" + str(self.musique.playing))
             self.musique.play()
-
 
     def play(self):
         """Alias pour Menu.joueur_musique()"""

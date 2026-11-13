@@ -1,3 +1,9 @@
+/*
+    DRM pour le jeu
+    Peut être réutilisé
+    N'est pas la DRM la plus sécurisé mais elle fait le travail, montrant qu'il y a une possibilité d'amilioration dans le futur.
+*/
+
 #include <iostream>
 #include <cryptopp/modes.h>
 #include <string>
@@ -47,6 +53,7 @@ const unsigned char CLE[] = {
 
 #ifndef PRODUCTION
 using namespace CryptoPP;
+///////////////////////////////////////// COPIÉ (de la documentation)
 void encryptFile(const std::string& inputFile,
                  const std::string& outputFile,
                  const SecByteBlock& key) {
@@ -72,6 +79,7 @@ void encryptFile(const std::string& inputFile,
         )
     );
 }
+///////////////////////////////////////// FIN
 
 int construire(int argc, char** argv) {
     std::string fichier;
@@ -87,6 +95,7 @@ int construire(int argc, char** argv) {
 #endif
 
 #ifdef PRODUCTION
+///////////////////////////////////////// COPIÉ (de la documentation)
 using namespace CryptoPP;
 void decryptFile(const std::string& inputFile,
                  const std::string& outputFile,
@@ -109,6 +118,7 @@ void decryptFile(const std::string& inputFile,
         )
     );
 }
+///////////////////////////////////////// FIN
 
 int production(int argc, char** argv) {
     SecByteBlock cle{CLE, 32};
