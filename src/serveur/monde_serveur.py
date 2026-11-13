@@ -265,7 +265,7 @@ class MondeServeur:
         TEMPS_UPDATE: float = 0.01
         self.__temps_de_jeu += TEMPS_UPDATE
         self.__creer_obstacles()
-        #self.__maj_difficulte(TEMPS_UPDATE)
+        self.__maj_difficulte(TEMPS_UPDATE)
         self.maj_compteur()
 
         if len(self.__nouveaux_obstacles) != 0:
@@ -426,7 +426,8 @@ class MondeServeur:
 
 
     def __maj_difficulte(self, temps_entre_update: float):
-        self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
+        #self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
+        self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(0)(temps_entre_update + self.__temps_de_jeu)
 
     def __effacer_tout_obstacle(self):
 
