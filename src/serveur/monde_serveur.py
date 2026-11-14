@@ -49,11 +49,14 @@ class MondeServeur:
 
         self.__liste_messages = []
 
+
         self.__liste_obstacle: list[Obstacle] = []
         self.__personnes_a_ajouter: list[tuple[int,str]] = []
         self.__derniere_id = 0
         self.__nouveaux_obstacles: list[bytes] = []
         self.__debut = time.time()
+        self.__moment_maj_anterieure: float = self.__debut
+
         self.niveau_difficulte = 3
 
         self.__REQUETES = {
@@ -268,7 +271,7 @@ class MondeServeur:
         TEMPS_UPDATE: float = 0.01
         self.__temps_de_jeu += TEMPS_UPDATE
         self.__creer_obstacles()
-        self.__maj_difficulte(TEMPS_UPDATE)
+        self.__maj_difficulte()
         #self.__difficulte_globale += 0.2
         self.maj_compteur()
 
@@ -447,7 +450,8 @@ class MondeServeur:
 
     def __maj_difficulte(self, temps_entre_update: float):
         #self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
-        if self.__compteur == 0:
+
+        if math.ceil(self.temps_ecoule()) % 2 == 0:
             #print(self.__temps_de_jeu)
 
             self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(self.niveau_difficulte)((time.time() - self.__debut))
@@ -473,3 +477,30 @@ class MondeServeur:
                 
                 if self.__tuiles[idx_rangee][idx_t].duree <= 0:
                     self.__tuiles[idx_rangee][idx_t] = None
+
+
+    def temps_ecoule(self) -> float:
+        """
+        Returns:
+            float: Le temps écoulé depuis la création du `MondeServeur.`
+        """
+        return time.time() - self.__debut
+
+    def __remplacer_moment_maj_anterieure(self, moment: float) -> float:
+        self.__moment_maj_anterieure = moment
+
+
+    def __decidersi__cycle(self) -> bool:
+        """
+        Considère si assez de temps c'est écoulé (1 seconde) depuis le dernier cycle pour en commencer un autre.
+        
+        """
+        _t_maintenant: float = self.temps_ecoule()
+        # True si approx(temps écoulé entre le début du jeu et maintenant) et approx(temps écoulé depuis le début du jeu et le dernier cycle) ne sont pas égaux
+        # TODO Tester
+        _r: bool =  math.ceil(_t_maintenant) != math.ceil(self.__moment_maj_anterieure)
+        self.__remplacer_moment_maj_anterieure(_t_maintenant)
+
+        return _r
+
+        
