@@ -448,7 +448,7 @@ class MondeServeur:
     """
 
 
-    def __maj_difficulte(self, temps_entre_update: float):
+    def __maj_difficulte(self):
         #self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
 
         if math.ceil(self.temps_ecoule()) % 2 == 0:

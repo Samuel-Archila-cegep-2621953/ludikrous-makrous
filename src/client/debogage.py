@@ -1,5 +1,5 @@
 class Debogage:
-    NIVEAU_VERBOSITE: int = 2
+    NIVEAU_VERBOSITE: int = 5
 
     @staticmethod
     def err(msg: str, niveau: int = 1):

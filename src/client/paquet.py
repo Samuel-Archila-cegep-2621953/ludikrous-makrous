@@ -11,6 +11,8 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
     #print(f"LEN PAQUET {len(tuple_paquet)}")
     try:
         _type: TypePaquetServeur = tuple_paquet[0]
+        Dbg.info(f"paquet:: lire_paquet: type: {_type}", 3)
+
         if _type == TypePaquetServeur.CONNEXION_RATE:
             return (
                 _type,
@@ -24,25 +26,33 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
             )
 
         elif _type == TypePaquetServeur.MAJ_OBSTACLE:
+            Dbg.info("paquet::lire_paquet: Branche Obstacle", 3)
             _paquet: bytes = tuple_paquet[1]
             _type_obstacle_bytes: int = _paquet[0] # Extraire  le type d'obstacle
-            _type_obstacle: int = struct.unpack("!B", _type_obstacle_bytes)
-            _format: str = TypeObstacle.format(_type_obstacle)
+            #NOTE ^ ^ ^ ^ ^ : Samuel, 14-11-2026: Indexer un bytes -> int D:
+            Dbg.info(f"paquet::lire_paquet::Branche_Obstacle: _type_obstacle_bytes: {_type_obstacle_bytes}", 3)
+            #_type_obstacle: int = struct.unpack("!B", _type_obstacle_bytes)[0] # Se rappeler que c'est un tuple avec un seul u8 :(
+            #Dbg.info(f"paquet::lire_paquet::Branche_Obstacle: _type_obstacle: {_type_obstacle_bytes}")
+            _format: str = TypeObstacle.format(_type_obstacle_bytes)
 
             print("obstacle lire paquet")
+            Dbg.info(f"Paquet Obstacle, paquet::lire_paquet: format {_format}, type_obs: {_type_obstacle_bytes}", 3)
 
-            return (
-                _type_obstacle,
+            _r =  (
+                TypePaquetServeur.MAJ_OBSTACLE,
                 struct.unpack(
                     _format,
                     _paquet
                 )
             )
+            #print(f"{_r}")
+            return _r
 
         _paquet: bytes = tuple_paquet[1]
         Dbg.info(f"DANS LIRE_PAQUET TYPE EST {_type}", 3)
 
         if _type.value <= TypePaquetServeur.max():
+            Dbg.info("* paquet::lire_paquet: Branche générale", 3)
             Dbg.info(f"DANS lire_paquet LE PAQUET: {_paquet}", 3)
             _format = formats_serveur_par_type[_type.value][1:] # Enleve le char de format
 
@@ -62,6 +72,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
         Dbg.err("Dans paquet.lire_paquet():")
         Dbg.err(f"Erreur: le format du paquet n'est pas compatible, paquet: '{_paquet}'")
         Dbg.err(f"Len paquet: {len(_paquet)}", 2)
+        Dbg.err(f"Type: {_type}")
         Dbg.err(e)
         #exit(1)
 
@@ -106,7 +117,9 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
 
         case TypePaquetServeur.MAJ_OBSTACLE:
             #type_obstacle, position = tuple_paquet[1]
-            print("Paquet obs")
+            Dbg.info("Paquet obs", 3)
+            #_type_obstacle = tuple_paquet[1][0] # Le type est le premier élément dans le tuple
+            #Dbg.info(f"paquet::interpreter_paquet::Branche(MAJ_OBSTACLE): _ty_obs: {_type_obstacle}")
             return {
                 "Obstacle": TypeObstacle.dict_depuis_tuple(tuple_paquet[1])
             }

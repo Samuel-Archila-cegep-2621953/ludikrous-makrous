@@ -16,7 +16,7 @@ class Client:
     async def __gerer_envoyer_message(self, message: str) -> dict:
         _message: list[tuple[TypePaquetServeur, bytes]] = await self.__envoyer_message(message)
         await self.__fermer()
-        Dbg.info(_message, 5)
+        Dbg.info(f"DANS client_serveur::__gerer_envoyer_message: Msg recv: {_message}", 5)
         _decode: dict[str, any] = deconstruire_superpaquet(_message)
         Dbg.info(_decode, 5)
         return _decode
@@ -51,10 +51,10 @@ class Client:
             _longueur_message: int = longueur_paquet(_type_paquet)
 
 
-            if _type_paquet == TypePaquetServeur.MAJ_OBSTACLE:
+            if _type_paquet == TypePaquetServeur.MAJ_OBSTACLE.value:
                 Dbg.info("OBSTACLES REçUS!", 2)
                 _bytes_type_obstacle: bytes = await self.__lire.readexactly(1) # u8 indiquant le type d'obstacle
-                _type_obstacle: int = struct.unpack('!B', _bytes_type_obstacle)
+                _type_obstacle: int = struct.unpack('!B', _bytes_type_obstacle)[0] # Se rappeler que c'est un tuple contenant un seul u8
 
                 """
                 if _type_obstacle == TypeObstacle.TRAIN.value:
@@ -65,7 +65,8 @@ class Client:
                     _repack_type_obstacle = _bytes_type_obstacle + _bytes_longueur_train
                 """
                 #else:
-                _longueur_message: int = TypeObstacle.nb_bytes(_type_obstacle)
+                #NOTE TEST 
+                _longueur_message += TypeObstacle.nb_bytes(_type_obstacle) - 1 # Enlever 1 pour l'entête de type obstacle qui a déjà été lue
                 _repack_type_obstacle = _bytes_type_obstacle
 
             

@@ -14,3 +14,6 @@ class Monde:
 
     def tuile(self, x: int, y: int) -> tuile.Tuile:
         return self.__monde[y][x]
+
+    def changer_hauteur_tuile(self, x: int, y: int, h: float):
+        self.tuile(x, y).changer_hauteur(h)

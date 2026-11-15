@@ -53,7 +53,7 @@ class TypeObstacle(Enum):
         _type: int = donnees[0]
         match _type:
             case TypeObstacle.VAGUE_FEU.value: 
-                _, direction, hauteur = donnees[1]
+                _, direction, hauteur = donnees
                 return {
                     "Type": _type,
                     "Direction": direction,
@@ -61,7 +61,7 @@ class TypeObstacle(Enum):
                 }
 
             case TypeObstacle.LASER_CENTRE.value:
-                _, x, y, r = donnees[1]
+                _, x, y, r = donnees
                 return {
                     "Type": _type,
                     "Coord": (x, y),
@@ -69,7 +69,7 @@ class TypeObstacle(Enum):
                 }
 
             case TypeObstacle.PILIER.value:
-                _, x, y, h = donnees[1]
+                _, x, y, h = donnees
                 return {
                     "Type": _type,
                     "Coord": (x, y),
@@ -83,3 +83,5 @@ class TypeObstacle(Enum):
                     "Coord initiale": (coord_i_x, coord_i_y),
                     "Coord finale": (coord_f_x, coord_f_y)
                 }
+
+    #def type_obstacle_depuis_tuple(t: tuple[int, any]) -> 
