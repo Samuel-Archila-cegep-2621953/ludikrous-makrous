@@ -1,7 +1,5 @@
 from ursina import *
 from ursina.shaders import lit_with_shadows_shader
-import config
-import datetime
 import random
 
 tuile = load_model('ressources/modeles/tuile.glb')
@@ -20,8 +18,20 @@ class Tuile(Entity):
             scale=(0.5, 0.5, 0.5), 
             collider='box'
         )
+        self.doit_y = self.y
+        self.vitesse = 1
+
+    def __similaire(self, y1, y2, maximum):
+        return abs(y1 - y2) < maximum
+
+    def update(self):
+        _direction = 1 if self.y < self.doit_y else -1
+        if self.__similaire(self.y, self.doit_y, 0.3):
+            self.y = self.doit_y
+        else:
+            self.y += self.vitesse * time.dt * _direction
 
     def changer_hauteur(self, h: float):
-        self.y = h
+        self.doit_y = h
 
 
