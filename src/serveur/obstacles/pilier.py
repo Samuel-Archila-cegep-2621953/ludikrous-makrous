@@ -29,11 +29,20 @@ class Pilier(Obstacle):
             `None`: Si il n'est pas possible de placer cet obstacle nulle part
         """
         #print(monde)
+        """
         for y, rangees in enumerate(monde):
             for x, t in enumerate(rangees):
                 if t is None: #NOTE None -> La tuile n'a aucun obstacle
                     monde[y][x] = Pilier(x, y)
                     return (monde[y][x].difficulte, monde[y][x].comme_bytes())
+        """
+        for i in range(8):
+            _x = random.randint(0, 7)
+            _y = random.randint(0, 7)
+            if monde[_y][_x] is None:
+                monde[_y][_x] = Pilier(_x, _y)
+                return (monde[_y][_x].difficulte, monde[_y][_x].comme_bytes()) 
+        return None
 
 
     def comme_bytes(self) -> bytes:
