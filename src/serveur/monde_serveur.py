@@ -56,6 +56,7 @@ class MondeServeur:
         self.__nouveaux_obstacles: list[bytes] = []
         self.__debut = time.time()
         self.__moment_maj_anterieure: float = self.__debut
+        self.__lock = False
 
         self.niveau_difficulte = 3
 
@@ -284,9 +285,17 @@ class MondeServeur:
 
         _paquet_final = paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
 
-        if len(self.__nouveaux_obstacles) != 0:
-            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 2)
+        #print(len(self.__nouveaux_obstacles))
+
+        if len(self.__nouveaux_obstacles) > 0:
+            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 1)
+            #Dbg.info(f"MondeServeur::__recevoir_maj_paquets: len(self.__nouveaux_obstacles) = {len(self.__nouveaux_obstacles)}")
+
+        if self.__lock == False:
+            #print("No lock")
+            self.__lock = True
             self.__nouveaux_obstacles = []
+            self.__lock = False
 
         return _paquet_final
 
@@ -361,10 +370,15 @@ class MondeServeur:
 
 
     def creer_obstacles(self):
+
         #if self.__compteur != 0: 
         if not self.__decider_si_cycle():
             Dbg.info(str(self.__compteur), 4)
             return
+
+        if self.__lock == True:  return
+
+        self.__lock = True
 
         _difficulte_cible = self.__difficulte_globale        
         _difficulte_atteinte = 0.0 + self.__difficulte_actuelle()
@@ -406,6 +420,7 @@ class MondeServeur:
             self.__nouveaux_obstacles.append(_format_paquet_obstacle + _resultat_creer_obs[1])
             #print(self.__tuiles)
         #print(len(self.__nouveaux_obstacles))
+        self.__lock = False
 
         
     @staticmethod
