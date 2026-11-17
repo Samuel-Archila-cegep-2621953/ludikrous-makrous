@@ -4,20 +4,20 @@ class ControlleurPremierePersonne(Entity):
     def __init__(self, height=2, **kwargs):
         self.cursor = Entity(parent=camera.ui, model='quad', color=color.pink, scale=.008, rotation_z=45)
         super().__init__()
-        self.speed = 5
+        self.speed = 13
         self.height = height
         self.camera_pivot = Entity(parent=self, y=self.height)
 
         camera.parent = self.camera_pivot
         camera.position = Vec3.zero
         camera.rotation = Vec3.zero
-        camera.fov = 90
+        camera.fov = 120
         mouse.locked = True
         self.mouse_sensitivity = Vec2(40, 40)
 
-        self.gravity = -9.81
+        self.gravity = -32.5
         self.grounded = False
-        self.jump_height = 2
+        self.jump_height = 3
         self.jump_up_duration = .5
         self.fall_after = .47 # will interrupt jump up
         self.jumping = False
