@@ -454,7 +454,7 @@ class MondeServeur:
         #if math.ceil(self.temps_ecoule()) % 2 == 0:
         if not self.__decider_si_cycle():
             #print(self.__temps_de_jeu)
-            print("MAJ")
+            Dbg.info("MondeServeur::__maj_difficulte: MAJ Difficulté", 2)
 
             self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(self.niveau_difficulte)(self.temps_ecoule())
             #self.__difficulte_globale +=  0.2
@@ -507,8 +507,8 @@ class MondeServeur:
         # True si approx(temps écoulé entre le début du jeu et maintenant) et approx(temps écoulé depuis le début du jeu et le dernier cycle) ne sont pas égaux
         # TODO Tester
         _r: bool =  math.ceil(_t_maintenant) != math.ceil(self.__moment_maj_anterieure)
-        print(_r)
         self.__remplacer_moment_maj_anterieure(_t_maintenant)
+        Dbg.info(f"MondeServeur::__decider_si_cycle: Y aura-t-il cycle? : {_r}", 5)
 
         return _r
 

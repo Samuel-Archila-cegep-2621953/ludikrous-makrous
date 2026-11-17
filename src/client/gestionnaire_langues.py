@@ -104,5 +104,8 @@ class GestionnaireLangues:
 
     @staticmethod
     def de_config():
+        """
+        Définit la langue en se basant sur la configuration dans `config.json`
+        """
         _nouvelle = Config.json()["Client"]["langue"]
         GestionnaireLangues.changer(_nouvelle)

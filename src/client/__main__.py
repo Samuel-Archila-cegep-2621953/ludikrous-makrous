@@ -13,7 +13,6 @@ from gestionnaire_menus import GestionnaireMenus as Gm
 
 
 #if __name__ == "__main__":
-_client = Client()
 
 window.borderless = False
 window.vsync = False
@@ -48,6 +47,7 @@ def commencer_jeu():
 
     ciel_texte = load_texture("ressources/textures/ciel")
     _ciel = Sky(texture=ciel_texte)
+    _client = Client()
     #_monde = monde.Monde(8, 8)
 
 

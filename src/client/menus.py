@@ -12,6 +12,7 @@ from config import Config
 from constantes import LEN_MAX_NOM
 import socket
 import hashlib
+from time import sleep
 
 class QuelquesMenus:
     COULEUR_BASE = color.rgba(130/255, 69/255, 16/255, 0.6)
@@ -327,6 +328,7 @@ class QuelquesMenus:
             Config.changer_ip(_saisir_ip.text.strip())
             Config.changer_port(int(_saisir_port.text.strip()))
             GM.ajouter_et_montrer(QuelquesMenus.menu_attente(), True)
+            #sleep(0.3)
             main.commencer_jeu()
             
             

@@ -12,6 +12,7 @@ from debogage import Debogage as Dbg
 class Client:
     def __init__(self):
         self.__config = Config.json()
+        Dbg.info(self.__config, 3)
 
     async def __gerer_envoyer_message(self, message: str) -> dict:
         _message: list[tuple[TypePaquetServeur, bytes]] = await self.__envoyer_message(message)

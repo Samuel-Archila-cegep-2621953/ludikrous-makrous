@@ -12,7 +12,7 @@ class Config:
     """
 
     @staticmethod
-    def json() -> str:
+    def json() -> dict:
         with open(Config.CHEMIN, 'r') as _f_json:
             return json.load(_f_json)
 
@@ -30,8 +30,11 @@ class Config:
         #    _nouveau = json.dumps(_json)
 
         os.remove(Config.CHEMIN)
-        with open(Config.CHEMIN, 'w') as _f_json:
-            json.dump(j, _f_json, indent=3)
+        with open(Config.CHEMIN, 'w') as _f_json_temp:
+            json.dump(j, _f_json_temp, indent=3)
+            _f_json_temp.flush()
+
+        #with  open(Config.CHEMIN, 'w') as _vrai_json:
 
 
     @staticmethod

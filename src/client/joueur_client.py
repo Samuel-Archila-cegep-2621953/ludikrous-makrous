@@ -80,7 +80,7 @@ class JoueurClient(FirstPersonController):
             _mdp_hache)
         )["Connexion"]
 
-        Dbg.info(f"[+] Hache obtenue: {_hache}", 3)
+        Dbg.info(f"[+] Hache obtenue comme ID: {_hache}", 3)
         #return _donnee['ID']
         if _hache == None: exit(1)
         return _hache
