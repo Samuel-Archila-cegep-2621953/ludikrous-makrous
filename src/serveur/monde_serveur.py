@@ -336,10 +336,11 @@ class MondeServeur:
             """
             #Dbg.info(f"tt{temps_entre_update}", 3)
 
-            #self.nettoyer_tuiles()
+            self.nettoyer_tuiles()
+            Dbg.info("Dans MondeServeur::mise_a_jour_jeu()")
             self.__maj_difficulte()
             self.creer_obstacles()
-            self.maj_compteur()
+            #self.maj_compteur()
 
     def maj_compteur(self, max = 50):
         MAX_COMPTEUR: int = max

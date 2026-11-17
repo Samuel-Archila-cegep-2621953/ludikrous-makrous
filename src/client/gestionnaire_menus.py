@@ -132,6 +132,6 @@ class GestionnaireMenus:
 
     @staticmethod
     def chercher_nom(nom: str) -> int | None:
-        for m, idx in enumerate(GestionnaireMenus.liste):
+        for idx, m in enumerate(GestionnaireMenus.liste): # m: Menu
             if m is not None and m.nom == nom: return idx
         return None
