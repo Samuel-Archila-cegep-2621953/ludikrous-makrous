@@ -1,25 +1,31 @@
 from ursina import *
 from ursina.shaders import lit_with_shadows_shader
 import random
+from pilier import Pilier
+import time
+from debogage import Debogage as Dbg
 
 tuile = load_model('ressources/modeles/tuile.glb')
 tuile_texture = load_texture('ressources/textures/plateforme.png')
 
 class Tuile(Entity):
-    def __init__(self, x, y):
+    H_DEFAUT: float = -5
+    def __init__(self, x, y, moment_creation: float):
         h = random.uniform(-7, -3)
-        H_DEFAUT: float = -5
         super().__init__(
             model=copy(tuile), 
             texture=tuile_texture, 
             color=rgb(128/255,128/255,128/255), 
             rotation=(-90, 0, 0), 
-            position=(x*5, H_DEFAUT,y*5), 
+            position=(x*5, Tuile.H_DEFAUT,y*5), 
             scale=(0.5, 0.5, 0.5), 
             collider='box'
         )
         self.doit_y = self.y
         self.vitesse = 3
+        self.creation = moment_creation
+        self.dernier_var_h = 0
+        self.prochaine_mort = None
 
     def __similaire(self, y1, y2, maximum):
         return abs(y1 - y2) < maximum
@@ -31,7 +37,15 @@ class Tuile(Entity):
         else:
             self.y += self.vitesse * time.dt * _direction
 
-    def changer_hauteur(self, h: float):
+        if self.prochaine_mort is not None and time.time() >= self.prochaine_mort:
+            self.doit_y = Tuile.H_DEFAUT
+            self.prochaine_mort = None
+            Dbg.info("Tuile::update: Retour vers hauteur par défaut", 3)
+
+        
+
+    def changer_hauteur(self, h: float, t: float):
         self.doit_y = h
+        self.prochaine_mort = t + Pilier.DUREE
 
 
