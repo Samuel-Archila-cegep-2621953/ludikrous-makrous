@@ -178,8 +178,10 @@ class JoueurClient(ControlleurPremierePersonne):
         
         #print(self.position)
         if self.position.y < -10:
+            self.velocite_verticale = 0
             self.position = (16, 15, 16)
-            self.vie.value //= 2
+            #self.vie.value //= 2
+            self.vie.value -= 128
 
 
 
