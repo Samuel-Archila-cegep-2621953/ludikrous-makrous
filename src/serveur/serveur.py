@@ -147,6 +147,12 @@ class Serveur:
         _commande = "py" if platform.system() == "Windows" else "python3"
         subprocess.Popen([_commande, Path(__file__).parent / 'fermeture_serveur.py', self.__config["Serveur"]["ip"], str(self.__config["Serveur"]["port"])])
 
+    def __mettre_a_jour_obstacles(self):
+        while self.__ouvert:
+            self.__monde_serveur.nettoyer_tuiles()
+            self.__monde_serveur.creer_obstacles()
+            time.sleep(0.01)
+
     def __boucle_principale_avec_graphiques(self, commandes: dict[tuple]):
         _fenetre = ctk.CTk()
         _fenetre.title("Ludikrous Makrous")
@@ -278,8 +284,12 @@ class Serveur:
         _serveur = threading.Thread(target=self.__serveur)
         _serveur.start()
 
+        _obstacles = threading.Thread(target=self.__mettre_a_jour_obstacles)
+        _obstacles.start()
+
         if not variable_globale.interface_graphique:
             self.__boucle_principale_sans_graphiques(_commandes)
         else:
             self.__boucle_principale_avec_graphiques(_commandes)
         _serveur.join()
+        _obstacles.join()
