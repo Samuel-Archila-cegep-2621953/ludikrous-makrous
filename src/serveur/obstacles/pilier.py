@@ -8,7 +8,7 @@ from tuile import Tuile
 class Pilier(Obstacle):
     def __init__(self, x: int, y: int, moment_creation: float):
         super().__init__()
-        self.mode_hauteur: int = random.randint(1, 5)
+        self.mode_hauteur: int = random.randint(0, 5)
         self.difficulte: float = 0.1 * self.mode_hauteur
         self.__type_obstacle = TypeObstacle.PILIER
         self.position: tuple[int, int] = (x, y)
