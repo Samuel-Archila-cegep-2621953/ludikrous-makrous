@@ -161,9 +161,8 @@ class JoueurClient(ControlleurPremierePersonne):
                         _hauteur = pilier.Pilier.hauteur_depuis_mode(obs["Hauteur"])
                         self.monde.changer_hauteur_tuile(_coord[0], _coord[1], _hauteur)
             except Exception as e:
-                Dbg.err("joueur_client::*::lire_donnee::Branche(obstacles): Erreur", 2)
+                Dbg.err("JoueurClient::lire_donnee::Branche(obstacles): Erreur", 2)
                 Dbg.err(e)
-                pass
             
 
 
