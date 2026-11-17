@@ -322,10 +322,10 @@ class MondeServeur:
         return _resultat
 
 
-    def mise_a_jour_jeu(self, temps_entre_updates):
+    def mise_a_jour_jeu(self):
         #Dbg.info("Maj jeu")
 
-        #if self.__partie_en_cours == False:
+        if self.__partie_en_cours == True:
             
             #self.__temps_de_jeu += temps_entre_update
 
@@ -336,7 +336,7 @@ class MondeServeur:
             """
             #Dbg.info(f"tt{temps_entre_update}", 3)
 
-            self.nettoyer_tuiles()
+            #self.nettoyer_tuiles()
             self.__maj_difficulte()
             self.creer_obstacles()
             self.maj_compteur()
@@ -372,9 +372,9 @@ class MondeServeur:
     def creer_obstacles(self):
 
         #if self.__compteur != 0: 
-        if not self.__decider_si_cycle():
-            Dbg.info(str(self.__compteur), 4)
-            return
+        if self.__decider_si_cycle() == False:
+            #Dbg.info(str(self.__compteur), 4)
+            pass
 
         if self.__lock == True:  return
 

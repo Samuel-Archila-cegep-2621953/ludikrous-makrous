@@ -80,7 +80,8 @@ class Serveur:
             ### FIN TEST
             _temps_entre_update = _fin - _debut
             _debut = time.time()
-            self.__monde_serveur.mise_a_jour_jeu(_temps_entre_update)
+            #self.__monde_serveur.mise_a_jour_jeu()
+            #print("MAJ")
             _fin = time.time()
 
     def __fermer(self, langue, commande):
@@ -159,7 +160,8 @@ class Serveur:
         while self.__ouvert:
             self.__monde_serveur.nettoyer_tuiles()
             self.__monde_serveur.creer_obstacles()
-            time.sleep(0.01)
+            #time.sleep(0.01)
+            time.sleep(1)
 
     def __boucle_principale_avec_graphiques(self, commandes: dict[tuple]):
         _fenetre = ctk.CTk()
