@@ -50,9 +50,18 @@ def commencer_jeu():
     _client = Client()
     #_monde = monde.Monde(8, 8)
 
+    _reussit = True
+    try:
+        _ping = _client.envoyer_message_bas("ping")
+        print(_ping)
+    except:
+        print("Échec de connexion, n'a pas pu ping le serveur.")
+        _reussit = False
 
 
-    _moi = joueur_client.JoueurClient(_client)
+
+    if _reussit:
+        _moi = joueur_client.JoueurClient(_client)
     #_moi.musique.fade_in(duration=0.7)
 
 

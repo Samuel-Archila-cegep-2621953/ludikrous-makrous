@@ -2,3 +2,7 @@
 ip = "10.70.50.12" 
 port = 9004
 joueurs_max = 16
+
+[Info]
+nom = "Ludikrous Makrous Officiel"
+description = "Serveur officiel"
