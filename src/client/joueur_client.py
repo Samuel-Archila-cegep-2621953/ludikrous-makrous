@@ -22,7 +22,7 @@ class JoueurClient(ControlleurPremierePersonne):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
         super().__init__(height, **kwargs)
         self.__client = client
-        self.__id = self.__creer_id()
+        self.__id, self.__session = self.__creer_id()
         self.__dernier_temps = self.__obtenir_temps()
         self.__joueurs: list[joueur.Joueur] = []
         self.vie = HealthBar(
@@ -73,17 +73,18 @@ class JoueurClient(ControlleurPremierePersonne):
         _nom_utilisateur = Config.json()["Client"]["nom_utilisateur"].encode("ascii")
         Dbg.info(_mdp_hache, 3)
 
-        _hache = self.__client.envoyer_message(struct.pack(
+        _donnee = self.__client.envoyer_message(struct.pack(
             formats_clients_par_type[TypePaquetClient.CONNEXION.value],
             TypePaquetClient.CONNEXION.value, 
             _nom_utilisateur, 
             _mdp_hache)
-        )["Connexion"]
+        )
+        _hache = _donnee["Session"]
 
         Dbg.info(f"[+] Hache obtenue comme ID: {_hache}", 3)
         #return _donnee['ID']
         if _hache == None: exit(1)
-        return _hache
+        return (_donnee['Connexion'], _hache)
 
     def __obtenir_temps(self) -> float:
         return time.time()
@@ -106,7 +107,7 @@ class JoueurClient(ControlleurPremierePersonne):
                 #NOTE VIEUX TypePaquetClient.MAJ_JOUEUR.value[0],
                 TypePaquetClient.MAJ_JOUEUR.value,                            # TYPE
                 #NOTE VIEUX Config.json()["Client"]["mot_de_passe_hache"].encode("ascii"),
-                self.__id, # hache clé
+                self.__session, # hache clé
                 floor(self.position.x * 100),
                 floor(self.position.y * 100),
                 floor(self.position.z * 100),
@@ -133,11 +134,14 @@ class JoueurClient(ControlleurPremierePersonne):
 
             if i >= len(self.__joueurs):
                 _joueur = joueur.Joueur(_joueurs[i]["ID"], '', (_position[0], _position[1], _position[2]))
+                print(_joueurs[i]["ID"], self.__id)
+                if _joueurs[i]["ID"] == self.__id:
+                    _joueur.visible_setter(False)
                 self.__joueurs.append(_joueur)
             
             #else:
             elif _["ID"] != self.__id:  # Ne pas se mettre à jour soi-même?
-                _pos = (_position[0] / 100, _position[1] / 100 + 1.25, _position[2] / 100)
+                _pos = (_position[0] / 100, _position[1] / 100, _position[2] / 100)
                 Dbg.info(_pos, 4)
                 for p_idx, p in enumerate(_pos):
                     if is_nan(p):

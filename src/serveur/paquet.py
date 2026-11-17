@@ -47,14 +47,15 @@ def creer_paquet_deconnexion() -> bytes:
     Dbg.info("Création d'un paquet de déconnexion", 2)
     return struct.pack(formats_serveur_par_type[TypePaquetServeur.DECONNEXION.value], TypePaquetServeur.DECONNEXION.value)
 
-def creer_paquet_connexion_reussit(code: bytes) -> bytes:
+def creer_paquet_connexion_reussit(code: bytes, id: int) -> bytes:
     """
     Formatte la réponse lorsqu'une connexion est réussit
-    Format: `B32s`
+    Format: `BI32s`
     """
     Dbg.info("Création d'un paquet de connexion réussie", 2)
     return struct.pack(formats_serveur_par_type[TypePaquetServeur.CONNEXION_REUSSIT.value],
                        TypePaquetServeur.CONNEXION_REUSSIT.value,
+                        id,
                        code)
 
 def creer_paquet_connexion_rate() -> bytes:

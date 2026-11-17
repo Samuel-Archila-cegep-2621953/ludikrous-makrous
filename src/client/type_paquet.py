@@ -34,7 +34,7 @@ class TypePaquetClient(enum.Enum):
 formats_serveur_par_type = [
     #'BIfff16sBB', NOTE Apparement changé coté serveur pour \/
     'B!I16siiiBB',
-    'B!32s',
+    'B!I32s',
     'B!',
 
     #'B32s' NOTE ?
