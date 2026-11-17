@@ -1,4 +1,4 @@
-from ursina.prefabs.first_person_controller import FirstPersonController
+from prefabs.controlleur_premiere_personne import ControlleurPremierePersonne
 from ursina.prefabs.health_bar import HealthBar
 import client_serveur
 import time
@@ -18,7 +18,7 @@ from type_obstacle import TypeObstacle as TyOb
 #from obstacles import pilier
 import pilier
 
-class JoueurClient(FirstPersonController):
+class JoueurClient(ControlleurPremierePersonne):
     def __init__(self, client: client_serveur.Client, height=2, **kwargs):
         super().__init__(height, **kwargs)
         self.__client = client
