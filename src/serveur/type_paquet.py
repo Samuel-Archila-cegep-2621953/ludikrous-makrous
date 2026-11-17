@@ -15,7 +15,7 @@ class TypePaquetClient(enum.Enum):
 
 formats_serveur_par_type = [
     '!BI16siiiBB',
-    '!B32s',
+    '!BI32s',
     '!B',
     '!B', # Obstacle: Ceci + format spécifique au type
     '!B'

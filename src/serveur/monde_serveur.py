@@ -224,7 +224,7 @@ class MondeServeur:
             self.__joueurs.append(_joueur)
 
             self.__joueurs_hache[_clef] = _id
-            return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef)])
+            return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef, _id)])
 
         Dbg.avis(f"{_nom} a tenté une connexion, hash: {hashlib.sha256(donnee[2]).hexdigest()}")
         return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
@@ -247,7 +247,7 @@ class MondeServeur:
             self.__joueurs.append(_joueur)
         
             self.__joueurs_hache[_clef] = _id
-            return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef)])
+            return paquet.construire_paquet([paquet.creer_paquet_connexion_reussit(_clef, _id)])
         return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
 
     def __recevoir_maj_paquets(self, donnee: tuple) -> bytes:

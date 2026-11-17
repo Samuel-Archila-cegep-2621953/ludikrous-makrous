@@ -1,9 +1,10 @@
 from ursina import *
 
+markous = load_model('ressources/modeles/markous.glb')
+
 class Joueur(Entity):
     def __init__(self, id, nom, position: tuple[float,float,float], **kwargs):
-        super().__init__(model='cube', color=rgb(0,0,0), scale=(1,2.5,1))
-        self.alpha_setter(0.5)
+        super().__init__(model=copy(markous), scale=(1,1,1), rotation=(-90, 0, 0))
         self.__ID = id
         self.__nom = nom
         self.__score = 0

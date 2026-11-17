@@ -105,7 +105,8 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
         case TypePaquetServeur.CONNEXION_REUSSIT:
             print("\033[91mConnection réussie")
             return {
-                "Connexion": tuple_paquet[1][0]
+                "Connexion": tuple_paquet[1][0],
+                "Session": tuple_paquet[1][1]
             }
 
         case TypePaquetServeur.DECONNEXION: # NOTE ASSUMER JOUEUR QUITTES ? 
@@ -146,17 +147,20 @@ def deconstruire_superpaquet(superpaquet: list[tuple[TypePaquetServeur, bytes]])
     _joueurs_quittes: list[int] = []
     _obstacles: list[dict[str, any]] = []
     _connexion: dict[str, any] = {}
+    _session: bytes = b''
     for p in superpaquet:
         _dict_paquet: dict[str, any] = interpreter_paquet(lire_paquet(p))
 
-        if   "Joueur" in _dict_paquet:           _joueurs.append(_dict_paquet["Joueur"])
-        elif "Obstacle" in _dict_paquet:         _obstacles.append(_dict_paquet["Obstacle"])
-        elif "Connexion" in _dict_paquet:        _connexion = _dict_paquet["Connexion"]
-        elif "Joueurs quittés" in _dict_paquet:  _joueurs_quittes = _dict_paquet["Joueurs quittés"]
-
+        if "Joueur" in _dict_paquet:           _joueurs.append(_dict_paquet["Joueur"])
+        if "Obstacle" in _dict_paquet:         _obstacles.append(_dict_paquet["Obstacle"])
+        if "Connexion" in _dict_paquet:        _connexion = _dict_paquet["Connexion"]
+        if "Joueurs quittés" in _dict_paquet:  _joueurs_quittes = _dict_paquet["Joueurs quittés"]
+        if "Session" in _dict_paquet:          _session = _dict_paquet["Session"]
+    
     return {
         "Joueurs": _joueurs,
         "Obstacles": _obstacles,
         "Connexion": _connexion,
-        "Joueurs quittés": _joueurs_quittes
+        "Joueurs quittés": _joueurs_quittes,
+        "Session": _session
     }
