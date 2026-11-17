@@ -37,6 +37,7 @@ class Tuile(Entity):
         else:
             _multiplicateur = 2 if self.doit_y < -10 else 1
             self.y += self.vitesse * time.dt * _direction * _multiplicateur
+        self.visible_setter(self.y > -10)
 
         if self.prochaine_mort is not None and time.time() >= self.prochaine_mort:
             self.doit_y = Tuile.H_DEFAUT
