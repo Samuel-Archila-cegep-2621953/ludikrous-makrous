@@ -37,7 +37,7 @@ class Pilier(Obstacle):
                     monde[y][x] = Pilier(x, y)
                     return (monde[y][x].difficulte, monde[y][x].comme_bytes())
         """
-        for i in range(8):
+        for _ in range(8):
             _x = random.randint(0, 7)
             _y = random.randint(0, 7)
             if monde[_y][_x] is None:
