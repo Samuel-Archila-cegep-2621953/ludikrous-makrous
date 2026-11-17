@@ -6,7 +6,7 @@ class Pilier:
         match mode:
             case 0: return -30
             case 1: return -3
-            case 2: return 5.5
+            case 2: return 4.5
             case 3: return 2
             case 4: return -1
             case 5: return 4

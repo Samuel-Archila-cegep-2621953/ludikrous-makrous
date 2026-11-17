@@ -35,7 +35,8 @@ class Tuile(Entity):
         if self.__similaire(self.y, self.doit_y, 0.3):
             self.y = self.doit_y
         else:
-            self.y += self.vitesse * time.dt * _direction
+            _multiplicateur = 2 if self.doit_y < -10 else 1
+            self.y += self.vitesse * time.dt * _direction * _multiplicateur
 
         if self.prochaine_mort is not None and time.time() >= self.prochaine_mort:
             self.doit_y = Tuile.H_DEFAUT
