@@ -35,7 +35,6 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
             #Dbg.info(f"paquet::lire_paquet::Branche_Obstacle: _type_obstacle: {_type_obstacle_bytes}")
             _format: str = TypeObstacle.format(_type_obstacle_bytes)
 
-            print("obstacle lire paquet")
             Dbg.info(f"Paquet Obstacle, paquet::lire_paquet: format {_format}, type_obs: {_type_obstacle_bytes}", 3)
 
             _r =  (
