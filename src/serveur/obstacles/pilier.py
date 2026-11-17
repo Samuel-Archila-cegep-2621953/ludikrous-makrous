@@ -6,7 +6,7 @@ import struct
 from tuile import Tuile
 
 class Pilier(Obstacle):
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: int, y: int, moment_creation: float):
         super().__init__()
         self.mode_hauteur: int = random.randint(1, 5)
         self.difficulte: float = 0.1 * self.mode_hauteur
@@ -14,12 +14,13 @@ class Pilier(Obstacle):
         self.position: tuple[int, int] = (x, y)
         #self.duree: float = random.uniform(1, 15) 
         self.duree: int = 7
+        self.mort = self.determiner_mort(moment_creation)
         self.est_global = False
         self.transparent = False
 
 
     @staticmethod
-    def creer(monde: list[list[Tuile]]) -> tuple[float, bytes] | None:
+    def creer(monde: list[list[Tuile]], naissance: float) -> tuple[float, bytes] | None:
         """
         Args:
             monde (`&list[list[Tuile]]`): Le mond du serveur. Permet de vérifier s'il existe une position adéquate pour l'obstacle.
@@ -40,7 +41,7 @@ class Pilier(Obstacle):
             _x = random.randint(0, 7)
             _y = random.randint(0, 7)
             if monde[_y][_x] is None:
-                monde[_y][_x] = Pilier(_x, _y)
+                monde[_y][_x] = Pilier(_x, _y, naissance)
                 return (monde[_y][_x].difficulte, monde[_y][_x].comme_bytes()) 
         return None
 
@@ -55,3 +56,7 @@ class Pilier(Obstacle):
             self.position[1],
             self.mode_hauteur
         )
+
+
+    def determiner_mort(self, en_ce_moment: float):
+        return  en_ce_moment + self.duree

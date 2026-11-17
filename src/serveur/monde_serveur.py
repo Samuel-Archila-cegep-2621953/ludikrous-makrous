@@ -268,12 +268,14 @@ class MondeServeur:
 
         _joueurs: list[bytes] = [paquet.creer_paquet_joueur(joueur) for joueur in self.__joueurs]
         #print("here")
-        TEMPS_UPDATE: float = 0.01
-        self.__temps_de_jeu += TEMPS_UPDATE
+        #TEMPS_UPDATE: float = 0.01
+        #self.__temps_de_jeu += TEMPS_UPDATE
+        self.__nettoyer_tuiles()
         self.__creer_obstacles()
         self.__maj_difficulte()
         #self.__difficulte_globale += 0.2
-        self.maj_compteur()
+        #self.maj_compteur()
+        #self.mise_a_jour_jeu(None)
 
 
         #return paquet.construire_paquet(_joueurs)
@@ -284,7 +286,7 @@ class MondeServeur:
 
         if len(self.__nouveaux_obstacles) != 0:
             Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 1)
-            #self.__nouveaux_obstacles = []
+            self.__nouveaux_obstacles = []
 
         return _paquet_final
 
@@ -319,18 +321,18 @@ class MondeServeur:
         
         self.__difficulte_globale = 0.0
         self.__temps_de_jeu = 0.0
-        self.__partie_en_cours = False
+        self.__partie_en_cours = True
         self.__effacer_tout_obstacle()
 
         self.__liste_message.append("partie_fin")
 
 
-    def mise_a_jour_jeu(self, temps_entre_update: float):
+    def mise_a_jour_jeu(self, temps_entre_updates):
         #Dbg.info("Maj jeu")
 
-        if self.__partie_en_cours == False:
+        #if self.__partie_en_cours == False:
             
-            self.__temps_de_jeu += temps_entre_update
+            #self.__temps_de_jeu += temps_entre_update
 
             """
             for obstacle in self.__liste_obstacle:
@@ -339,12 +341,9 @@ class MondeServeur:
             """
             #Dbg.info(f"tt{temps_entre_update}", 3)
 
-            self.__nettoyer_tuiles(temps_entre_update)
-                
-            self.__maj_difficulte(temps_entre_update)
-
+            self.__nettoyer_tuiles()
+            self.__maj_difficulte()
             self.__creer_obstacles()
-
             self.maj_compteur()
 
     def maj_compteur(self, max = 50):
@@ -376,7 +375,8 @@ class MondeServeur:
 
 
     def __creer_obstacles(self):
-        if self.__compteur != 0: 
+        #if self.__compteur != 0: 
+        if not self.__decider_si_cycle():
             Dbg.info(str(self.__compteur), 4)
             return
 
@@ -384,11 +384,11 @@ class MondeServeur:
         _difficulte_atteinte = 0.0 + self.__difficulte_actuelle()
         #_nouveaux_obstacles: list[TypeObstacle] = []
 
-        MAX_LOOPS = 32
+        MAX_LOOPS = 48
 
         #_i = 0
         #while _difficulte_atteinte < _difficulte_cible or _i > MAX_LOOPS: # Continue à ajouter des obstacles jusqu'à la difficulté globale
-        for _ in range(MAX_LOOPS):
+        for _ in range(MAX_LOOPS): #NOTE il faut placer une limite explicite au nombre de fois que l'algorithme peut essayer de générer des obstacles pour éviter que le serveur bloque
             if _difficulte_atteinte > _difficulte_cible : break
             #_i += 1
             _rand_obstacle: int = random.randint(0, TypeObstacle.max())
@@ -403,7 +403,7 @@ class MondeServeur:
                 continue # HACK: Les autres obstacles n'existent pas encore
             
             _fn_creer_obstacle: Callable = MondeServeur.__constructeur_obstacle_depuis_type(_rand_obstacle)
-            _resultat_creer_obs: tuple[float, bytes] | None = _fn_creer_obstacle(self.__tuiles)
+            _resultat_creer_obs: tuple[float, bytes] | None = _fn_creer_obstacle(self.__tuiles, self.temps_ecoule())
             #print(_resultat_creer_obs[1])
             #print(_resultat_creer_obs)
 
@@ -451,10 +451,12 @@ class MondeServeur:
     def __maj_difficulte(self):
         #self.__difficulte_globale += ModificateurDifficulte.fonction_difficulte(constantes.NIVEAU_DIFFICULTE)(temps_entre_update * 0.1)
 
-        if math.ceil(self.temps_ecoule()) % 2 == 0:
+        #if math.ceil(self.temps_ecoule()) % 2 == 0:
+        if not self.__decider_si_cycle():
             #print(self.__temps_de_jeu)
+            print("MAJ")
 
-            self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(self.niveau_difficulte)((time.time() - self.__debut))
+            self.__difficulte_globale = ModificateurDifficulte.fonction_difficulte(self.niveau_difficulte)(self.temps_ecoule())
             #self.__difficulte_globale +=  0.2
             #print(self.__difficulte_globale)
 
@@ -468,15 +470,21 @@ class MondeServeur:
         #TODO delete tout les obstacles
 
 
-    def __nettoyer_tuiles(self, temps_entre_updates: float):
+    def __nettoyer_tuiles(self):
         for idx_rangee in range(len(self.__tuiles)):
             for idx_t in range(len(self.__tuiles[idx_rangee])):
                 if self.__tuiles[idx_rangee][idx_t] is None: continue
 
-                self.__tuiles[idx_rangee][idx_t].duree -= temps_entre_updates
+                """
+                self.__tuiles[idx_rangee][idx_t].duree -= self.__
                 
                 if self.__tuiles[idx_rangee][idx_t].duree <= 0:
                     self.__tuiles[idx_rangee][idx_t] = None
+                """
+                if self.__tuiles[idx_rangee][idx_t].mort >= self.temps_ecoule(): # Vérifie si le momemt prévu pour la mort de l'obstacle est déjà passé ou non
+                    self.__tuiles[idx_rangee][idx_t] = None
+                    Dbg.info("Nettoyage de tuile", 2)
+
 
 
     def temps_ecoule(self) -> float:
@@ -490,15 +498,16 @@ class MondeServeur:
         self.__moment_maj_anterieure = moment
 
 
-    def __decidersi__cycle(self) -> bool:
+    def __decider_si_cycle(self) -> bool:
         """
-        Considère si assez de temps c'est écoulé (1 seconde) depuis le dernier cycle pour en commencer un autre.
-        
+        Considère si assez de temps s'est écoulé (1 seconde) depuis le dernier cycle pour en commencer un autre.
         """
         _t_maintenant: float = self.temps_ecoule()
+        Dbg.info(f"MondeServeur::__decider_si_cycle: _t_maintenant = {_t_maintenant}", 5)
         # True si approx(temps écoulé entre le début du jeu et maintenant) et approx(temps écoulé depuis le début du jeu et le dernier cycle) ne sont pas égaux
         # TODO Tester
         _r: bool =  math.ceil(_t_maintenant) != math.ceil(self.__moment_maj_anterieure)
+        print(_r)
         self.__remplacer_moment_maj_anterieure(_t_maintenant)
 
         return _r

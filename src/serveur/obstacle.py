@@ -12,6 +12,7 @@ class Obstacle:
         self.__position = None
         self.est_global = None # Détermine si cet obstacle est nécessairement lié à une case spécifique
         self.transparent = None # Détermine si un autre obstacle peut passe à travers de cet obstacle
+        self.naissance: float = None # Le moment ou l'obstacle a été créé
 
     def temps_en_vie(self) -> int:
         return self.__temps_en_vie
@@ -24,4 +25,8 @@ class Obstacle:
         pass
 
     def detruire(self):
+        pass
+
+    @abstractmethod
+    def determiner_mort(self) -> float:
         pass
