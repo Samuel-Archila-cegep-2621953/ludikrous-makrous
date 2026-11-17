@@ -270,8 +270,8 @@ class MondeServeur:
         #print("here")
         #TEMPS_UPDATE: float = 0.01
         #self.__temps_de_jeu += TEMPS_UPDATE
-        self.__nettoyer_tuiles()
-        self.__creer_obstacles()
+        #self.__nettoyer_tuiles()
+        #self.__creer_obstacles()
         self.__maj_difficulte()
         #self.__difficulte_globale += 0.2
         #self.maj_compteur()
@@ -312,20 +312,6 @@ class MondeServeur:
         Dbg.info(f"Résultat de recevoir_client: {_resultat}", 2)
         return _resultat
 
-    
-    def __terminer_partie(self):
-        """
-        terminer la partie
-        """
-        
-        
-        self.__difficulte_globale = 0.0
-        self.__temps_de_jeu = 0.0
-        self.__partie_en_cours = True
-        self.__effacer_tout_obstacle()
-
-        self.__liste_message.append("partie_fin")
-
 
     def mise_a_jour_jeu(self, temps_entre_updates):
         #Dbg.info("Maj jeu")
@@ -341,9 +327,9 @@ class MondeServeur:
             """
             #Dbg.info(f"tt{temps_entre_update}", 3)
 
-            self.__nettoyer_tuiles()
+            self.nettoyer_tuiles()
             self.__maj_difficulte()
-            self.__creer_obstacles()
+            self.creer_obstacles()
             self.maj_compteur()
 
     def maj_compteur(self, max = 50):
@@ -374,7 +360,7 @@ class MondeServeur:
         return _difficulte_actuelle
 
 
-    def __creer_obstacles(self):
+    def creer_obstacles(self):
         #if self.__compteur != 0: 
         if not self.__decider_si_cycle():
             Dbg.info(str(self.__compteur), 4)
@@ -461,17 +447,8 @@ class MondeServeur:
             #self.__difficulte_globale +=  0.2
             #print(self.__difficulte_globale)
 
-    def __effacer_tout_obstacle(self):
 
-        for o in self.__liste_obstacle:
-            o.detruire()
-
-        self.__liste_obstacle = []
-
-        #TODO delete tout les obstacles
-
-
-    def __nettoyer_tuiles(self):
+    def nettoyer_tuiles(self):
         for idx_rangee in range(len(self.__tuiles)):
             for idx_t in range(len(self.__tuiles[idx_rangee])):
                 if self.__tuiles[idx_rangee][idx_t] is None: continue
