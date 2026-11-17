@@ -285,7 +285,7 @@ class MondeServeur:
         _paquet_final = paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
 
         if len(self.__nouveaux_obstacles) != 0:
-            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 1)
+            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 2)
             self.__nouveaux_obstacles = []
 
         return _paquet_final

@@ -22,7 +22,7 @@ class Tuile(Entity):
             collider='box'
         )
         self.doit_y = self.y
-        self.vitesse = 3
+        self.vitesse = 5
         self.creation = moment_creation
         self.dernier_var_h = 0
         self.prochaine_mort = None
