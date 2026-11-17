@@ -192,9 +192,9 @@ class MondeServeur:
 
         if len(_joueurs_quittes) > 0:
             if len(_joueurs_quittes) == 1:
-                print(f"[-] Joueur {_joueurs_quittes[0]}")
+                Dbg.info(f"[-] Joueur {_joueurs_quittes[0]}")
             else:
-                print(f"[-] Joueurs {_joueurs_quittes}")
+                Dbg.info(f"[-] Joueurs {_joueurs_quittes}")
 
         return json.dumps(self.__formatter_dict(_joueurs_quittes))
 
@@ -279,7 +279,7 @@ class MondeServeur:
 
 
         #return paquet.construire_paquet(_joueurs)
-        if len(self.__nouveaux_obstacles) != 0: print("OBSCTALEES")
+        #if len(self.__nouveaux_obstacles) != 0: print("OBSCTALEES")
 
 
         _paquet_final = paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
@@ -398,7 +398,8 @@ class MondeServeur:
                 if _chance != 0:
                     continue
 
-            if _rand_obstacle != TypeObstacle.PILIER.value:
+            #if _rand_obstacle != TypeObstacle.PILIER.value or _rand_obstacle != TypeObstacle.RIEN.value:
+            if not (_rand_obstacle == TypeObstacle.PILIER.value or _rand_obstacle == TypeObstacle.RIEN.value):
                 #print("pas pilier")
                 continue # HACK: Les autres obstacles n'existent pas encore
             
@@ -434,7 +435,7 @@ class MondeServeur:
         #TODO importer les constructeurs
 
         match t:
-            case TypeObstacle.RIEN.value: return None
+            case TypeObstacle.RIEN.value: return reservation.Reservation.creer
             case TypeObstacle.TRAIN.value: return train.Train.creer
             case TypeObstacle.PILIER.value: return pilier.Pilier.creer
             case TypeObstacle.LASER_CENTRE.value: return laser.Laser.creer
@@ -483,7 +484,7 @@ class MondeServeur:
                 """
                 if self.__tuiles[idx_rangee][idx_t].mort >= self.temps_ecoule(): # Vérifie si le momemt prévu pour la mort de l'obstacle est déjà passé ou non
                     self.__tuiles[idx_rangee][idx_t] = None
-                    Dbg.info("Nettoyage de tuile", 2)
+                    Dbg.info("MondeServeur::__nettoyer_tuiles: Nettoyage d'une tuile", 2)
 
 
 

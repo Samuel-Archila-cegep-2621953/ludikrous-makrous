@@ -19,7 +19,7 @@ class Tuile(Entity):
             collider='box'
         )
         self.doit_y = self.y
-        self.vitesse = 1
+        self.vitesse = 3
 
     def __similaire(self, y1, y2, maximum):
         return abs(y1 - y2) < maximum
