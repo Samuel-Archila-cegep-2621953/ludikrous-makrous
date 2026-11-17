@@ -21,6 +21,16 @@ class Client:
         _decode: dict[str, any] = deconstruire_superpaquet(_message)
         Dbg.info(_decode, 5)
         return _decode
+
+    async def __gerer_envoyer_message_bas(self, message: str) -> str:
+        self.__lire, self.__ecrire = await asyncio.open_connection(self.__config["Client"]["ip"], self.__config["Client"]["port"])
+        self.__ecrire.write(message.encode())
+        await self.__ecrire.drain()
+
+        _texte = await self.__lire.read()
+        _resultat = _texte.decode()
+
+        return _resultat
     
     async def __envoyer_message(self, message: bytes) -> list[tuple[TypePaquetServeur, bytes]]:
         self.__lire, self.__ecrire = await asyncio.open_connection(self.__config["Client"]["ip"], self.__config["Client"]["port"])
@@ -102,4 +112,7 @@ class Client:
 
     def envoyer_message(self, message: bytes) -> dict:
         return asyncio.run(self.__gerer_envoyer_message(message))
+
+    def envoyer_message_bas(self, message: str) -> str:
+        return asyncio.run(self.__gerer_envoyer_message_bas(message))
 

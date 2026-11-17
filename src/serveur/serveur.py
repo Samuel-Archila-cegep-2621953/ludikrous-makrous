@@ -4,15 +4,14 @@ import time
 import monde_serveur
 import tomllib
 from pathlib import Path
-import select
 import hashlib
 import customtkinter as ctk
 import variable_globale
 import journal
 import psutil
-import CTkListbox as ctkl
 import subprocess
 import platform
+import json
 
 print(str((Path(__file__).parent.parent / 'fermeture_serveur.py')))
 
@@ -63,6 +62,15 @@ class Serveur:
                     _client.close()
                     self.__ouvert = False
                     break
+
+            if _requete == 'ping'.encode():
+                _client.send(json.dumps({
+                    "nom": self.__config["Info"]["nom"],
+                    "description": self.__config["Info"]["description"],
+                    "joueurs max": self.__config["Serveur"]["joueurs_max"]
+                }).encode())
+                _client.close()
+                continue
 
             _dbg_msg = self.__monde_serveur.recevoir_client_paquets(_requete)
             #print(f"Msg {_dbg_msg}")
