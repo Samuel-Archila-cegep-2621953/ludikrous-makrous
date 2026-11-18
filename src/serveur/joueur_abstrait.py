@@ -11,7 +11,13 @@ class JoueurAbstrait:
         #NOTE Changé vers un int pour tester. 2-11-2026. Samuel. self.animation = "pause"
         self.animation = 0
         self.dernier_paquet = time.time()
+        self.doit_recevoir_maj_obstacles = False
 
+    def changer_doit_recevoir_maj_obstacles(self):
+        self.doit_recevoir_maj_obstacles = True
+
+    def a_recu_maj_obstacles(self):
+        self.doit_recevoir_maj_obstacles = False
 
 def formatter_json(liste_joueurs: list[JoueurAbstrait]) -> list[dict]:
     """
