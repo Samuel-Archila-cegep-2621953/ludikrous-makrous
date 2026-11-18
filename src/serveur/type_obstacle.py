@@ -6,10 +6,11 @@ class TypeObstacle(Enum):
     PILIER = 2
     LASER_CENTRE = 3
     VAGUE_FEU = 4
+    MISSILE = 5
 
     @staticmethod
     def max():
-        return 4
+        return 5
 
 
     @staticmethod
@@ -20,6 +21,7 @@ class TypeObstacle(Enum):
             case TypeObstacle.PILIER:       return 2
             case TypeObstacle.LASER_CENTRE: return 3
             case TypeObstacle.VAGUE_FEU:    return 4
+            case TypeObstacle.MISSILE:      return 5
 
 
     @staticmethod
@@ -35,6 +37,7 @@ class TypeObstacle(Enum):
             'B BB B', # Type obs, coord, mode hauteur
             'B BB f', # Type obs, coord, rayon
             'B B f', # Type obs, direction, hauteur
+            'B BB' # Position
         ]
         return _formats[type_obstacle]
 

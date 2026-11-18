@@ -15,8 +15,8 @@ from math import isnan as is_nan
 from debogage import Debogage as Dbg
 from monde import Monde
 from type_obstacle import TypeObstacle as TyOb
-#from obstacles import pilier
 import pilier
+#from obstacles import pilier
 
 class JoueurClient(ControlleurPremierePersonne):
     def __init__(self, client: client_serveur.Client, monde: Monde, height=2, **kwargs):
@@ -55,7 +55,7 @@ class JoueurClient(ControlleurPremierePersonne):
         )
         self.cursor.visible = False
 
-        self.musique = Musique(TypesMusique.PERTE)
+        self.musique = Musique(TypesMusique.JEU_FACILE)
         self.musique.fade_in(0.7)
 
         self.monde = monde
@@ -159,7 +159,8 @@ class JoueurClient(ControlleurPremierePersonne):
         for j, obs in enumerate(_obstacles):
             try:
                 match obs["Type"]:
-                    case TyOb.TRAIN.value: pass
+                    case TyOb.MISSILE.value:
+                        pass
                     case TyOb.PILIER.value:
                         _coord: tuple[int, int] = obs["Coord"]
                         _hauteur = pilier.Pilier.hauteur_depuis_mode(obs["Hauteur"])

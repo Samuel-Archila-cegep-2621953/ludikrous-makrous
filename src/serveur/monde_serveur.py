@@ -24,7 +24,7 @@ import os
 
 from collections.abc import Callable
 
-from obstacles import (laser, pilier, reservation, train, vague)
+from obstacles import (laser, pilier, reservation, train, vague, missile)
 import math
 
 class MondeServeur:
@@ -58,6 +58,7 @@ class MondeServeur:
         self.__debut = time.time()
         self.__moment_maj_anterieure: float = self.__debut
         self.__lock = False
+        self.__obstacles_implementes = [TypeObstacle.PILIER.value, TypeObstacle.RIEN.value, TypeObstacle.MISSILE.value]
 
         #self.
 
@@ -419,7 +420,8 @@ class MondeServeur:
                     continue
 
             #if _rand_obstacle != TypeObstacle.PILIER.value or _rand_obstacle != TypeObstacle.RIEN.value:
-            if not (_rand_obstacle == TypeObstacle.PILIER.value or _rand_obstacle == TypeObstacle.RIEN.value):
+            #if not (_rand_obstacle == TypeObstacle.PILIER.value or _rand_obstacle == TypeObstacle.RIEN.value):
+            if not _rand_obstacle in self.__obstacles_implementes:
                 #print("pas pilier")
                 continue # HACK: Les autres obstacles n'existent pas encore
             
@@ -463,6 +465,7 @@ class MondeServeur:
             case TypeObstacle.PILIER.value: return pilier.Pilier.creer
             case TypeObstacle.LASER_CENTRE.value: return laser.Laser.creer
             case TypeObstacle.VAGUE_FEU.value: return vague.Vague.creer
+            case TypeObstacle.MISSILE.value:   return missile.Missile.creer
 
     """
     def __creer_obstacles(self, nouveaux_obstacles: list[TypeObstacle]):
