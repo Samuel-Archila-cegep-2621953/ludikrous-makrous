@@ -84,6 +84,7 @@ class MondeServeur:
         return None
 
     def __recevoir_deconnexion_paquets(self, donnee: tuple) -> bytes:
+        Dbg.info(f"[-] {self.__joueurs[self.__joueurs_hache[donnee[1]]].nom} s'est déconnecté.")
         for i, _ in enumerate(self.__joueurs):
             if _.id == self.__joueurs_hache[donnee[1]]:
                 del self.__joueurs[i]
