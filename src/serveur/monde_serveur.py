@@ -289,6 +289,7 @@ class MondeServeur:
 
         if len(self.__nouveaux_obstacles) > 0:
             Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 1)
+            print(self.__nouveaux_obstacles)
             #Dbg.info(f"MondeServeur::__recevoir_maj_paquets: len(self.__nouveaux_obstacles) = {len(self.__nouveaux_obstacles)}")
 
         if self.__lock == False:

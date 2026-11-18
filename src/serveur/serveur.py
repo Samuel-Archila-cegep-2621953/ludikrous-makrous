@@ -157,7 +157,7 @@ class Serveur:
         subprocess.Popen([_commande, Path(__file__).parent / 'fermeture_serveur.py', self.__config["Serveur"]["ip"], str(self.__config["Serveur"]["port"])])
 
     def __mettre_a_jour_obstacles(self):
-        time.sleep(30)
+        time.sleep(10)
         while self.__ouvert:
             self.__monde_serveur.nettoyer_tuiles()
             self.__monde_serveur.creer_obstacles()
