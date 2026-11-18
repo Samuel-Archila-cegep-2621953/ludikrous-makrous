@@ -4,7 +4,7 @@ markous = load_model('ressources/modeles/markous.glb')
 
 class Joueur(Entity):
     def __init__(self, id, nom, position: tuple[float,float,float], **kwargs):
-        super().__init__(model=copy(markous), scale=(1,1,1), rotation=(-90, 0, 0))
+        super().__init__(model=copy(markous), scale=(0.5,0.5,0.5), rotation=(-90, 0, 0))
         self.__ID = id
         self.__nom = nom
         self.__score = 0
