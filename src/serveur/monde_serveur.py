@@ -54,9 +54,12 @@ class MondeServeur:
         self.__personnes_a_ajouter: list[tuple[int,str]] = []
         self.__derniere_id = 0
         self.__nouveaux_obstacles: list[bytes] = []
+        self.__joueurs_auxquels_envoyer_obstacles: list[int] = []
         self.__debut = time.time()
         self.__moment_maj_anterieure: float = self.__debut
         self.__lock = False
+
+        #self.
 
         self.niveau_difficulte = 3
 
@@ -266,9 +269,12 @@ class MondeServeur:
             joueur.position = (donnee[2], donnee[3], donnee[4])
             joueur.vie = donnee[5]
             joueur.animation = donnee[6]
+            #joueur.a_recu_maj_obstacles()
+
 
         _joueurs: list[bytes] = [paquet.creer_paquet_joueur(joueur) for joueur in self.__joueurs]
         #print("here")
+
         #TEMPS_UPDATE: float = 0.01
         #self.__temps_de_jeu += TEMPS_UPDATE
         #self.__nettoyer_tuiles()
@@ -283,20 +289,31 @@ class MondeServeur:
         #if len(self.__nouveaux_obstacles) != 0: print("OBSCTALEES")
 
 
-        _paquet_final = paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
+        #_joueurs + self.__nouveaux_obstacles if not self.__obtenir_joueur_par_id(_id).a_recu_maj_obstacles() else _joueurs
+        _joueur = self.__obtenir_joueur_par_id(_id)
+        if _joueur.doit_recevoir_maj_obstacles: 
+            _paquet_final = paquet.construire_paquet(_joueurs + self.__nouveaux_obstacles)
+            _joueur.a_recu_maj_obstacles()
+        else: _paquet_final = paquet.construire_paquet(_joueurs)
+            #_joueurs + self.__nouveaux_obstacles if not self.__obtenir_joueur_par_id(_id).a_recu_maj_obstacles() else _joueurs
+        
+        
+
 
         #print(len(self.__nouveaux_obstacles))
 
         if len(self.__nouveaux_obstacles) > 0:
-            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 1)
-            print(self.__nouveaux_obstacles)
+            Dbg.info(f"Ajout de {len(self.__nouveaux_obstacles)} obstacle(s)", 3)
+            Dbg.info(f"MondeServeur::__recevoir_maj_paquets: Nouveaux obstacles comme bytes {self.__nouveaux_obstacles}", 5)
             #Dbg.info(f"MondeServeur::__recevoir_maj_paquets: len(self.__nouveaux_obstacles) = {len(self.__nouveaux_obstacles)}")
 
+        """
         if self.__lock == False:
             #print("No lock")
             self.__lock = True
-            self.__nouveaux_obstacles = []
+            #self.__nouveaux_obstacles = []
             self.__lock = False
+        """
 
         return _paquet_final
 
@@ -376,6 +393,7 @@ class MondeServeur:
         #if self.__compteur != 0: 
         if self.__decider_si_cycle() == False:
             #Dbg.info(str(self.__compteur), 4)
+            #return
             pass
 
         if self.__lock == True:  return
@@ -423,6 +441,8 @@ class MondeServeur:
             #print(self.__tuiles)
         #print(len(self.__nouveaux_obstacles))
         self.__lock = False
+        for j in self.__joueurs:
+            j.changer_doit_recevoir_maj_obstacles()
 
         
     @staticmethod
@@ -507,4 +527,6 @@ class MondeServeur:
 
         return _r
 
+    def effacer_liste_nouveaux_obstacles(self):
+        self.__nouveaux_obstacles = []
         

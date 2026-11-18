@@ -159,6 +159,7 @@ class Serveur:
     def __mettre_a_jour_obstacles(self):
         time.sleep(10)
         while self.__ouvert:
+            self.__monde_serveur.effacer_liste_nouveaux_obstacles()
             self.__monde_serveur.nettoyer_tuiles()
             self.__monde_serveur.creer_obstacles()
             #time.sleep(0.01)
