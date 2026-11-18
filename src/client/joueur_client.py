@@ -19,7 +19,7 @@ from type_obstacle import TypeObstacle as TyOb
 import pilier
 
 class JoueurClient(ControlleurPremierePersonne):
-    def __init__(self, client: client_serveur.Client, height=2, **kwargs):
+    def __init__(self, client: client_serveur.Client, monde: Monde, height=2, **kwargs):
         super().__init__(height, **kwargs)
         self.__client = client
         self.__id, self.__session = self.__creer_id()
@@ -58,7 +58,7 @@ class JoueurClient(ControlleurPremierePersonne):
         self.musique = Musique(TypesMusique.PERTE)
         self.musique.fade_in(0.7)
 
-        self.monde = Monde(8, 8)
+        self.monde = monde
 
     def __creer_id(self) -> int:
         """

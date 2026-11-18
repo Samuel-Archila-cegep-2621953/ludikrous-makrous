@@ -11,9 +11,14 @@ class Monde:
             _colonne_tuile = []
             for x in range(longueur):
                 _tuile = tuile.Tuile(x, y, self.debut)
+                _tuile.visible_setter(False)
                 _colonne_tuile.append(_tuile)
             self.__monde.append(_colonne_tuile)
 
+    def changer_visibilite(self):
+        for rang in self.__monde:
+            for tuile in rang:
+                tuile.visible_setter(True)
 
     def tuile(self, x: int, y: int) -> tuile.Tuile:
         return self.__monde[y][x]

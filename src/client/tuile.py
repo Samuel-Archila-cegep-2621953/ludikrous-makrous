@@ -6,16 +6,14 @@ import time
 from debogage import Debogage as Dbg
 
 tuile = load_model('ressources/modeles/tuile.glb')
-tuile_texture = load_texture('ressources/textures/plateforme.png')
 
 class Tuile(Entity):
     H_DEFAUT: float = -5
     def __init__(self, x, y, moment_creation: float):
         h = random.uniform(-7, -3)
         super().__init__(
-            model=copy(tuile), 
-            texture=tuile_texture, 
-            color=rgb(128/255,128/255,128/255), 
+            model=copy(tuile),
+            color=color.white,
             rotation=(-90, 0, 0), 
             position=(x*5, Tuile.H_DEFAUT,y*5), 
             scale=(0.5, 0.5, 0.5), 
