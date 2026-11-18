@@ -253,6 +253,10 @@ class MondeServeur:
         MAX_COMPTEUR: int = max
         self.__compteur += 1
         if self.__compteur == MAX_COMPTEUR: self.__compteur = 0
+
+
+    def effacer_liste_nouveaux_obstacles(self):
+        self.__nouveaux_obstacles = []
             
     def __joueurs_ordonnes(self) -> list[JoueurAbstrait]:
         """
