@@ -7,10 +7,11 @@ class TypeObstacle(Enum):
     PILIER = 2
     LASER_CENTRE = 3
     VAGUE_FEU = 4
+    MISSILE = 5
 
     @staticmethod
     def max():
-        return 4
+        return 5
 
 
     @staticmethod
@@ -25,6 +26,7 @@ class TypeObstacle(Enum):
             case TypeObstacle.PILIER.value:      return TypeObstacle.PILIER
             case TypeObstacle.LASER_CENTRE.value: return TypeObstacle.LASER_CENTRE
             case TypeObstacle.VAGUE_FEU.value:     return TypeObstacle.VAGUE_FEU
+            case TypeObstacle.MISSILE.value:        return TypeObstacle.MISSILE
 
     @staticmethod
     def format(type_obstacle: 'int | TypeObstacle') -> str:
@@ -37,6 +39,7 @@ class TypeObstacle(Enum):
             'B BB B', # Type obs, coord, hauteur
             'B BB f', # Type obs, coord, rayon
             'B B f', # Type obs, direction, hauteur
+            'B BB', # type, position
         ]
         return _formats[type_obstacle]
 
@@ -52,6 +55,12 @@ class TypeObstacle(Enum):
     def dict_depuis_tuple(donnees: tuple['int | TypeObstacle', tuple[any]]) -> dict[str, any]:
         _type: int = donnees[0]
         match _type:
+            case TypeObstacle.MISSILE.value:
+                _, x, y = donnees
+                return {
+                    "Type": _type,
+                    "Coord": (x, y)
+                }
             case TypeObstacle.VAGUE_FEU.value: 
                 _, direction, hauteur = donnees
                 return {
