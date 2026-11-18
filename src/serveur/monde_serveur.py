@@ -64,150 +64,31 @@ class MondeServeur:
 
         self.niveau_difficulte = 3
 
+        """ OBSOLÈTE
         self.__REQUETES = {
             'CREER ID': self.__recevoir_creer_id,
             'MAJ': self.__recevoir_maj
         }
+        """
         self.__REQUETES_PAQUETS = {
             TypePaquetClient.MAJ_JOUEUR.value[0]: self.__recevoir_maj_paquets,
             TypePaquetClient.CONNEXION.value[0]: self.__recevoir_connexion_paquets,
-            TypePaquetClient.CREATION_COMPTE.value[0]: self.__recevoir_inscrire_paquets
+            TypePaquetClient.CREATION_COMPTE.value[0]: self.__recevoir_inscrire_paquets,
+            TypePaquetClient.DECONNEXION.value[0]: self.__recevoir_deconnexion_paquets,
         }
-        
-
-    def __obsolète____formatter_dict(self, joueurs_quitte: list[int]):
-        """
-        Formatte le monde du serveur en json pour l'envoyer au client.
-        Style:
-            {
-                "Général": {
-                    "Temps de jeu": <__temps_de_jeu>,
-                    "Liste messages": <SignalServeurClient> 
-                },
-
-                "Nouveaux Obstacles": [
-                    <bytes>
-                ],
-
-                "Joueurs": [ # Envoyer en ordre de leur classement selon leur score
-                    {
-                        "ID": <ID>
-                        "Position": <[x, y, x]>,
-                        "Nom": <nom>,
-                        "Vie": <vie>,
-                        "En_vie": <en_vie>
-                        "Animation": <animation>
-                    }
-                }
-            }
-
-        """
-        _fichier_json = {}
-
-        #_fichier_json["Obstacles"]: list[bytes] = []
-
-        _fichier_json["Général"] = {}
-
-        _fichier_json["Général"]["Temps de jeu"] = self.__temps_de_jeu
-
-        _liste_message = []
-        for m in self.__liste_messages:
-
-            _liste_message.append(m)
-
-            _fichier_json["Général"]["Liste messages"] = self.__liste_messages
-
-
-        _fichier_json["Nouveaux obstacles"] = []
-
-        #NOTE Samuel, 12-11-2026: Changement vers l'utilisation des bytes directement pour les obstacles.
-        """
-        for o in self.__nouveaux_obstacles:
-
-            
-            _nouveau_obstacle = {}
-
-            _nouveau_obstacle["Type"] = o.__type_obstacle.value
-            _nouveau_obstacle["Position"] = [o.__position[0], o.__position[1], o.__position[2]]
-
-            _fichier_json["Nouveaux obstacles"].append(_nouveau_obstacle)
-        """
-
-        #_fichier_json["Obstacles"] = self.__nouveaux_obstacles.copy()
-        #self.__nouveaux_obstacles = [] # Remettre à 0
-
-        _fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
-
-        _fichier_json["Joueurs quittés"] = joueurs_quitte
-
-        Dbg.info(f"Fichier JSON dabs MondeServeur.__formatter_dict: {_fichier_json}", 3)
-        return _fichier_json
-
-
-    def __demarrer_nouvelle_partie(self):
-        """
-        Commencer une nouvelle partie
-        """
-
-        self.__difficulte_globale = 0.0
-        self.__temps_de_jeu = 0.0
-        self.__partie_en_cours = True
-        self.effacer_tout_obstacle()
-
-        Dbg.info("Nouvelle partie commencée", 2)
-        self.__liste_message.append("partie_commence")
-
-    def __recevoir_creer_id(self, donnee: dict) -> str:
-        _temps = time.time()
-        for idx, _ in enumerate(self.__joueurs):
-            if _temps - _.dernier_paquet > 10:
-                self.__joueurs.remove(_)
-
-        if len(self.__joueurs) == 0: self.__derniere_id = 0
-
-        _joueur = JoueurAbstrait()
-        _joueur.id = self.__derniere_id
-
-        self.__joueurs.append(_joueur)
-        _resultat = json.dumps({'ID': self.__derniere_id})
-        Dbg.info(f"[+] Joueur {self.__derniere_id}")
-        self.__derniere_id += 1
-        return _resultat
-
-    def __recevoir_maj(self, donnee: dict) -> str:
-        _index_joueur = 0
-        for idx, _ in enumerate(self.__joueurs):
-            if _.id == donnee['ID']:
-                _index_joueur = idx
-        self.__joueurs[_index_joueur].position = (
-            donnee['Position'][0],
-            donnee['Position'][1],
-            donnee['Position'][2]
-        )
-
-
-        _temps = time.time()
-        self.__joueurs[_index_joueur].dernier_paquet = _temps
-
-        _joueurs_quittes = []
-        for idx, _ in enumerate(self.__joueurs):
-            if _temps - _.dernier_paquet > 10:
-                _joueurs_quittes.append(idx)
-                self.__joueurs.remove(_)
-
-        if len(_joueurs_quittes) > 0:
-            if len(_joueurs_quittes) == 1:
-                Dbg.info(f"[-] Joueur {_joueurs_quittes[0]}")
-            else:
-                Dbg.info(f"[-] Joueurs {_joueurs_quittes}")
-
-        return json.dumps(self.__formatter_dict(_joueurs_quittes))
 
     def __obtenir_joueur_par_id(self, id: int):
         for j in self.__joueurs:
             if j.id == id:
                 return j
         return None
+
+    def __recevoir_deconnexion_paquets(self, donnee: tuple) -> bytes:
+        for i, _ in enumerate(self.__joueurs):
+            if _.id == self.__joueurs_hache[donnee[1]]:
+                del self.__joueurs[i]
+        del self.__joueurs_hache[donnee[1]]
+        return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
 
     def __recevoir_connexion_paquets(self, donnee: tuple) -> bytes:
         """
@@ -223,6 +104,10 @@ class MondeServeur:
             # _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
             _clef = os.urandom(32)
             _id = self.base_donnee.obtenir_id(_nom)
+
+            for _it_clef, _it_id in self.__joueurs_hache.items():
+                if _it_id == _id:
+                    return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
 
             _joueur = JoueurAbstrait()
             _joueur.id = _id
@@ -243,6 +128,7 @@ class MondeServeur:
         """
         _nom = donnee[1].decode().replace('\0', '')
         if self.base_donnee.creer_utilisateur(_nom, hashlib.sha256(donnee[2]).hexdigest()):
+            Dbg.info(f"[+] {_nom} s'est connecté.")
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
             _id = self.base_donnee.obtenir_id(_nom)
@@ -530,6 +416,136 @@ class MondeServeur:
 
         return _r
 
-    def effacer_liste_nouveaux_obstacles(self):
-        self.__nouveaux_obstacles = []
+
+    #####################################################################################################
+    # FONCTIONS OBSOLÈTES
+    #####################################################################################################
+
+    def __obsolète____formatter_dict(self, joueurs_quitte: list[int]):
+        """
+        Formatte le monde du serveur en json pour l'envoyer au client.
+        Style:
+            {
+                "Général": {
+                    "Temps de jeu": <__temps_de_jeu>,
+                    "Liste messages": <SignalServeurClient> 
+                },
+
+                "Nouveaux Obstacles": [
+                    <bytes>
+                ],
+
+                "Joueurs": [ # Envoyer en ordre de leur classement selon leur score
+                    {
+                        "ID": <ID>
+                        "Position": <[x, y, x]>,
+                        "Nom": <nom>,
+                        "Vie": <vie>,
+                        "En_vie": <en_vie>
+                        "Animation": <animation>
+                    }
+                }
+            }
+
+        """
+        _fichier_json = {}
+
+        #_fichier_json["Obstacles"]: list[bytes] = []
+
+        _fichier_json["Général"] = {}
+
+        _fichier_json["Général"]["Temps de jeu"] = self.__temps_de_jeu
+
+        _liste_message = []
+        for m in self.__liste_messages:
+
+            _liste_message.append(m)
+
+            _fichier_json["Général"]["Liste messages"] = self.__liste_messages
+
+
+        _fichier_json["Nouveaux obstacles"] = []
+
+        #NOTE Samuel, 12-11-2026: Changement vers l'utilisation des bytes directement pour les obstacles.
+        """
+        for o in self.__nouveaux_obstacles:
+
+            
+            _nouveau_obstacle = {}
+
+            _nouveau_obstacle["Type"] = o.__type_obstacle.value
+            _nouveau_obstacle["Position"] = [o.__position[0], o.__position[1], o.__position[2]]
+
+            _fichier_json["Nouveaux obstacles"].append(_nouveau_obstacle)
+        """
+
+        #_fichier_json["Obstacles"] = self.__nouveaux_obstacles.copy()
+        #self.__nouveaux_obstacles = [] # Remettre à 0
+
+        _fichier_json["Joueurs"] = joueur_abstrait.formatter_json(self.__joueurs)
+
+        _fichier_json["Joueurs quittés"] = joueurs_quitte
+
+        Dbg.info(f"Fichier JSON dabs MondeServeur.__formatter_dict: {_fichier_json}", 3)
+        return _fichier_json
+
+
+    def __obsolète____demarrer_nouvelle_partie(self):
+        """
+        Commencer une nouvelle partie
+        """
+
+        self.__difficulte_globale = 0.0
+        self.__temps_de_jeu = 0.0
+        self.__partie_en_cours = True
+        self.effacer_tout_obstacle()
+
+        Dbg.info("Nouvelle partie commencée", 2)
+        self.__liste_message.append("partie_commence")
+
+    def __obsolète____recevoir_creer_id(self, donnee: dict) -> str:
+        _temps = time.time()
+        for idx, _ in enumerate(self.__joueurs):
+            if _temps - _.dernier_paquet > 10:
+                self.__joueurs.remove(_)
+
+        if len(self.__joueurs) == 0: self.__derniere_id = 0
+
+        _joueur = JoueurAbstrait()
+        _joueur.id = self.__derniere_id
+
+        self.__joueurs.append(_joueur)
+        _resultat = json.dumps({'ID': self.__derniere_id})
+        Dbg.info(f"[+] Joueur {self.__derniere_id}")
+        self.__derniere_id += 1
+        return _resultat
+
+    def __obsolète____recevoir_maj(self, donnee: dict) -> str:
+        _index_joueur = 0
+        for idx, _ in enumerate(self.__joueurs):
+            if _.id == donnee['ID']:
+                _index_joueur = idx
+        self.__joueurs[_index_joueur].position = (
+            donnee['Position'][0],
+            donnee['Position'][1],
+            donnee['Position'][2]
+        )
+
+
+        _temps = time.time()
+        self.__joueurs[_index_joueur].dernier_paquet = _temps
+
+        _joueurs_quittes = []
+        for idx, _ in enumerate(self.__joueurs):
+            if _temps - _.dernier_paquet > 10:
+                _joueurs_quittes.append(idx)
+                self.__joueurs.remove(_)
+
+        if len(_joueurs_quittes) > 0:
+            if len(_joueurs_quittes) == 1:
+                Dbg.info(f"[-] Joueur {_joueurs_quittes[0]}")
+            else:
+                Dbg.info(f"[-] Joueurs {_joueurs_quittes}")
+
+        return json.dumps(self.__formatter_dict(_joueurs_quittes))
         
