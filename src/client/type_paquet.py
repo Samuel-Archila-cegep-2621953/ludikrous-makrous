@@ -29,7 +29,8 @@ class TypePaquetClient(enum.Enum):
     MAJ_JOUEUR = 0
     CONNEXION = 1
     CREATION_COMPTE = 2
-    MAX = 3
+    DECONNEXION = 3
+    MAX = 4
 
 formats_serveur_par_type = [
     #'BIfff16sBB', NOTE Apparement changé coté serveur pour \/
@@ -46,5 +47,6 @@ formats_serveur_par_type = [
 formats_clients_par_type = [
     "!B32siiiBB", # Type, hache clé, x * 100, y * 100, z * 100, vie, animation; TODO! Confirmer "hache clé"
     "!B16s32s", # Type, nom, mdp haché
-    "!B16s32s" # Type, nom, mdp haché
+    "!B16s32s", # Type, nom, mdp haché
+    "!B32s" # Type, session
 ]

@@ -72,7 +72,8 @@ class MondeServeur:
         self.__REQUETES_PAQUETS = {
             TypePaquetClient.MAJ_JOUEUR.value[0]: self.__recevoir_maj_paquets,
             TypePaquetClient.CONNEXION.value[0]: self.__recevoir_connexion_paquets,
-            TypePaquetClient.CREATION_COMPTE.value[0]: self.__recevoir_inscrire_paquets
+            TypePaquetClient.CREATION_COMPTE.value[0]: self.__recevoir_inscrire_paquets,
+            TypePaquetClient.DECONNEXION.value[0]: self.__recevoir_deconnexion_paquets,
         }
 
     def __obtenir_joueur_par_id(self, id: int):
@@ -80,6 +81,13 @@ class MondeServeur:
             if j.id == id:
                 return j
         return None
+
+    def __recevoir_deconnexion_paquets(self, donnee: tuple) -> bytes:
+        for i, _ in enumerate(self.__joueurs):
+            if _.id == self.__joueurs_hache[donnee[1]]:
+                del self.__joueurs[i]
+        del self.__joueurs_hache[donnee[1]]
+        return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
 
     def __recevoir_connexion_paquets(self, donnee: tuple) -> bytes:
         """
@@ -119,6 +127,7 @@ class MondeServeur:
         """
         _nom = donnee[1].decode().replace('\0', '')
         if self.base_donnee.creer_utilisateur(_nom, hashlib.sha256(donnee[2]).hexdigest()):
+            Dbg.info(f"[+] {_nom} s'est connecté.")
             self.__compteur += 1
             _clef = hashlib.sha256(str(self.__compteur).encode()).digest()
             _id = self.base_donnee.obtenir_id(_nom)

@@ -191,11 +191,18 @@ class JoueurClient(ControlleurPremierePersonne):
     def reduire_vie(self, quantite: float):
         self.vie.value -= quantite
 
+    def __emballer_deconnexion(self) -> bytes:
+        return struct.pack(
+            formats_clients_par_type[TypePaquetClient.DECONNEXION.value],
+            self.__session
+        )
         
     def input(self,key):
         super().input(key)
         match key:
-            case "escape": principale.terminer_jeu()
+            case "escape": 
+                self.__client.envoyer_message(self.__emballer_deconnexion())
+                principale.terminer_jeu()
             case "-": self.reduire_vie(3)
             case "=": self.vie.value += 10
 
