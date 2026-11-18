@@ -84,9 +84,10 @@ class MondeServeur:
         return None
 
     def __recevoir_deconnexion_paquets(self, donnee: tuple) -> bytes:
-        Dbg.info(f"[-] {self.__joueurs[self.__joueurs_hache[donnee[1]]].nom} s'est déconnecté.")
+        
         for i, _ in enumerate(self.__joueurs):
             if _.id == self.__joueurs_hache[donnee[1]]:
+                Dbg.info(f"[-] {_.nom} s'est déconnecté.")
                 del self.__joueurs[i]
         del self.__joueurs_hache[donnee[1]]
         return paquet.construire_paquet([paquet.creer_paquet_connexion_rate()])
