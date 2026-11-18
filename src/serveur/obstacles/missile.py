@@ -19,6 +19,8 @@ class Missile(Obstacle):
 
     @staticmethod
     def creer(monde: list[list[Tuile]], naissance: float) -> tuple[float, bytes] | None: 
+        _chance = random.randint(0,1)
+        if _chance == 0: return None
         for _ in range(8):
             _x = random.randint(0, 7)
             _y = random.randint(0, 7)
