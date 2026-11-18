@@ -1,4 +1,4 @@
 # William
 
-[ ] ajouter la mort
+[X] ajouter la mort
 [ ] ajouter le missile

@@ -53,6 +53,8 @@ class JoueurClient(ControlleurPremierePersonne):
             scale=(0.02, 0.02),
             model='quad'
         )
+        self.spectateur = Text('Spectateur', origin=(0,0.5), scale=(2,2), y = 0.5)
+        self.spectateur.visible_setter(False)
         self.cursor.visible = False
 
         self.musique = Musique(TypesMusique.JEU_FACILE)
@@ -170,7 +172,10 @@ class JoueurClient(ControlleurPremierePersonne):
                 Dbg.err(e)
             
 
-
+    def __remettre_en_vie(self):
+        self.mode_camera = 'mouvement'
+        self.position = (16, 15, 16)
+        self.spectateur.visible_setter(False)
 
     def update(self):
         super().update()
@@ -179,6 +184,11 @@ class JoueurClient(ControlleurPremierePersonne):
             #NOTE VIEUX self.lire_donnee(Pq.interpreter_paquet(self.__client.envoyer_message(self.__emballer_les_donnees())), TypePaquetServeur.MAJ_JOUEUR)
             self.lire_donnee(self.__client.envoyer_message(self.__emballer_les_donnees()))
 
+        if self.vie.value <= 0:
+            self.vie.value = 255
+            self.spectateur.visible_setter(True)
+            self.mode_camera = 'mort'
+            invoke(self.__remettre_en_vie, delay=5)
         
         #print(self.position)
         if self.position.y < -10:

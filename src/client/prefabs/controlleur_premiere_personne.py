@@ -4,6 +4,7 @@ class ControlleurPremierePersonne(Entity):
     def __init__(self, height=2, **kwargs):
         self.cursor = Entity(parent=camera.ui, model='quad', color=color.pink, scale=.008, rotation_z=45)
         super().__init__()
+        self.mode_camera = 'mouvement'
         self.speed = 13
         self.height = height
         self.camera_pivot = Entity(parent=self, y=self.height)
@@ -45,15 +46,21 @@ class ControlleurPremierePersonne(Entity):
 
 
     def maj_y(self):
+        if self.mode_camera != 'mouvement': return
         self.velocite_verticale += self.gravity * time.dt
         self.y += self.velocite_verticale * time.dt
 
+    def __mort(self):
+        self.position = (16, 14, -5)
+
     def update(self):
+        if self.mode_camera == 'mort': self.__mort()
         self.rotation_y += mouse.velocity[0] * self.mouse_sensitivity[1]
 
         self.camera_pivot.rotation_x -= mouse.velocity[1] * self.mouse_sensitivity[0]
         self.camera_pivot.rotation_x= clamp(self.camera_pivot.rotation_x, -90, 90)
-
+        if self.mode_camera != 'mouvement': return
+        
         self.direction = Vec3(
             self.forward * (held_keys['w'] - held_keys['s'])
             + self.right * (held_keys['d'] - held_keys['a'])
@@ -106,6 +113,7 @@ class ControlleurPremierePersonne(Entity):
 
 
     def input(self, key):
+        if self.mode_camera != 'mouvement': return
         if key == 'space':
             self.jump()
 

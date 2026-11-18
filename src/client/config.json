@@ -1,6 +1,6 @@
 {
    "Client": {
-      "ip": "10.70.80.5",
+      "ip": "127.0.0.1",
       "port": 9004,
       "langue": "en",
       "nom_utilisateur": "info",
