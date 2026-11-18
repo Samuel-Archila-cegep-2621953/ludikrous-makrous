@@ -195,6 +195,7 @@ class JoueurClient(ControlleurPremierePersonne):
     def __emballer_deconnexion(self) -> bytes:
         return struct.pack(
             formats_clients_par_type[TypePaquetClient.DECONNEXION.value],
+            TypePaquetClient.DECONNEXION.value,
             self.__session
         )
         
