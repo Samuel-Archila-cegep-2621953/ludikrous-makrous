@@ -27,7 +27,7 @@ def lire_paquet(tuple_paquet: tuple[TypePaquetServeur, bytes]) -> tuple[TypePaqu
 
         elif _type == TypePaquetServeur.MAJ_OBSTACLE:
             Dbg.info("paquet::lire_paquet: Branche Obstacle", 3)
-            print(tuple_paquet)
+            #print(tuple_paquet)
             _paquet: bytes = tuple_paquet[1]
             _type_obstacle_bytes: int = _paquet[0] # Extraire  le type d'obstacle
             #NOTE ^ ^ ^ ^ ^ : Samuel, 14-11-2026: Indexer un bytes -> int D:

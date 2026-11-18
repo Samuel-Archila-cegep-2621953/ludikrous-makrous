@@ -35,6 +35,7 @@ DirectionalLight(parent=pivot, y=2, z=3, shadows=True, rotation=(45, -45, 45))
 
 Text.default_font = "ressources/polices/CraftyGirls-Regular.ttf"
 
+_monde = monde.Monde(8, 8)
 
 def terminer_jeu():
     print("Fermeture du jeu...")
@@ -61,7 +62,7 @@ def commencer_jeu():
 
 
     if _reussit:
-        _moi = joueur_client.JoueurClient(_client)
+        _moi = joueur_client.JoueurClient(_client, _monde)
     #_moi.musique.fade_in(duration=0.7)
 
 
