@@ -148,7 +148,7 @@ class JoueurClient(ControlleurPremierePersonne):
                         Dbg.err(f"ERREUR1: Position d'un joueur est NaN. Position: {_position}")
                         _position[p_idx] = 0.0
                         Dbg.err(f"Position corrigée: {_pos}")
-                self.__joueurs[i].animate_position(_pos, 1 / 12)
+                self.__joueurs[i].position = _pos
         
         for jq in _donnee['Joueurs quittés']:
             destroy(self.__joueurs[jq])

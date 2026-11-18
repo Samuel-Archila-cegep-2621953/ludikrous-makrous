@@ -3,8 +3,8 @@
       "ip": "10.70.80.5",
       "port": 9004,
       "langue": "en",
-      "nom_utilisateur": "Samuel2",
-      "mot_de_passe_hache": "56ec4fee9f20de343a99f2caa8793dadb6c8fbeebeed0f124e397d660112245c",
+      "nom_utilisateur": "info",
+      "mot_de_passe_hache": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd",
       "nom_affichage": "Petit Ludikrous",
       "lumieres": false
    }
