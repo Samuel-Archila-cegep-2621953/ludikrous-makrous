@@ -7,14 +7,14 @@ from debogage import Debogage as Dbg
 type Gm = GestionnaireMenus
 
 class GestionnaireMenus:
-    liste: list[Menu] = [None, None]
+    liste: list[Menu | None] = [None, None]
     ptr: int = 0
 
     @staticmethod
     def ajouter(prochain: Menu):
         """
         Ajoute le prochain menu après la fin de celui qui est activé en ce moment
-        Args: 
+        Args:
             prochain (Menu): Le prochain menu à montrer
 
         """
@@ -135,3 +135,10 @@ class GestionnaireMenus:
         for idx, m in enumerate(GestionnaireMenus.liste): # m: Menu
             if m is not None and m.nom == nom: return idx
         return None
+
+    @staticmethod
+    def arreter_toute_musique():
+        for m in GestionnaireMenus.liste:
+            if m is None: continue
+            if m.musique is None: continue
+            m.musique.arreter()
