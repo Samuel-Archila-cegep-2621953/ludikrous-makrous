@@ -1,0 +1,122 @@
+<mxfile host="65bd71144e">
+    <diagram id="O6hLKmDlf9m2dWRDY8pp" name="Page-1">
+        <mxGraphModel dx="1905" dy="726" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-5" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-2" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-2" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="Début" vertex="1">
+                    <mxGeometry height="80" width="120" x="10" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-6" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-3" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-3" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Tuple de données" vertex="1">
+                    <mxGeometry height="60" width="120" x="140" y="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-8" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-4" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-4" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Obtenir l&#39;information du joueur" vertex="1">
+                    <mxGeometry height="80" width="80" x="160" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-13" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-7" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-12">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-16" connectable="0" parent="zD7Pkprm2g4q24D3zuJc-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.1111" y="-2" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-7" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Le hache du joueur est-il présent dans le serveur?" vertex="1">
+                    <mxGeometry height="110" width="130" x="270" y="315" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-9" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Envoyer un paquet de déconnexion" vertex="1">
+                    <mxGeometry height="60" width="120" x="280" y="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-10" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-7" style="edgeStyle=none;html=1;entryX=0.444;entryY=0.997;entryDx=0;entryDy=0;entryPerimeter=0;" target="zD7Pkprm2g4q24D3zuJc-9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-11" connectable="0" parent="zD7Pkprm2g4q24D3zuJc-10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Non" vertex="1">
+                    <mxGeometry relative="1" x="0.1055" y="3" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-15" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-12" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-14">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-12" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Obtenir l&#39;ID du joueur" vertex="1">
+                    <mxGeometry height="80" width="80" x="450" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-18" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-14" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-17">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-14" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Obtenir le JoueurAbstrait selon l&#39;ID" vertex="1">
+                    <mxGeometry height="80" width="80" x="560" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-20" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-17" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-19">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-17" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Mettre à jour le JoueurAbstrait" vertex="1">
+                    <mxGeometry height="80" width="80" x="670" y="330" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-22" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-19" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-21">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-19" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Créer le paquet contenant les informations de tous les joueurs au paquet final" vertex="1">
+                    <mxGeometry height="90" width="90" x="780" y="325" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-24" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-21" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-23">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-30" connectable="0" parent="zD7Pkprm2g4q24D3zuJc-24" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.3333" y="-3" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-28" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-21" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-27">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-29" connectable="0" parent="zD7Pkprm2g4q24D3zuJc-28" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.2394" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-21" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Le joueur a-t-il reçu le dernier paquet de mise à jour d&#39;obstacles?" vertex="1">
+                    <mxGeometry height="120" width="147.5" x="750" y="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-26" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-23" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-25">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-23" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Ajouteur les paquets d&#39;obstacles au paquet final" vertex="1">
+                    <mxGeometry height="80" width="80" x="640" y="460" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-32" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-25" style="edgeStyle=orthogonalEdgeStyle;html=1;libavoidRouting=1;" target="zD7Pkprm2g4q24D3zuJc-27">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="560" y="630"/>
+                        </Array>
+                        <mxPoint x="560" y="620" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-25" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Marquer le joueur comme ayant reçu la dernière mise à jour d&#39;obstacles" vertex="1">
+                    <mxGeometry height="100" width="100" x="510" y="450" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-34" edge="1" parent="1" source="zD7Pkprm2g4q24D3zuJc-27" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="zD7Pkprm2g4q24D3zuJc-33">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-27" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Envoyer le paquet final" vertex="1">
+                    <mxGeometry height="60" width="120" x="765" y="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-33" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="Fin" vertex="1">
+                    <mxGeometry height="80" width="120" x="764" y="690" as="geometry"/>
+                </mxCell>
+                <mxCell id="zD7Pkprm2g4q24D3zuJc-35" parent="1" style="text;strokeColor=none;fillColor=none;html=1;fontSize=26;fontStyle=1;verticalAlign=middle;align=center;autosizeText=1;" value="MondeServeur.__recevoir_maj_paquets(donnees: tuple)" vertex="1">
+                    <mxGeometry height="130" width="700" x="200" y="70" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
