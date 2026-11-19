@@ -1,8 +1,8 @@
 {
    "Client": {
-      "ip": "127.0.0.1",
+      "ip": "10.70.60.2",
       "port": 9004,
-      "langue": "es",
+      "langue": "fr",
       "nom_utilisateur": "info",
       "mot_de_passe_hache": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd",
       "nom_affichage": "Petit Ludikrous",

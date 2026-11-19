@@ -8,7 +8,7 @@ class Missile:
             self.__joueur = joueur
         def update(self):
             import joueur_client
-            self.y -= 5 * time.dt
+            self.y -= 40 * time.dt
             # logique
             ray = raycast(self.world_position, self.down)
             if ray.distance < 0.3:
