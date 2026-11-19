@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="aFtOxlXNeR_tTh17vR5g" name="Page-1">
-        <mxGraphModel dx="2754" dy="1058" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2286" dy="871" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -36,7 +36,7 @@
                 <mxCell id="zlX6CyZ0AJ4Nf6qMwMF9-14" edge="1" parent="1" source="zlX6CyZ0AJ4Nf6qMwMF9-5" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zlX6CyZ0AJ4Nf6qMwMF9-6">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="zlX6CyZ0AJ4Nf6qMwMF9-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Délai de 2 seconde" vertex="1">
+                <mxCell id="zlX6CyZ0AJ4Nf6qMwMF9-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Délai de 2 secondes" vertex="1">
                     <mxGeometry height="60" width="120" x="340" y="410" as="geometry"/>
                 </mxCell>
                 <mxCell id="zlX6CyZ0AJ4Nf6qMwMF9-15" edge="1" parent="1" source="zlX6CyZ0AJ4Nf6qMwMF9-6" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="zlX6CyZ0AJ4Nf6qMwMF9-7">
