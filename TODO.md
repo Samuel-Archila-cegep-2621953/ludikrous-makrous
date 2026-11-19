@@ -1,5 +1,3 @@
-# William
-
 [X] ajouter la mort
 [X] ajouter le missile
 [ ] center le missile

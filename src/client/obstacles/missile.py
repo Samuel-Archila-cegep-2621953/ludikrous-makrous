@@ -1,14 +1,16 @@
 from ursina import *
 
+missile = load_model('ressources/modeles/missile.glb')
+
 class Missile:
     class Missile_Object(Entity):
         def __init__(self, position, supprimer, joueur):
-            super().__init__(model='cube', position=position)
+            super().__init__(model=missile, position=position, rotation=(-90, 0, 0), scale=(0.5,0.5,0.5))
             self.__supprimer = supprimer
             self.__joueur = joueur
         def update(self):
             import joueur_client
-            self.y -= 5 * time.dt
+            self.y -= 40 * time.dt
             # logique
             ray = raycast(self.world_position, self.down)
             if ray.distance < 0.3:
