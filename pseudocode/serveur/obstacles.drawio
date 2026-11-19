@@ -1,0 +1,141 @@
+<mxfile host="65bd71144e">
+    <diagram id="Wa0oy6u7k2MQ_lyQafg_" name="Page-1">
+        <mxGraphModel dx="2286" dy="871" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-16" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-1" style="edgeStyle=none;html=1;">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="178" y="301" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="&lt;br&gt;Début d&#39;un cycle d&#39;obstacles" vertex="1">
+                    <mxGeometry height="80" width="120" x="28" y="261" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-8" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-4" style="edgeStyle=none;html=1;" target="_bcIGsfLSPApLfd-Xcfb-7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-4" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Choisir un type d&#39;obstacle aléatoire" vertex="1">
+                    <mxGeometry height="80" width="80" x="538" y="261" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-10" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-7" style="edgeStyle=none;html=1;" target="_bcIGsfLSPApLfd-Xcfb-9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-7" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Exécuter le constructeur correspondant" vertex="1">
+                    <mxGeometry height="80" width="80" x="638" y="261" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-25" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-9" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-24">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-26" connectable="0" parent="_bcIGsfLSPApLfd-Xcfb-25" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.25" y="-1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-40" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-9" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-11">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-41" connectable="0" parent="_bcIGsfLSPApLfd-Xcfb-40" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.3913" y="4" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-44" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-9" style="edgeStyle=none;html=1;" target="_bcIGsfLSPApLfd-Xcfb-24" value="">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-45" connectable="0" parent="_bcIGsfLSPApLfd-Xcfb-44" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Non" vertex="1">
+                    <mxGeometry relative="1" x="-0.2" y="2" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-9" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Le constructeur retourne-t-&#39;il None?" vertex="1">
+                    <mxGeometry height="100" width="130" x="732" y="251" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-47" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-11" style="edgeStyle=orthogonalEdgeStyle;html=1;libavoidRouting=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-15">
+                    <mxGeometry relative="1" x="-0.1919" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="967" y="230"/>
+                            <mxPoint x="323" y="230"/>
+                        </Array>
+                        <mxPoint x="958" y="171" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-11" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Incrémenter le conteur de cycles" vertex="1">
+                    <mxGeometry height="80" width="80" x="927" y="261" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-28" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-15" style="edgeStyle=none;html=1;" target="_bcIGsfLSPApLfd-Xcfb-27">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-37" connectable="0" parent="_bcIGsfLSPApLfd-Xcfb-28" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Non" vertex="1">
+                    <mxGeometry relative="1" x="-0.2" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-31" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-15" style="edgeStyle=orthogonalEdgeStyle;html=1;libavoidRouting=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-30">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="323" y="411"/>
+                        </Array>
+                        <mxPoint x="323" y="431" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-32" connectable="0" parent="_bcIGsfLSPApLfd-Xcfb-31" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.7787" y="2" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-15" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Le conteur est-il &amp;gt;= 48? (MAX)" vertex="1">
+                    <mxGeometry height="100" width="110" x="268" y="251" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-23" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-19" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-19" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Calculer la difficulté globale à atteindre" vertex="1">
+                    <mxGeometry height="70" width="70" x="178" y="266" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-42" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-24" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-36">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-24" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Incrémenter la difficulté globale atteinte par la difficulté de l&#39;obstacle choisi" vertex="1">
+                    <mxGeometry height="100" width="100" x="747" y="391" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-29" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-27" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-38" connectable="0" parent="_bcIGsfLSPApLfd-Xcfb-29" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Non" vertex="1">
+                    <mxGeometry relative="1" x="-0.7" y="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-33" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-27" style="edgeStyle=orthogonalEdgeStyle;html=1;libavoidRouting=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-30">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="453" y="411"/>
+                        </Array>
+                        <mxPoint x="458" y="401" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-34" connectable="0" parent="_bcIGsfLSPApLfd-Xcfb-33" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.8685" y="-2" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-27" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="La difficulté atteinte est-elle &amp;gt;= à la difficulté ciblée?" vertex="1">
+                    <mxGeometry height="110" width="110" x="398" y="246" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-30" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="Fin du cycle de génération d&#39;obstacles" vertex="1">
+                    <mxGeometry height="80" width="120" x="28" y="371" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-43" edge="1" parent="1" source="_bcIGsfLSPApLfd-Xcfb-36" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="_bcIGsfLSPApLfd-Xcfb-11">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-36" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Ajouter l&#39;obstacle comme bytes à MondeServeur.__nouveaux_obstacles&lt;/span&gt;" vertex="1">
+                    <mxGeometry height="60" width="210" x="862" y="411" as="geometry"/>
+                </mxCell>
+                <mxCell id="_bcIGsfLSPApLfd-Xcfb-48" parent="1" style="text;strokeColor=none;fillColor=none;html=1;fontSize=32;fontStyle=1;verticalAlign=middle;align=center;autosizeText=1;" value="MondeServeur.creer_obstacles()" vertex="1">
+                    <mxGeometry height="110" width="502" x="299" y="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
