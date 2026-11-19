@@ -5,3 +5,5 @@
 *.pyc
 *.ogg
 **/build/
+*.dist
+*.build
