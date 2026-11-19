@@ -16,7 +16,9 @@ from debogage import Debogage as Dbg
 from monde import Monde
 from type_obstacle import TypeObstacle as TyOb
 import pilier
+from gestionnaire_langues import GestionnaireLangues as Gl
 #from obstacles import pilier
+from obstacles.missile import Missile
 
 class JoueurClient(ControlleurPremierePersonne):
     def __init__(self, client: client_serveur.Client, monde: Monde, height=2, **kwargs):
@@ -26,14 +28,14 @@ class JoueurClient(ControlleurPremierePersonne):
         self.__dernier_temps = self.__obtenir_temps()
         self.__joueurs: list[joueur.Joueur] = []
         self.vie = HealthBar(
-            parent=camera.ui, 
-            bar_color=rgb(84/255, 23/255, 14/255), 
-            roundness=0, 
-            value=255, 
-            max_value=255, 
-            y=0.45, 
-            x= -0.8, 
-            color=rgb(129/255,129/255,129/255), 
+            parent=camera.ui,
+            bar_color=rgb(84/255, 23/255, 14/255),
+            roundness=0,
+            value=255,
+            max_value=255,
+            y=0.45,
+            x= -0.8,
+            color=rgb(129/255,129/255,129/255),
             scale=(0.3, 0.05),
             show_text=False
         )
@@ -53,7 +55,7 @@ class JoueurClient(ControlleurPremierePersonne):
             scale=(0.02, 0.02),
             model='quad'
         )
-        self.spectateur = Text('Spectateur', origin=(0,0.5), scale=(2,2), y = 0.5)
+        self.spectateur = Text(Gl.obtenir("jeu.texte.spectateur", Gl.LANGUE), origin=(0,0.5), scale=(2,2), y = 0.5)
         self.spectateur.visible_setter(False)
         self.cursor.visible = False
 
@@ -61,6 +63,8 @@ class JoueurClient(ControlleurPremierePersonne):
         self.musique.fade_in(0.7)
 
         self.monde = monde
+
+        self.__obstacles = []
 
     def __creer_id(self) -> int:
         """
@@ -77,8 +81,8 @@ class JoueurClient(ControlleurPremierePersonne):
 
         _donnee = self.__client.envoyer_message(struct.pack(
             formats_clients_par_type[TypePaquetClient.CONNEXION.value],
-            TypePaquetClient.CONNEXION.value, 
-            _nom_utilisateur, 
+            TypePaquetClient.CONNEXION.value,
+            _nom_utilisateur,
             _mdp_hache)
         )
         _hache = _donnee["Session"]
@@ -140,7 +144,7 @@ class JoueurClient(ControlleurPremierePersonne):
                 if _joueurs[i]["ID"] == self.__id:
                     _joueur.visible_setter(False)
                 self.__joueurs.append(_joueur)
-            
+
             #else:
             elif _["ID"] != self.__id:  # Ne pas se mettre à jour soi-même?
                 _pos = (_position[0] / 100, _position[1] / 100, _position[2] / 100)
@@ -151,7 +155,7 @@ class JoueurClient(ControlleurPremierePersonne):
                         _position[p_idx] = 0.0
                         Dbg.err(f"Position corrigée: {_pos}")
                 self.__joueurs[i].position = _pos
-        
+
         for jq in _donnee['Joueurs quittés']:
             destroy(self.__joueurs[jq])
             del self.__joueurs[jq]
@@ -162,7 +166,8 @@ class JoueurClient(ControlleurPremierePersonne):
             try:
                 match obs["Type"]:
                     case TyOb.MISSILE.value:
-                        pass
+                        _missile = Missile(obs["Coord"], self)
+                        self.__obstacles.append(_missile)
                     case TyOb.PILIER.value:
                         _coord: tuple[int, int] = obs["Coord"]
                         _hauteur = pilier.Pilier.hauteur_depuis_mode(obs["Hauteur"])
@@ -170,7 +175,7 @@ class JoueurClient(ControlleurPremierePersonne):
             except Exception as e:
                 Dbg.err("JoueurClient::lire_donnee::Branche(obstacles): Erreur", 2)
                 Dbg.err(e)
-            
+
 
     def __remettre_en_vie(self):
         self.mode_camera = 'mouvement'
@@ -189,7 +194,7 @@ class JoueurClient(ControlleurPremierePersonne):
             self.spectateur.visible_setter(True)
             self.mode_camera = 'mort'
             invoke(self.__remettre_en_vie, delay=5)
-        
+
         #print(self.position)
         if self.position.y < -10:
             self.velocite_verticale = 0
@@ -208,11 +213,11 @@ class JoueurClient(ControlleurPremierePersonne):
             TypePaquetClient.DECONNEXION.value,
             self.__session
         )
-        
+
     def input(self,key):
         super().input(key)
         match key:
-            case "escape": 
+            case "escape":
                 self.__client.envoyer_message(self.__emballer_deconnexion())
                 principale.terminer_jeu()
             case "-": self.reduire_vie(3)
