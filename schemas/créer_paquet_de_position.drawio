@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="-PSPLgxVBx3ywWSWrdCO" name="Page-1">
-        <mxGraphModel dx="2286" dy="878" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="914" dy="351" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -26,6 +26,11 @@
                 </mxCell>
                 <mxCell id="P_bq82y3KuRX1tIVkQiI-23" edge="1" parent="1" source="P_bq82y3KuRX1tIVkQiI-4" style="edgeStyle=none;html=1;" target="P_bq82y3KuRX1tIVkQiI-22">
                     <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="P_bq82y3KuRX1tIVkQiI-28" connectable="0" parent="P_bq82y3KuRX1tIVkQiI-23" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="Oui" vertex="1">
+                    <mxGeometry relative="1" x="-0.3081" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
                 </mxCell>
                 <mxCell id="P_bq82y3KuRX1tIVkQiI-4" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Chaque joueurs ont leur paquet?" vertex="1">
                     <mxGeometry height="110" width="120" x="190" y="425" as="geometry"/>
