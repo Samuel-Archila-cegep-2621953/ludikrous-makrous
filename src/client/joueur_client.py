@@ -18,6 +18,7 @@ from type_obstacle import TypeObstacle as TyOb
 import pilier
 from gestionnaire_langues import GestionnaireLangues as Gl
 #from obstacles import pilier
+from obstacles.missile import Missile
 
 class JoueurClient(ControlleurPremierePersonne):
     def __init__(self, client: client_serveur.Client, monde: Monde, height=2, **kwargs):
@@ -62,6 +63,8 @@ class JoueurClient(ControlleurPremierePersonne):
         self.musique.fade_in(0.7)
 
         self.monde = monde
+
+        self.__obstacles = []
 
     def __creer_id(self) -> int:
         """
@@ -163,7 +166,8 @@ class JoueurClient(ControlleurPremierePersonne):
             try:
                 match obs["Type"]:
                     case TyOb.MISSILE.value:
-                        pass
+                        _missile = Missile(obs["Coord"], self)
+                        self.__obstacles.append(_missile)
                     case TyOb.PILIER.value:
                         _coord: tuple[int, int] = obs["Coord"]
                         _hauteur = pilier.Pilier.hauteur_depuis_mode(obs["Hauteur"])
