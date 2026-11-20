@@ -25,7 +25,7 @@ class Missile:
         """
         self.__position = position
 
-        self.__cible = Entity(model='cube', scale=(1, 20, 1), position=(self.__position[0] * 4, 0, self.__position[1] * 4))
+        self.__cible = Entity(model='cube', scale=(1, 20, 1), position=(self.__position[0] * 4+1, 0, self.__position[1] * 4+1))
         self.__missile = None
         self.__joueur = joueur
 

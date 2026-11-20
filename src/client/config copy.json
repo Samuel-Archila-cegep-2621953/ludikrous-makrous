@@ -1,9 +1,0 @@
-{
-    "Client": {
-    "ip": "127.0.0.1",
-    "port": 24113,
-    "langue": "fr",
-    "nom_utilisateur": "",
-    "mot_de_passe_hache": "e6bb2f79b09de980f5c852afef361bbe4d12f3f78f1edb6f86bf7807d6d0b075",
-    "nom_affichCage": ""
-}}
