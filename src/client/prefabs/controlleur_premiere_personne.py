@@ -18,7 +18,7 @@ class ControlleurPremierePersonne(Entity):
 
         self.gravity = -32.5
         self.grounded = False
-        self.jump_height = 3
+        self.jump_height = 5
         self.jump_up_duration = .5
         self.fall_after = .47 # will interrupt jump up
         self.jumping = False
