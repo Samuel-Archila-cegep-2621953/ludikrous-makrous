@@ -1,0 +1,1 @@
+py -m nuitka --mode=standalone --include-data-dir=./ressources=ressources --windows-icon-from-ico=./ressources/logo.ico --windows-console-mode=disable --zig --output-filename=client-makrous.exe --include-package=ursina --include-package=panda3d --include-package=direct --include-package-data=ursina --include-package-data=panda3d --follow-imports src/client/__main__.py
