@@ -1,0 +1,50 @@
+* jump;
+double jump
+? dashing
+!wall jump
+sprinting
+? sliding
+Continuous movement, discrete obstacles
+3rd person,
+? 1st person
+8 x 8 sized
+
+section Obstacles:
+	Height variation, each tile is a pilar;
+	Some sweeping;
+	Warning, subsequent bomb/train;
+	From some pos, origine rotating laser;
+	? Thunder cloud;
+	%chance Spikes;
+	Ads
+
+
+section Player:
+	Health;
+	!Stamina;
+	One fixed speed;
+	
+
+section Networking:
+	Simultaneous existence on the Map
+	
+
+section Server:
+	Recv pos;
+	Algorithmes du monde;
+	Indicates obstacles;
+	Recv player states;
+	
+
+section Client:
+	Interpolation;
+	Recv other player pos;
+	Render and handle obstacles;
+	Send States;
+
+
+section DifficultyModifier:
+	One modifier per Obstacles;
+	Global Modifier;
+	
+	
