@@ -12,6 +12,7 @@ import psutil
 import subprocess
 import platform
 import json
+import sys
 
 print(str((Path(__file__).parent.parent / 'fermeture_serveur.py')))
 
@@ -24,7 +25,11 @@ class Serveur:
         _fichier_toml = open(Path(__file__).parent / "config.toml", 'rb')
         self.__config = tomllib.load(_fichier_toml)
         _serveur: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        _serveur.bind((self.__config["Serveur"]["ip"], self.__config["Serveur"]["port"]))
+
+        self.__ip = self.__config["Serveur"]["ip"] if variable_globale.ip == -1 else sys.argv[variable_globale.ip]
+        self.__port = self.__config["Serveur"]["port"] if variable_globale.port == -1 else int(sys.argv[variable_globale.port])
+        
+        _serveur.bind((self.__ip, self.__port))
         _serveur.listen(self.__config["Serveur"]["joueurs_max"])
 
         print(""" █████                      █████  ███  █████                                                                         █████                                           
@@ -40,7 +45,7 @@ class Serveur:
                                                                 ▀▀▀  ▀▀▀ ▀      ▀    ▀▀▀  ▀▀▀ ▀    
                                                                             """)
 
-        journal.inserer_info(f"Serveur lancé sur {self.__config["Serveur"]["ip"]}:{self.__config["Serveur"]["port"]}")
+        journal.inserer_info(f"Serveur lancé sur {self.__ip}:{self.__port}")
 
         _temps_entre_update = 0.0
         _debut = 0.0
@@ -55,9 +60,7 @@ class Serveur:
             _requete = _client.recv(1024)
             
             if _requete == 'fermer'.encode():
-                print(_addresse[0])
-                print(self.__config["Serveur"]["ip"])
-                if _addresse[0] == self.__config["Serveur"]["ip"]:
+                if _addresse[0] == self.__ip:
                     _client.send(b'\x01')
                     _client.close()
                     self.__ouvert = False
@@ -154,7 +157,7 @@ class Serveur:
     def __destruction(self, _):
         # créer une connection pour fermer le programme
         _commande = "py" if platform.system() == "Windows" else "python3"
-        subprocess.Popen([_commande, Path(__file__).parent / 'fermeture_serveur.py', self.__config["Serveur"]["ip"], str(self.__config["Serveur"]["port"])])
+        subprocess.Popen([_commande, Path(__file__).parent / 'fermeture_serveur.py', self.__ip, str(self.__port)])
 
     def __mettre_a_jour_obstacles(self):
         time.sleep(10)
