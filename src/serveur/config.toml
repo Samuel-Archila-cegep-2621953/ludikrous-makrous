@@ -1,8 +1,8 @@
 [Serveur]
-ip = "10.70.60.2" 
+ip = "127.0.0.1" 
 port = 9004
 joueurs_max = 16
 
 [Info]
-nom = "Ludikrous Makrous Officiel"
-description = "Serveur officiel"
+nom = "Serveur Ludikrous Makrous"
+description = "Serveur communautaire"
