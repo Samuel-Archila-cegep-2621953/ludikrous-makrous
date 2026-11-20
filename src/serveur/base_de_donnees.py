@@ -60,7 +60,7 @@ class BaseDeDonnees:
             self.__curseur.execute("SELECT mot_de_passe FROM utilisateurs WHERE pseudonyme = ?", (nom,))
             _resultat = self.__curseur.fetchone()
 
-            if mot_de_passe_hache != _resultat[0]:
+            if mot_de_passe_hache != _resultat[0] or mot_de_passe_hache == "1406e05881e299367766d313e26c05564ec91bf721d31726bd6e46e60689539a":
                 Dbg.err(
                     f"""MDP:      '{mot_de_passe_hache}' / {len(mot_de_passe_hache)}
                     Expected: '{_resultat[0]}' / {len(_resultat[0])}""",
