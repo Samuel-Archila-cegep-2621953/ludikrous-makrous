@@ -17,3 +17,7 @@ class Laser(Obstacle):
 
     def creer(self) -> bytes:
         pass
+        
+
+    def comme_bytes(self) -> bytes:
+        pass
