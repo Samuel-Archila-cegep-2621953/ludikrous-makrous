@@ -1,7 +1,7 @@
 [Serveur]
 ip = "127.0.0.1" 
 port = 9004
-joueurs_max = 16
+joueurs_max = 64
 
 [Info]
 nom = "Serveur Ludikrous Makrous"
