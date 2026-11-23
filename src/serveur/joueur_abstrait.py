@@ -4,6 +4,7 @@ class JoueurAbstrait:
     def __init__(self):
         self.id = 0
         self.nom = ''
+        self.rotation = 0
         self.score = 0
         self.position = (0,0,0)
         self.vie = 100

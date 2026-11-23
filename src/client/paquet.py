@@ -85,7 +85,7 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
     match _type:
         case TypePaquetServeur.MAJ_JOUEUR:
             Dbg.info(f"Paquet MAJ JOUEUR: {tuple_paquet}", 3)
-            id, nom, x, y, z, vie, animation = tuple_paquet[1]
+            id, nom, x, y, z, vie, animation, rotation = tuple_paquet[1]
             # CHANGE: 2-11-2026. Samuel.
             return {
                 "Joueur": {
@@ -93,7 +93,8 @@ def interpreter_paquet(tuple_paquet: tuple[TypePaquetServeur, tuple[any]]) -> di
                     "Position": [x, y, z],
                     "Nom": nom,
                     "En_vie": vie,
-                    "Animation": animation
+                    "Animation": animation,
+                    "Rotation": rotation
                 }
             }
 
