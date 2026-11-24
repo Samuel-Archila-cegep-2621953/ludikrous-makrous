@@ -17,4 +17,4 @@ Nous avons ensuite envoyé ces modèles 3d dans le projet sous le format GLB ou 
 
 Pour le menu principal, nous avons créé une animation de 1 seconde répétée indéfiniment sous format mp4 avec *Blender*. Nous avons utilisé la technologie du ray-tracing dans blender pour bien simuler la lumière des lumières de la vidéo sur les murs et toute la scène.
 
-
+[Retour](index.md)
