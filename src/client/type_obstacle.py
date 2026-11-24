@@ -1,5 +1,6 @@
 from enum import Enum
 import struct
+from typing import Any
 
 class TypeObstacle(Enum):
     RIEN = 0
@@ -44,6 +45,7 @@ class TypeObstacle(Enum):
         return _formats[type_obstacle]
 
 
+    @staticmethod
     def nb_bytes(t: int) -> int:
         """
         Calcule le nombre d'octets à lire selon le type d'obstacle
@@ -52,7 +54,7 @@ class TypeObstacle(Enum):
 
 
     @staticmethod
-    def dict_depuis_tuple(donnees: tuple['int | TypeObstacle', tuple[any]]) -> dict[str, any]:
+    def dict_depuis_tuple(donnees: tuple['int | TypeObstacle', tuple[Any]]) -> dict[str, Any]:
         _type: int = donnees[0]
         match _type:
             case TypeObstacle.MISSILE.value:
