@@ -15,6 +15,9 @@ Pour s'assurer que les obstacles soient les même, on a mis un affichage à chaq
 
 ## Troisième test: joueurs
 
-Pour s'assurer que le serveur envoie les positions des joueurs correctement, deux joueurs sont connectés au serveur. Avec le `niveau_debogage` à `5`, on peut comparer la position du `Joueur A` que reçoit le serveur avec celle que reçoit `Joueur B` dans le client. La position était originalement en `float`, mais il y avait des erreurs où `NaN` était interprété par le client. Pour résoudre ce problème, nous avons changé la positioon pour un `int32_t` qui est ensuite divisé du côté du client. Après ce changement, les positions reçues et envoyées correspondaient parfaitement
+Pour s'assurer que le serveur envoie les positions des joueurs correctement, deux joueurs sont connectés au serveur. Avec le `niveau_debogage` à `5`, on peut comparer la position du `Joueur A` que reçoit le serveur avec celle que reçoit `Joueur B` dans le client. La position était originalement en `float`, mais il y avait des erreurs où `NaN` était interprété par le client. Pour résoudre ce problème, nous avons changé la position pour un `int32_t` qui est ensuite divisé du côté du client. Après ce changement, les positions reçues et envoyées correspondaient parfaitement.
+
+## Quatrième test: mots de passe
+Pour s'assurer que les mots de passes reçus et envoyés sont les mêmes pour le serveur et le client et que l'authentification fonctionnera, il est possible d'afficher le mot de passe haché du client dans le client. Ensuite, le mot de passe reçu par le serveur est haché encore une fois et affiché. Le mot de passe sauvegardé dans la base de données est aussi affiché. Il est donc possible de vérifier si l'information est correcte et si le mot de passe à été haché le nombre correct de fois.
 
 [Retour](index.md)
