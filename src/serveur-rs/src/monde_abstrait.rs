@@ -4,12 +4,14 @@ use crate::utils::Vec2;
 use std::boxed::Box;
 use std::iter::repeat_with;
 use std::sync::{Arc, RwLock};
+use std::time::Instant;
 
 #[derive(Debug)]
 pub struct AbstractWorld {
     world: Vec<Vec<Option<Box<dyn Obstacle>>>>,
     players: Vec<AbstractPlayer>,
     queue_new_obstacles: Arc<RwLock<Vec<u8>>>, // type provisoire
+    pub debut: Instant
 }
 
 impl AbstractWorld {
@@ -23,6 +25,7 @@ impl AbstractWorld {
             world: monde,
             players: Vec::new(),
             queue_new_obstacles: Arc::new(RwLock::new(Vec::new())),
+            debut: Instant::now()
         }
     }
 }
