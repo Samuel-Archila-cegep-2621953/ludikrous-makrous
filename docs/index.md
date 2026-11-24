@@ -6,4 +6,4 @@ title: Home
 
 Bienvenue sur la documentation du jeu!
 
-[tests.md](Tests)
+[Tests](tests.md)
