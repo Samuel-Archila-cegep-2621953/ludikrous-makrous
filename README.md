@@ -1,7 +1,7 @@
 # Ludikrous Makrous
 
 ## Introduction
-Ludikrous Makrous est un jeu multijoueur en temps réel où il faut survivre dans une grille huit par huit d'une accumulation d'évênements. Chaque 30 secondes, un nouveau défi s'enchaîne dans la liste de défis.
+Ludikrous Makrous est un jeu multijoueur en temps réel où il faut survivre dans une grille huit par huit d'une accumulation d'évênements. Chaque seconde, un nouveau défi s'enchaîne dans la liste de défis.
 
 ## ✨ Caractéristiques ✨
 - Multijoueur
@@ -17,7 +17,8 @@ Ludikrous Makrous est un jeu multijoueur en temps réel où il faut survivre dan
 ## 💻 Comment lancer le programme
 
 1) Dans le dossier principal, lancez `scripts/installation_dependances.py` pour télécharger toutes les librairies externes.
-2) Dans le dossier serveur, lancez `__main__.py` pour lancer le serveur. Il y a plusieurs paramètres :
+2) Dans le dossier serveur, lancez `__main__.py` pour lancer le serveur ou téléchargez le fichier release le plus récent et lancez `serveur-makrous.exe`. Il y a plusieurs paramètres :
     - `-g` `--gui` `--graphique` — active l'interface graphique
     - `-p` `--port` — change temporairement le port du serveur
-3) Dans le dossier client, lancez `__main__.py` pour lancer le client
+    - `-i` `--ip` - change temporairement l'addresse IP du serveur
+3) Dans le dossier client, lancez `__main__.py` pour lancer le client ou téléchargez le fichier `release` le plus récent et lancez `client-makrous.exe`.
