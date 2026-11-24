@@ -20,3 +20,5 @@ Deuxièmement, le côté serveur. En premier lieu, le serveur reçoit les paquet
 Troisièmement, le décodage du client. Dans un premier temps, la mise en tête est décodé. Elle contient une `unsigned short` disant le nombre de paquets. Ensuite une boucle `for` en *range* du nombre de paquet est créé. En premier, le programme lit le premier *byte*, ceci est le type de paquet. En second, il lit le reste du paquet, ceci est les données.
 
 Quatrièmement, les interactions des paquets. Chaque paquet appelle une fonction. Par exemple – quand il y a un paquet de missile – le client va placer un missile dans la position X et Y de la carte, et créer une `ursina.Entity` étant le missile. Pour les joueurs – quand il y a un joueur de connecté – le client vérifie si le client existe. S'il existe, le client va simplement mettre à jour les valeurs de ce joueur, telle que la position. Sinon, le client va ajouter le joueur dans la liste des joueurs. 
+
+[Retour](index.md)
