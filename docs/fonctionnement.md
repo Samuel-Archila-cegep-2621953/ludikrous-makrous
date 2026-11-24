@@ -21,4 +21,24 @@ Troisièmement, le décodage du client. Dans un premier temps, la mise en tête 
 
 Quatrièmement, les interactions des paquets. Chaque paquet appelle une fonction. Par exemple – quand il y a un paquet de missile – le client va placer un missile dans la position X et Y de la carte, et créer une `ursina.Entity` étant le missile. Pour les joueurs – quand il y a un joueur de connecté – le client vérifie si le client existe. S'il existe, le client va simplement mettre à jour les valeurs de ce joueur, telle que la position. Sinon, le client va ajouter le joueur dans la liste des joueurs. 
 
+## Manipulations en plusieurs formats
+
+Parmi tous les formats pour emmagasiner des données, nous avons utilisé trois façons :
+- sqlite3
+- JSON
+- TOML
+SQLite3 fut utilisé comme base de donnée pour les comptes dans le jeu et les traductions. En effet, il était plus facile de mettre les traductions dans une base de donnée, à cause qu'il y a des éditeurs comme *Microsoft Excel* pour les bases de données. Ceci rendait la lecture plus facile. JSON fut utilisé pour sauvegarder des configurations qui change tout le temps. Par exemple, l'IP du serveur et les identifiants d'un compte. TOML fut utilisé pour les configurations statiques, par exemple pour l'adresse IP du serveur, le port, le nom et la description.
+
+## Débogage
+
+Malgré le manque de tests, il a fallu beaucoup de débogage, car il y avait constamment des erreurs. En effet, il y avait des erreurs surtout dans les paquets. Par exemple, le *endian* n'était pas correct, etc.
+
+## Affichage 3D
+
+Pour afficher en 3D, *Ursina* a été utilisé. C'est un *game engine* (Moteur de jeu) qui permet de simplifier la programmation graphique en 3D. Ceci avait déjà :
+- Un système d'entité
+- Un système de mouvement
+- Un système pour charger des textures / modèles
+Malgré le système déjà existant pour le mouvement, il a été modifié pour être plus fluide.
+
 [Retour](index.md)
