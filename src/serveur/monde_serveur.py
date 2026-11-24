@@ -113,6 +113,7 @@ class MondeServeur:
 
             _joueur = JoueurAbstrait()
             _joueur.id = _id
+            _joueur.nom = _nom
             self.__joueurs.append(_joueur)
 
             self.__joueurs_hache[_clef] = _id
@@ -136,6 +137,7 @@ class MondeServeur:
             _id = self.base_donnee.obtenir_id(_nom)
         
             _joueur = JoueurAbstrait()
+            _joueur.nom = _nom
             _joueur.id = _id
             self.__joueurs.append(_joueur)
         
