@@ -1,0 +1,11 @@
+{
+   "Client": {
+      "ip": "127.0.0.1",
+      "port": 9004,
+      "langue": "fr",
+      "nom_utilisateur": "u2",
+      "mot_de_passe_hache": "ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb",
+      "nom_affichage": "Petit Ludikrous",
+      "lumieres": false
+   }
+}
