@@ -27,6 +27,7 @@ Parmi tous les formats pour emmagasiner des données, nous avons utilisé trois 
 - sqlite3
 - JSON
 - TOML
+
 SQLite3 fut utilisé comme base de donnée pour les comptes dans le jeu et les traductions. En effet, il était plus facile de mettre les traductions dans une base de donnée, à cause qu'il y a des éditeurs comme *Microsoft Excel* pour les bases de données. Ceci rendait la lecture plus facile. JSON fut utilisé pour sauvegarder des configurations qui change tout le temps. Par exemple, l'IP du serveur et les identifiants d'un compte. TOML fut utilisé pour les configurations statiques, par exemple pour l'adresse IP du serveur, le port, le nom et la description.
 
 ## Débogage
@@ -39,6 +40,7 @@ Pour afficher en 3D, *Ursina* a été utilisé. C'est un *game engine* (Moteur d
 - Un système d'entité
 - Un système de mouvement
 - Un système pour charger des textures / modèles
+
 Malgré le système déjà existant pour le mouvement, il a été modifié pour être plus fluide.
 
 [Retour](index.md)
