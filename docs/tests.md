@@ -12,3 +12,5 @@ Pour la connexion, le client envoie un paquet « ping » et porte attention s'il
 ## Deuxièmes tests: obstacles
 
 Pour s'assurer que les obstacles soient les même, on a mis un affichage à chaque fois que le serveur envoie un obstacle. Ensuite, on validait si les valeurs dans le client était le même que celui des autres clients. Un des problèmes était que les client recevait tout le temps les obstacles en retard, et il y avait des joueurs avec des obstacles en avance.
+
+[Retour](index.md)
