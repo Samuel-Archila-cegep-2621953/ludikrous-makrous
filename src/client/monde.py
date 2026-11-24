@@ -2,7 +2,7 @@ import tuile
 from ursina import *
 import time
 
-dehors = load_model('ressources/modeles/ai_data_center_final_render.glb')
+dehors = load_model('ressources/modeles/data_center_final_question_mark.glb')
 
 class Monde:
     def __init__(self, longueur: int, hauteur: int):
