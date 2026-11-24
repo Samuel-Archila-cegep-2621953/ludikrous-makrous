@@ -11,3 +11,4 @@
 *.xml
 *.onefile-build
 *.exe
+**/target/

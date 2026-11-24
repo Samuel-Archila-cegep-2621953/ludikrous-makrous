@@ -329,6 +329,7 @@ class QuelquesMenus:
             Config.changer_port(int(_saisir_port.text.strip()))
             GM.ajouter_et_montrer(QuelquesMenus.menu_attente(), True)
             #sleep(0.3)
+            GM.arreter_toute_musique()
             main.commencer_jeu()
             
             
