@@ -1,12 +1,15 @@
 import tuile
-from ursina import Entity
+from ursina import *
 import time
 
+dehors = load_model('ressources/modeles/data_center_final_question_mark.glb')
 
 class Monde:
     def __init__(self, longueur: int, hauteur: int):
         self.debut = time.time()
         self.__monde: list[list[tuile.Tuile]] = []
+        self.__ext = Entity(model=copy(dehors), position=(17.5, 0, 17.5), scale=(4,4,4), rotation=(-90,90,0))
+    
         for y in range(hauteur):
             _colonne_tuile = []
             for x in range(longueur):

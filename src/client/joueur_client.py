@@ -118,7 +118,8 @@ class JoueurClient(ControlleurPremierePersonne):
                 floor(self.position.y * 100),
                 floor(self.position.z * 100),
                 self.vie.value,
-                3 # TODO Animations
+                3, # TODO Animations
+                self.rotation.y
             )
 
     def joueurs(self) -> list[joueur.Joueur]:
@@ -155,6 +156,8 @@ class JoueurClient(ControlleurPremierePersonne):
                         _position[p_idx] = 0.0
                         Dbg.err(f"Position corrigée: {_pos}")
                 self.__joueurs[i].position = _pos
+                print(_["Rotation"])
+                self.__joueurs[i].rotation = (-90, _["Rotation"], 0)
 
         for jq in _donnee['Joueurs quittés']:
             destroy(self.__joueurs[jq])

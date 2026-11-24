@@ -158,6 +158,7 @@ class MondeServeur:
             joueur.position = (donnee[2], donnee[3], donnee[4])
             joueur.vie = donnee[5]
             joueur.animation = donnee[6]
+            joueur.rotation = donnee[7]
             #joueur.a_recu_maj_obstacles()
 
 

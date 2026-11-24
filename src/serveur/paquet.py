@@ -33,7 +33,8 @@ def creer_paquet_joueur(joueur: joueur_abstrait.JoueurAbstrait) -> bytes:
             joueur.nom.encode("ascii"),
             joueur.position[0], joueur.position[1], joueur.position[2],
             joueur.vie,
-            joueur.animation
+            joueur.animation,
+            joueur.rotation
         )
 
 def creer_paquet_deconnexion() -> bytes:
