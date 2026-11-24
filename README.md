@@ -22,3 +22,7 @@ Ludikrous Makrous est un jeu multijoueur en temps réel où il faut survivre dan
     - `-p` `--port` — change temporairement le port du serveur
     - `-i` `--ip` - change temporairement l'addresse IP du serveur
 3) Dans le dossier client, lancez `__main__.py` pour lancer le client ou téléchargez le fichier `release` le plus récent et lancez `client-makrous.exe`.
+
+## Site web pour le projet
+
+[Site web](https://samuel-archila-cegep-2621953.github.io/ludikrous-makrous/)
