@@ -35,7 +35,6 @@ impl WorldGrid for VecGrid {
     
     fn delete(&mut self, x: u8, y: u8) {
         if self.is_free(x, y) { return }
-
-        self.0[x][y] = None;
+        self.0[x as usize][y as usize] = None;
     }
 }

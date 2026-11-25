@@ -14,7 +14,7 @@ const MAX_GEN_ATTEMPTS: u8 = 48;
 pub struct AbstractWorld<W: WorldGrid> {
     world: W,
     players: Vec<AbstractPlayer>,
-    queue_new_obstacles: Arc<RwLock<Vec<u8>>>, // type provisoire
+    queue_new_obstacles: RwLock<Vec<u8>>, // type provisoire
     pub debut: Instant,
 }
 
@@ -23,7 +23,7 @@ impl AbstractWorld<VecGrid> {
         Self {
             world: VecGrid::new_empty(x, y),
             players: Vec::new(),
-            queue_new_obstacles: Arc::new(RwLock::new(Vec::new())),
+            queue_new_obstacles: RwLock::new(Vec::new()),
             debut: Instant::now(),
         }
     }

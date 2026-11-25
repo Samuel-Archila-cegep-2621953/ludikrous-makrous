@@ -37,7 +37,7 @@ impl SerializedPillar {
 
 #[derive(Debug, Clone)]
 struct Pillar {
-    death: Instant,
+    death_foretold: Instant,
     h_mode: u8,
     difficulty: f32,
 }
@@ -46,10 +46,10 @@ impl Pillar {
     fn new(instant: Instant) -> Self {
         let h_mode = select_random(5);
         let difficulty = 0.1 * h_mode as f32;
-        let death = instant + PILLAR_DURATION;
+        let death_foretold = instant + PILLAR_DURATION;
 
         Self {
-            death,
+            death_foretold,
             h_mode,
             difficulty
         }
@@ -60,12 +60,12 @@ impl Pillar {
     }
     
     fn as_serialized(&self, x: u8, y: u8) -> SerializedPillar {
-        SerializedPillar::from(self.h_mode, x, y)
+        SerializedPillar::from(x, y, self.h_mode)
     }
 }
 
 impl Obstacle for Pillar {
-    fn try_spawn(maintenant: Instant, grid: &mut WorldGrid) -> Option<f32> {
+    fn try_spawn(maintenant: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)> {
         for _ in 0..MAX_ATTEMPTS {
             let random_position = grid.select_random_grid_position();
 
@@ -74,19 +74,16 @@ impl Obstacle for Pillar {
             }
             let pillar = Pillar::new(maintenant);
             let difficulty = pillar.difficulty;
+            let bytes = pillar.as_serialized(random_position.0, random_position.1).encode_to_vec();
             
             grid.set(random_position, pillar.into_box());
             
-            return Some(difficulty);
+            return Some((difficulty, ObstacleBytes::WillBeSent(bytes)));
         }
         None
     }
 
-    fn as_bytes(&self, aoe: ObstacleAoe) -> Vec<u8> {
-        self.as_serialized(x, y)
-    }
-
     fn is_dead(&self, now: Instant) -> bool {
-        self.mort >= now
+        self.death_foretold >= now
     }
 }

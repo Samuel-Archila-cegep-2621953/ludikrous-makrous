@@ -1,4 +1,4 @@
-use crate::abstract_world::WorldGrid;
+use crate::world_grid::WorldGrid;
 use dyn_clone::DynClone;
 use std::fmt::Debug;
 use std::time::Instant;
@@ -13,19 +13,17 @@ pub enum ObstacleType {
     Missile = 5
 }
 
-#[derive(Debug, Clone, Copy)]
-pub enum ObstacleAoe {
-    Localized(u8, u8),
-    Global(u8),
+#[derive(Debug, Clone)]
+pub enum ObstacleBytes {
+    WillBeSent(Vec<u8>),
+    PurelyAbstract,
 }
 
 pub trait Obstacle: Debug {
-    fn as_bytes(&self, aoe: ObstacleAoe) -> Vec<u8>;
-    fn try_spawn(maintenant: Instant, grid: &mut WorldGrid) -> Option<f32>
+    //fn as_bytes(&self) -> Vec<u8>;
+    fn try_spawn(maintenant: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)>
     where
         Self: Sized;
 
     fn is_dead(&self, now: Instant) -> bool;
-    
-    fn aoe(&self) -> ObstacleAoe;
 }

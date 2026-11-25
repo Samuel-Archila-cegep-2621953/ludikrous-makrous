@@ -12,7 +12,7 @@ impl WorldGrid for HashedGrid {
     fn new_empty(x: u8, y: u8) -> Self {
         Self {
             size: (x, y),
-            grid: HashMap::with_capacity((x * y) as usiz),
+            grid: HashMap::with_capacity((x * y) as usize),
         }
     }
 
