@@ -13,6 +13,8 @@ use abstract_world::*;
 mod utils;
 use utils::*;
 
+mod world_grid;
+
 fn main() {
     println!("Hello, world!");
 }
