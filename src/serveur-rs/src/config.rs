@@ -1,5 +1,6 @@
 use std::default::Default;
 
+#[derive(Debug)]
 pub struct Config {
     pub ip: String,
     pub port: u16,

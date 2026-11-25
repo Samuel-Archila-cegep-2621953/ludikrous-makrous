@@ -1,5 +1,6 @@
 use std::env::args;
 use crate::config::*;
+use crate::utils::is_ip_valid;
 
 const LONE_PARAMS: [&str; 0] = [];
 const SINGLE_ARG_PARAMS: [&str; 6] = ["--ip", "-i", "--port", "-p", "--max-players", "-m"];
@@ -19,7 +20,9 @@ pub fn process_args() -> Config {
         match p {
             ParamType::Alone(_) => {},
             ParamType::SingleArg(p, arg) => match p {
-                "--ip" | "-i" => cfg.ip(arg),
+                "--ip" | "-i" => if is_ip_valid(arg) {
+                    cfg.ip(arg) 
+                }
                 "--port" | "-p" => {
                     let parsed = arg.parse::<u16>();
                     match parsed {

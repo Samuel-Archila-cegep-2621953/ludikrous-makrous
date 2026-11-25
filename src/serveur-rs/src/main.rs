@@ -33,6 +33,8 @@ mod config;
 
 use sha2::{self, Digest, Sha256};
 
+use crate::args::process_args;
+
 #[tokio::main]
 async fn main() {
     /* */
@@ -45,4 +47,7 @@ async fn main() {
     let p = db.password_matches("u2", hashed);
     println!("Hello, world! {r}");
     println!("Hello, world! {p}");
+    
+    let cfg = process_args();
+    println!("{}", cfg.addr());
 }

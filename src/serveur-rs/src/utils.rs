@@ -25,3 +25,20 @@ pub struct Vec3(pub f32, pub f32, pub f32);
 pub fn select_random(max: u8) -> u8 {
     random_range(0..=max)
 }
+
+pub fn is_ip_valid(candidate: &str) -> bool {
+    const ALLOWED_CHARS: [char; 11] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.']; 
+    if !candidate.chars().all(|c| ALLOWED_CHARS.contains(&c)) { return false }
+    
+    let sp: Vec<&str> = candidate.split('.').collect();
+    if sp.len() != 4 { return false }
+    
+    for seg in sp {
+        if seg.chars().count() > 3 { return false }
+        
+        let res = seg.parse::<u8>();
+        if res.is_err() { return false }
+    }
+    
+    true
+}
