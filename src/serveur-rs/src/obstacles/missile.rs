@@ -27,10 +27,11 @@ impl Missile {
         }
     }
     
+    /*
     #[inline]
     fn into_box(self) -> Box<Self> {
         Box::new(self)
-    }
+    } */
     
     #[inline]
     fn as_serialized(&self, x: u8, y: u8) -> SerializedMissile {
@@ -40,6 +41,7 @@ impl Missile {
 
 #[derive(Encode, Debug)]
 struct SerializedMissile {
+    pkt_ty: u8,
     ty: u8,
     x: u8,
     y: u8
@@ -54,6 +56,7 @@ impl SerializedMissile {
     #[inline]
     fn from(x: u8, y: u8) -> Self {
         Self {
+            pkt_ty: FromServerPacketTypes::ObstacleUpdate as u8,
             ty: ObstacleType::Missile as u8,
             x,
             y

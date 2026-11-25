@@ -11,6 +11,7 @@ const MAX_ATTEMPTS: u8 = 8;
 
 #[derive(Debug, Serialize, Encode)]
 struct SerializedPillar {
+    pkt_ty: u8,
     ty: u8,
     x: u8,
     y: u8,
@@ -26,6 +27,7 @@ impl SerializedPillar {
     #[inline]
     fn from(x: u8, y: u8, h_mode: u8) -> Self {
         Self {
+            pkt_ty: FromServerPacketTypes::ObstacleUpdate as u8, 
             ty: ObstacleType::Pillar as u8,
             x,
             y,
@@ -36,7 +38,7 @@ impl SerializedPillar {
 
 
 #[derive(Debug, Clone)]
-struct Pillar {
+pub struct Pillar {
     death_foretold: Instant,
     h_mode: u8,
     difficulty: f32,
@@ -55,10 +57,12 @@ impl Pillar {
         }
     }
 
+    /*
     #[inline]
     fn into_box(self) -> Box<Self> {
         Box::new(self)
-    }
+    } */
+    
     
     #[inline]
     fn as_serialized(&self, x: u8, y: u8) -> SerializedPillar {
