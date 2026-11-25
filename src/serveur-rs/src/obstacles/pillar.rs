@@ -69,16 +69,16 @@ impl Pillar {
 impl Obstacle for Pillar {
     fn try_spawn(server_time: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)> {
         for _ in 0..MAX_ATTEMPTS {
-            let random_position = grid.select_random_grid_position();
+            let tile = grid.random_tile();
 
-            if !grid.is_free(random_position.0, random_position.1) {
+            if !grid.is_free(tile) {
                 continue;
             }
             let pillar = Pillar::new(server_time);
             let difficulty = pillar.difficulty;
-            let bytes = pillar.as_serialized(random_position.0, random_position.1).encode_to_vec();
+            let bytes = pillar.as_serialized(tile.x, tile.y).encode_to_vec();
             
-            grid.set(random_position, pillar.into_box());
+            grid.set(tile, pillar.into_box());
             
             return Some((difficulty, ObstacleBytes::WillBeSent(bytes)));
         }

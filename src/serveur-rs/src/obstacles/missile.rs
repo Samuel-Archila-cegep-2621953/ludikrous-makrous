@@ -70,14 +70,14 @@ impl Obstacle for Missile {
         if select_random(1) == 0 { return None } // 50% Chance of generation failure
         
         for _ in 0..MAX_ATTEMPS {
-            let (x, y) = grid.select_random_grid_position();
+            let tile = grid.random_tile();
             
-            if !grid.is_free(x, y) { continue }
+            if !grid.is_free(tile) { continue }
             
             let missile = Missile::new(server_time);
-            let bytes = missile.as_serialized(x, y).encode_to_vec();
+            let bytes = missile.as_serialized(tile.x, tile.y).encode_to_vec();
             
-            grid.set((x, y), missile.into_box());
+            grid.set(tile, missile.into_box());
             
             return Some((
                 DIFFICULTY,

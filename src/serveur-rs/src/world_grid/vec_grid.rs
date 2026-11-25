@@ -1,4 +1,4 @@
-use crate::world_grid::WorldGrid;
+use crate::world_grid::{TilePosition, WorldGrid};
 use std::boxed::Box;
 use crate::obstacles::Obstacle;
 use std::iter::repeat_with;
@@ -18,8 +18,8 @@ impl WorldGrid for VecGrid {
     }
 
     #[inline]
-    fn is_free(&self, x: u8, y: u8) -> bool {
-        self.0[x as usize][y as usize].is_none()
+    fn is_free(&self, pos: TilePosition) -> bool {
+        self.0[pos.x as usize][pos.y as usize].is_none()
     }
 
     #[inline]
@@ -33,12 +33,12 @@ impl WorldGrid for VecGrid {
     }
 
     #[inline]
-    fn set(&mut self, pos: (u8, u8), obstacle: Box<dyn Obstacle>) {
-        self.0[pos.0 as usize][pos.1 as usize] = Some(obstacle);
+    fn set(&mut self, pos: TilePosition, obstacle: Box<dyn Obstacle>) {
+        self.0[pos.x as usize][pos.y as usize] = Some(obstacle);
     }
     
-    fn delete(&mut self, x: u8, y: u8) {
-        if self.is_free(x, y) { return }
-        self.0[x as usize][y as usize] = None;
+    fn delete(&mut self, pos: TilePosition) {
+        if self.is_free(pos) { return }
+        self.0[pos.x as usize][pos.y as usize] = None;
     }
 }

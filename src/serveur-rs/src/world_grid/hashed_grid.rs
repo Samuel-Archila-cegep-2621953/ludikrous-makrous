@@ -1,11 +1,11 @@
 use crate::obstacles::Obstacle;
-use crate::world_grid::WorldGrid;
+use crate::world_grid::{TilePosition, WorldGrid};
 use std::boxed::Box;
 use std::collections::HashMap;
 
 pub struct HashedGrid {
     size: (u8, u8),
-    grid: HashMap<(u8, u8), Box<dyn Obstacle>>,
+    grid: HashMap<TilePosition, Box<dyn Obstacle>>,
 }
 
 impl WorldGrid for HashedGrid {
@@ -17,8 +17,8 @@ impl WorldGrid for HashedGrid {
     }
 
     #[inline]
-    fn is_free(&self, x: u8, y: u8) -> bool {
-        !self.grid.contains_key(&(x, y))
+    fn is_free(&self, pos: TilePosition) -> bool {
+        !self.grid.contains_key(&pos)
     }
 
     #[inline]
@@ -32,12 +32,12 @@ impl WorldGrid for HashedGrid {
     }
 
     #[inline]
-    fn set(&mut self, pos: (u8, u8), obstacle: Box<dyn Obstacle>) {
+    fn set(&mut self, pos: TilePosition, obstacle: Box<dyn Obstacle>) {
         self.grid.insert(pos, obstacle);
     }
 
     #[inline]
-    fn delete(&mut self, x: u8, y: u8) {
-        _ = self.grid.remove(&(x, y));
+    fn delete(&mut self, pos: TilePosition) {
+        _ = self.grid.remove(&pos);
     }
 }
