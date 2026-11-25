@@ -18,10 +18,12 @@ struct SerializedPillar {
 }
 
 impl SerializedPillar {
+    #[inline]
     fn encode_to_vec(self) -> Vec<u8> {
         encode_to_vec(self, DEFAULT_BINCODE_CFG).expect("Bincode failed to encode Pillar")
     }
     
+    #[inline]
     fn from(x: u8, y: u8, h_mode: u8) -> Self {
         Self {
             ty: ObstacleType::Pillar as u8,
@@ -53,10 +55,12 @@ impl Pillar {
         }
     }
 
+    #[inline]
     fn into_box(self) -> Box<Self> {
         Box::new(self)
     }
     
+    #[inline]
     fn as_serialized(&self, x: u8, y: u8) -> SerializedPillar {
         SerializedPillar::from(x, y, self.h_mode)
     }
@@ -81,6 +85,7 @@ impl Obstacle for Pillar {
         None
     }
 
+    #[inline]
     fn is_dead(&self, now: Instant) -> bool {
         self.death_foretold >= now
     }

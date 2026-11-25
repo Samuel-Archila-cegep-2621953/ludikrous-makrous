@@ -17,18 +17,22 @@ impl WorldGrid for VecGrid {
         )
     }
 
+    #[inline]
     fn is_free(&self, x: u8, y: u8) -> bool {
         self.0[x as usize][y as usize].is_none()
     }
 
+    #[inline]
     fn len_x(&self) -> usize {
         self.0.len()
     }
 
+    #[inline]
     fn len_y(&self) -> usize {
         self.0[0].len()
     }
 
+    #[inline]
     fn set(&mut self, pos: (u8, u8), obstacle: Box<dyn Obstacle>) {
         self.0[pos.0 as usize][pos.1 as usize] = Some(obstacle);
     }

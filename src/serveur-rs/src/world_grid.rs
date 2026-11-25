@@ -16,6 +16,7 @@ pub trait WorldGrid {
         (select_random(x_max - 1), select_random(y_max - 1))
     }
     
+    #[inline]
     fn default() -> Self 
     where Self: Sized {
         Self::new_empty(8, 8)

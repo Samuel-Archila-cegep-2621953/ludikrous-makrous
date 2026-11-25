@@ -9,7 +9,7 @@ pub const DEFAULT_BINCODE_CFG: bincode_next::config::Configuration<
     bincode_next::config::NoLimit,
     bincode_next::config::AllowBitPacking,
     bincode_next::config::MsbFirst,
-> = config::standard()
+> = config::standard() // Son what is this type 😭
     .with_big_endian()
     .with_fixed_int_encoding()
     .with_bit_packing();
@@ -20,6 +20,7 @@ pub struct Vec2(pub f32, pub f32);
 #[derive(Debug, Serialize, PartialEq, PartialOrd)]
 pub struct Vec3(pub f32, pub f32, pub f32);
 
+#[inline]
 pub fn select_random(max: u8) -> u8 {
     random_range(0..=max)
 }

@@ -27,10 +27,12 @@ impl Missile {
         }
     }
     
+    #[inline]
     fn into_box(self) -> Box<Self> {
         Box::new(self)
     }
     
+    #[inline]
     fn as_serialized(&self, x: u8, y: u8) -> SerializedMissile {
         SerializedMissile::from(x, y)
     }
@@ -44,10 +46,12 @@ struct SerializedMissile {
 }
 
 impl SerializedMissile {
+    #[inline]
     fn encode_to_vec(self) -> Vec<u8> {
         encode_to_vec(self, DEFAULT_BINCODE_CFG).expect("Bincode failed to encode Missile")
     }
     
+    #[inline]
     fn from(x: u8, y: u8) -> Self {
         Self {
             ty: ObstacleType::Missile as u8,
@@ -83,6 +87,7 @@ impl Obstacle for Missile {
         None
     }
     
+    #[inline]
     fn is_dead(&self, now: Instant) -> bool {
         self.death_foretold >= now
     }

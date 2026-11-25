@@ -16,22 +16,27 @@ impl WorldGrid for HashedGrid {
         }
     }
 
+    #[inline]
     fn is_free(&self, x: u8, y: u8) -> bool {
         !self.grid.contains_key(&(x, y))
     }
 
+    #[inline]
     fn len_x(&self) -> usize {
         self.size.0 as usize
     }
 
+    #[inline]
     fn len_y(&self) -> usize {
         self.size.1 as usize
     }
 
+    #[inline]
     fn set(&mut self, pos: (u8, u8), obstacle: Box<dyn Obstacle>) {
         self.grid.insert(pos, obstacle);
     }
 
+    #[inline]
     fn delete(&mut self, x: u8, y: u8) {
         _ = self.grid.remove(&(x, y));
     }
