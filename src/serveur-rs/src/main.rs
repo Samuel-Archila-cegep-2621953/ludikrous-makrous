@@ -25,7 +25,7 @@ mod login;
 use database::*;
 mod packet_types;
 
-use sha2::{self, Digest, Sha256, digest};
+use sha2::{self, Digest, Sha256};
 
 fn main() {
     /* */
