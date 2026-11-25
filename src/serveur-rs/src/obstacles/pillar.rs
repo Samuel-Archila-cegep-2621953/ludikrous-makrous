@@ -1,10 +1,8 @@
 use crate::obstacles::*;
 use crate::utils::*;
 use bincode_next::encode_to_vec;
-use rand::{random, rng};
 use serde::Serialize;
 use std::boxed::Box;
-use std::convert::From;
 use std::time::{Duration, Instant};
 use bincode_next::{Encode, encode_into_slice};
 
@@ -65,14 +63,14 @@ impl Pillar {
 }
 
 impl Obstacle for Pillar {
-    fn try_spawn(maintenant: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)> {
+    fn try_spawn(server_time: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)> {
         for _ in 0..MAX_ATTEMPTS {
             let random_position = grid.select_random_grid_position();
 
             if !grid.is_free(random_position.0, random_position.1) {
                 continue;
             }
-            let pillar = Pillar::new(maintenant);
+            let pillar = Pillar::new(server_time);
             let difficulty = pillar.difficulty;
             let bytes = pillar.as_serialized(random_position.0, random_position.1).encode_to_vec();
             

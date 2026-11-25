@@ -4,6 +4,7 @@ use std::fmt::Debug;
 use std::time::Instant;
 
 pub mod pillar;
+pub mod missile;
 
 #[repr(u8)]
 #[derive(Debug)]
@@ -21,7 +22,7 @@ pub enum ObstacleBytes {
 
 pub trait Obstacle: Debug {
     //fn as_bytes(&self) -> Vec<u8>;
-    fn try_spawn(maintenant: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)>
+    fn try_spawn(server_time: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)>
     where
         Self: Sized;
 
