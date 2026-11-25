@@ -8,6 +8,9 @@ use std::iter::repeat_with;
 use std::sync::{Arc, RwLock};
 use std::time::Instant;
 use std::collections::HashMap;
+use dashmap::DashMap;
+use tokio::sync::broadcast;
+use bytes;
 
 const MAX_GEN_ATTEMPTS: u8 = 48;
 
@@ -15,20 +18,22 @@ const MAX_GEN_ATTEMPTS: u8 = 48;
 #[derive(Debug)]
 pub struct AbstractWorld<W: WorldGrid> {
     world: W,
-    players: HashMap<Id, AbstractPlayer>,
+    players: DashMap<Id, AbstractPlayer>,
     global_difficulty: f32,
     queue_new_obstacles: RwLock<Vec<u8>>, // type provisoire
     pub clock: Instant,
+    tx: broadcast::Sender<bytes::Bytes>
 }
 
 impl AbstractWorld<VecGrid> {
-    pub fn new(x: u8, y: u8) -> Self {
+    pub fn new(x: u8, y: u8, tx: broadcast::Sender<bytes::Bytes>, max_players: u16) -> Self {
         Self {
             world: VecGrid::new_empty(x, y),
-            players: HashMap::new(),
+            players: DashMap::with_capacity(max_players as usize),
             global_difficulty: 0.0,
             queue_new_obstacles: RwLock::new(Vec::new()),
             clock: Instant::now(),
+            tx
         }
     }
 

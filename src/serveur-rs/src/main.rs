@@ -5,7 +5,11 @@ use std::{
     sync::Arc,
     time::{Duration, Instant},
 };
-
+use tokio::{
+    net::{TcpListener, TcpStream},
+    sync::broadcast,
+    time::interval
+};
 mod abstract_player;
 use abstract_player::*;
 
@@ -24,10 +28,13 @@ mod database;
 mod login;
 use database::*;
 mod packet_types;
+mod args;
+mod config;
 
 use sha2::{self, Digest, Sha256};
 
-fn main() {
+#[tokio::main]
+async fn main() {
     /* */
     let hashed = &*Sha256::digest(b"\0");
     //let a = hex::encode(hashed);
