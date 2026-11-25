@@ -14,15 +14,6 @@ pub const DEFAULT_BINCODE_CFG: bincode_next::config::Configuration<
     .with_fixed_int_encoding()
     .with_bit_packing();
 
-#[derive(Debug, Clone, Copy)]
-#[repr(u8)]
-pub enum FromServerPacketTypes {
-    PlayerUpdate = 0,
-    LoginSuccess = 1,
-    LoginFailure = 2,
-    ObstacleUpdate = 3,
-    Disconnect = 4
-}
 
 #[derive(Debug, Serialize, PartialEq, PartialOrd)]
 pub struct Vec2(pub f32, pub f32);

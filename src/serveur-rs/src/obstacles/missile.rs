@@ -1,5 +1,6 @@
 use crate::obstacles::*;
 use crate::utils::*;
+use crate::packet_types::FromServerPacketTypes;
 use bincode_next::encode_to_vec;
 use serde::Serialize;
 use std::boxed::Box;
