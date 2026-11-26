@@ -1,9 +1,18 @@
-use std::env::args;
 use crate::config::*;
 use crate::utils::is_ip_valid;
+use std::env::args;
 
-const LONE_PARAMS: [&str; 0] = [];
-const SINGLE_ARG_PARAMS: [&str; 6] = ["--ip", "-i", "--port", "-p", "--max-players", "-m"];
+const LONE_PARAMS: [&str; 6] = ["-g", "--gui", "--no-login", "-n", "--help", "-h"];
+const SINGLE_ARG_PARAMS: [&str; 8] = [
+    "--ip",
+    "-i",
+    "--port",
+    "-p",
+    "--max-players",
+    "-m",
+    "--config",
+    "-c",
+];
 const DOUBLE_ARG_PARAMS: [&str; 2] = ["--world-size", "-w"];
 
 pub fn process_args() -> Config {
@@ -11,17 +20,21 @@ pub fn process_args() -> Config {
     let argv = args().collect::<Vec<String>>();
     let mut cfg = Config::default();
     let argv: Vec<&str> = argv.iter().map(|s| s.as_str()).collect();
-    
-    if argv.len() <= 1 { return cfg }
-    
+
+    if argv.len() <= 1 {
+        return cfg;
+    }
+
     let args = group_args(argv);
-    
-    for p in  args {
+
+    for p in args {
         match p {
-            ParamType::Alone(_) => {},
+            ParamType::Alone(_) => {}
             ParamType::SingleArg(p, arg) => match p {
-                "--ip" | "-i" => if is_ip_valid(arg) {
-                    cfg.set_ip(arg) 
+                "--ip" | "-i" => {
+                    if is_ip_valid(arg) {
+                        cfg.set_ip(arg)
+                    }
                 }
                 "--port" | "-p" => {
                     let parsed = arg.parse::<u16>();
@@ -38,7 +51,7 @@ pub fn process_args() -> Config {
                     }
                 }
                 _ => {}
-            }
+            },
             ParamType::DoubleArg(p, arg1, arg2) => match p {
                 "--world-size" | "-w" => {
                     let parsed1 = arg1.parse::<u8>();
@@ -50,7 +63,7 @@ pub fn process_args() -> Config {
                     }
                 }
                 _ => {}
-            }
+            },
         }
     }
     cfg
@@ -60,7 +73,7 @@ fn group_args(argv: Vec<&str>) -> Vec<ParamType<'_>> {
     let mut final_vec: Vec<Vec<&str>> = Vec::with_capacity(2);
     let mut tmp_vec: Vec<&str> = Vec::with_capacity(2);
     let mut next_flag: u8 = 0;
-    
+
     for i in 1..argv.len() {
         if next_flag == 0 {
             match argv[i] {
@@ -76,22 +89,30 @@ fn group_args(argv: Vec<&str>) -> Vec<ParamType<'_>> {
                 _ => {}
             }
         } else {
+            if argv[i].starts_with('-') {
+                eprint!("Failed to parse command line arguments");
+                return Vec::new();
+            }
             tmp_vec.push(argv[i]);
             next_flag -= 1;
         }
-        
+
         if tmp_vec.len() > 0 && next_flag == 0 {
             final_vec.push(tmp_vec.clone());
             tmp_vec = Vec::with_capacity(2);
         }
     }
-    
+
     grouped_args_clean(final_vec)
 }
 
 fn grouped_args_clean(args: Vec<Vec<&str>>) -> Vec<ParamType<'_>> {
     let mut out = Vec::with_capacity(2);
     for v in args {
+        if !v[0].starts_with('-') {
+            eprint!("Failed to parse command line arguments");
+            return Vec::new();
+        }
         match v.len() {
             1 => out.push(ParamType::Alone(v[0])),
             2 => out.push(ParamType::SingleArg(v[0], v[1])),
