@@ -38,6 +38,7 @@ impl Obstacle for TilePlaceHolder {
             
             grid.set(tile, placeholder.into_box());
             
+            println!("Gen placeholder");
             return Some((0.0, ObstacleBytes::PurelyAbstract));
         }
         None

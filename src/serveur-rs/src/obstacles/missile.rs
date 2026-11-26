@@ -83,6 +83,7 @@ impl Obstacle for Missile {
             
             grid.set(tile, missile.into_box());
             
+            println!("Gen missile");
             return Some((
                 DIFFICULTY,
                 ObstacleBytes::WillBeSent(bytes)

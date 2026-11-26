@@ -6,7 +6,7 @@ pub fn difficulty_fn(level: u8) -> fn(Instant) -> f32 {
         1 => |t| t.elapsed().as_secs() as f32 * 0.19,
         2 => |t| t.elapsed().as_secs() as f32 * 1.0,
         3 => |t| (t.elapsed().as_secs() as f32).exp2() * 0.002,
-        4 => |t| 1.0022_f32.powf(t.elapsed().as_secs() as f32) * 1.25,
+        4 => |t| 1.2_f32.powf(t.elapsed().as_secs() as f32) * 2.0 + 4.0,
         _ => |t| t.elapsed().as_secs() as f32 * 1.55,
     }
 }

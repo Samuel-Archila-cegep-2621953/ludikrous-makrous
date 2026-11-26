@@ -1,13 +1,12 @@
 use serde::{Deserialize, Serialize};
 use serde_json::error::Category::Data;
+use tokio_tungstenite::accept_async;
 use std::{
-    net::SocketAddr,
-    sync::{Arc, RwLock},
-    time::{Duration, Instant},
+    fs::read, net::SocketAddr, sync::{Arc, RwLock}, time::{Duration, Instant},
     
 };
 use tokio::{
-    net::{TcpListener, TcpStream}, sync::{RwLock as tokio_RwLock, broadcast}, time::{interval, sleep},
+    io::AsyncReadExt, net::{TcpListener, TcpStream}, sync::{RwLock as tokio_RwLock, broadcast}, time::{interval, sleep},
 };
 mod abstract_player;
 use abstract_player::*;
@@ -34,6 +33,8 @@ mod global_difficulty;
 use sha2::{self, Digest, Sha256};
 
 use crate::{args::process_args, world_grid::{WorldGrid, vec_grid::VecGrid}};
+
+const TIME_BEFORE_START_OBSTACLE_GEN: Duration = Duration::from_secs(3);
 
 #[tokio::main]
 async fn main() {
@@ -75,10 +76,16 @@ async fn main() {
             let mut collected_player_states = { //for dropping lock
                 loop_state_world.read().expect("POISOM!").get_player_states()
             };
+            
+            let should_flush = {
+                loop_state_world.read().expect("Tried getting obstacle queue len").queue_new_obstacles.len() > 0
+            };
             //let new_obstacles = loop_state_world.flush_new_obstacles_queue();
             //let mut new_obstacles = loop_state_world.write().await.queue_new_obstacles.clone();
-            let mut new_obstacles = {
-                loop_state_world.write().expect("POISON!!").flush_new_obstacles_queue()
+            let mut new_obstacles: Vec<bytes::Bytes> = {
+                if should_flush { 
+                    loop_state_world.write().expect("POISON!!").flush_new_obstacles_queue()
+                } else { Vec::new() }
             };
             
             collected_player_states.append(&mut new_obstacles);
@@ -94,8 +101,9 @@ async fn main() {
     
     // Obstacles
     tokio::spawn(async move {
-        _ = sleep(Duration::from_secs(10));
+        _ = sleep(TIME_BEFORE_START_OBSTACLE_GEN).await;
         let mut ticker = interval(Duration::from_secs(1));
+        
         
         loop {
             ticker.tick().await;
@@ -114,18 +122,31 @@ async fn main() {
                 .write()
                 .expect("Poison trying to add obstacles to queue")
                 .add_new_obstacles_to_queue(new_obstacles);
+
+            println!("============================================");
         }
     });
     
     while let Ok((stream, peer_addr)) = listener.accept().await {
         let connection_state = world.clone();
-        
+        tokio::spawn(handle_connections(stream, peer_addr, connection_state));
     }
     
     
     
 }
 
-async fn handle_connections(stream: TcpStream, addr: SocketAddr, state: Arc<AbstractWorld<VecGrid>>) {
+async fn handle_connections(stream: TcpStream, addr: SocketAddr, state: Arc<RwLock<AbstractWorld<VecGrid>>>) {
+    let websock_stream = match accept_async(stream).await {
+        Ok(sock) => sock,
+        Err(e) => {
+            eprintln!("WebSocket nono for {}: {}", addr, e);
+            return;
+        }
+    };
+    let mut initial_buf: [u8; 1024] = [0; 1024];
     
+    println!("ADDD {}", addr.to_string());
+    
+    let player_id = 9u32;
 }

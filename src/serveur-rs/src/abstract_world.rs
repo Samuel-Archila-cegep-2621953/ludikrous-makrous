@@ -17,7 +17,7 @@ use bytes::*;
 use bincode_next::encode_into_slice;
 
 const MAX_GEN_ATTEMPTS: u8 = 48;
-const DIFFICULTY_LEVEL: u8 = 2;
+const DIFFICULTY_LEVEL: u8 = 4;
 
 
 #[derive(Debug)]
@@ -44,11 +44,18 @@ impl AbstractWorld<VecGrid> {
     }
 
     pub fn generate_obstacles(&mut self) -> Vec<Bytes> {
+        println!("Generatoion +++++++++++++++++");
         let mut new_obstacles: Vec<Bytes> = Vec::with_capacity(self.world.len_x() * self.world.len_y() / 10 + 3); //random approximation
-        let mut target_difficulty = difficulty_fn(DIFFICULTY_LEVEL)(self.get_now());
+        let now = self.get_now();
+        //println!("{:?}", now.elapsed().as_secs());
+        let mut target_difficulty = difficulty_fn(DIFFICULTY_LEVEL)(now);
+        println!("{:?}  {:?}", self.global_difficulty, target_difficulty);
         
         for _ in 0..MAX_GEN_ATTEMPTS {
-            if self.global_difficulty >= target_difficulty { break }
+            if self.global_difficulty >= target_difficulty {
+                println!("break");
+                break;
+            }
             
             let choice = ObstacleType::random_implemented_type();
             let now = self.clock;
@@ -57,7 +64,7 @@ impl AbstractWorld<VecGrid> {
             
             if let Some((gained_difficulty, mut obstacle)) = ObstacleType::construct(choice, now, grid) {
                 self.global_difficulty += gained_difficulty;
-                target_difficulty += gained_difficulty;
+                //target_difficulty += gained_difficulty;
 
                 if let ObstacleBytes::WillBeSent(bytes) = &mut obstacle {
                     new_obstacles.push(bytes.clone());
@@ -91,6 +98,7 @@ impl AbstractWorld<VecGrid> {
     pub fn flush_new_obstacles_queue(&mut self) -> Vec<Bytes> {
         let mut out: Vec<Bytes> = Vec::with_capacity(self.queue_new_obstacles.len());
         out.append(&mut self.queue_new_obstacles);
+        println!("Flush");
         out
     }
 }

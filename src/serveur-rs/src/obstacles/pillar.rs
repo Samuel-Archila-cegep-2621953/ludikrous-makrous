@@ -85,6 +85,7 @@ impl Obstacle for Pillar {
             
             grid.set(tile, pillar.into_box());
             
+            println!("Gen pillar");
             return Some((difficulty, ObstacleBytes::WillBeSent(bytes)));
         }
         None
