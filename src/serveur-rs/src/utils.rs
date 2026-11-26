@@ -2,6 +2,7 @@ use bincode_next::config::{self, Configuration};
 use rand::{random, random_range, rng};
 use serde::Serialize;
 use std::range::Range;
+use bytes::*;
 
 pub const DEFAULT_BINCODE_CFG: bincode_next::config::Configuration<
     bincode_next::config::BigEndian,
@@ -15,11 +16,14 @@ pub const DEFAULT_BINCODE_CFG: bincode_next::config::Configuration<
     .with_bit_packing();
 
 
-#[derive(Debug, Serialize, PartialEq, PartialOrd)]
+#[derive(Debug, Serialize, PartialEq, PartialOrd, Clone, Copy)]
 pub struct Vec2(pub f32, pub f32);
 
-#[derive(Debug, Serialize, PartialEq, PartialOrd)]
+#[derive(Debug, Serialize, PartialEq, PartialOrd, Clone, Copy)]
 pub struct Vec3(pub f32, pub f32, pub f32);
+
+#[derive(Debug, Serialize, PartialEq, PartialOrd, Clone, Copy)]
+pub struct FalseVec3(pub i32, pub i32, pub i32);
 
 #[inline]
 pub fn select_random(max: u8) -> u8 {
@@ -41,4 +45,19 @@ pub fn is_ip_valid(candidate: &str) -> bool {
     }
     
     true
+}
+
+pub fn build_grand_packet(b: Vec<Bytes>) -> Bytes {
+    let mut buf = BytesMut::with_capacity(64);
+    buf.put_u16(b.len() as u16); // header for number of packets
+    
+    for packet in b {
+        buf.extend_from_slice(&packet);
+    }
+    
+    Bytes::from(buf)
+}
+
+pub fn bytes_from_vecu8(v: Vec<u8>) -> Bytes {
+    Bytes::from(v)
 }

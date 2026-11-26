@@ -31,7 +31,7 @@ pub enum ObstacleType {
 impl ObstacleType {
     pub fn random_implemented_type() -> ObstacleType {
         let len = IMPLEMENTED_OBSTACLES.len();
-        let choice = select_random(len as u8) as usize - 1;
+        let choice = select_random(len as u8 - 1) as usize ;
         
         IMPLEMENTED_OBSTACLES[choice]
     }
@@ -57,11 +57,11 @@ impl ObstacleType {
 
 #[derive(Debug, Clone)]
 pub enum ObstacleBytes {
-    WillBeSent(Vec<u8>),
+    WillBeSent(bytes::Bytes),
     PurelyAbstract,
 }
 
-pub trait Obstacle: Debug {
+pub trait Obstacle: Debug + Sync + Send {
 
     fn is_dead(&self, now: Instant) -> bool;
     

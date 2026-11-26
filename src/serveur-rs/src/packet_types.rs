@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 
-pub mod client;
-pub mod server;
+pub mod from_client;
+pub mod from_server;
 
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]

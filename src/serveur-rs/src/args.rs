@@ -21,19 +21,19 @@ pub fn process_args() -> Config {
             ParamType::Alone(_) => {},
             ParamType::SingleArg(p, arg) => match p {
                 "--ip" | "-i" => if is_ip_valid(arg) {
-                    cfg.ip(arg) 
+                    cfg.set_ip(arg) 
                 }
                 "--port" | "-p" => {
                     let parsed = arg.parse::<u16>();
                     match parsed {
-                        Ok(port) => cfg.port(port),
+                        Ok(port) => cfg.set_port(port),
                         Err(_) => {}
                     }
                 }
                 "--max-players" | "-m" => {
                     let parsed = arg.parse::<u16>();
                     match parsed {
-                        Ok(m) => cfg.max_players(m),
+                        Ok(m) => cfg.set_max_players(m),
                         Err(_) => {}
                     }
                 }
@@ -45,7 +45,8 @@ pub fn process_args() -> Config {
                     let parsed2 = arg2.parse::<u8>();
 
                     if parsed1.is_ok() && parsed2.is_ok() {
-                        cfg.world_size(parsed1.unwrap(), parsed2.unwrap());
+                        cfg.set_size_x(parsed1.unwrap());
+                        cfg.set_size_y(parsed2.unwrap());
                     }
                 }
                 _ => {}
@@ -55,7 +56,7 @@ pub fn process_args() -> Config {
     cfg
 }
 
-fn group_args(argv: Vec<&str>) -> Vec<ParamType> {
+fn group_args(argv: Vec<&str>) -> Vec<ParamType<'_>> {
     let mut final_vec: Vec<Vec<&str>> = Vec::with_capacity(2);
     let mut tmp_vec: Vec<&str> = Vec::with_capacity(2);
     let mut next_flag: u8 = 0;
@@ -88,7 +89,7 @@ fn group_args(argv: Vec<&str>) -> Vec<ParamType> {
     grouped_args_clean(final_vec)
 }
 
-fn grouped_args_clean(args: Vec<Vec<&str>>) -> Vec<ParamType> {
+fn grouped_args_clean(args: Vec<Vec<&str>>) -> Vec<ParamType<'_>> {
     let mut out = Vec::with_capacity(2);
     for v in args {
         match v.len() {

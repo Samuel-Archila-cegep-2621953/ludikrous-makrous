@@ -21,8 +21,8 @@ struct SerializedPillar {
 
 impl SerializedPillar {
     #[inline]
-    fn encode_to_vec(self) -> Vec<u8> {
-        encode_to_vec(self, DEFAULT_BINCODE_CFG).expect("Bincode failed to encode Pillar")
+    fn encode_to_bytes(self) -> bytes::Bytes {
+        bytes::Bytes::from(encode_to_vec(self, DEFAULT_BINCODE_CFG).expect("Bincode failed to encode Pillar"))
     }
     
     #[inline]
@@ -81,7 +81,7 @@ impl Obstacle for Pillar {
             }
             let pillar = Pillar::new(server_time);
             let difficulty = pillar.difficulty;
-            let bytes = pillar.as_serialized(tile.x, tile.y).encode_to_vec();
+            let bytes = pillar.as_serialized(tile.x, tile.y).encode_to_bytes();
             
             grid.set(tile, pillar.into_box());
             

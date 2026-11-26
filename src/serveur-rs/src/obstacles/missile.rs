@@ -50,8 +50,8 @@ struct SerializedMissile {
 
 impl SerializedMissile {
     #[inline]
-    fn encode_to_vec(self) -> Vec<u8> {
-        encode_to_vec(self, DEFAULT_BINCODE_CFG).expect("Bincode failed to encode Missile")
+    fn encode_to_bytes(self) -> bytes::Bytes {
+        bytes::Bytes::from(encode_to_vec(self, DEFAULT_BINCODE_CFG).expect("Bincode failed to encode Missile"))
     }
     
     #[inline]
@@ -79,7 +79,7 @@ impl Obstacle for Missile {
             if !grid.is_free(tile) { continue }
             
             let missile = Missile::new(server_time);
-            let bytes = missile.as_serialized(tile.x, tile.y).encode_to_vec();
+            let bytes = missile.as_serialized(tile.x, tile.y).encode_to_bytes();
             
             grid.set(tile, missile.into_box());
             
