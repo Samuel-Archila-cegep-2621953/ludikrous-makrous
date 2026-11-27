@@ -150,3 +150,18 @@ async fn handle_connections(stream: TcpStream, addr: SocketAddr, state: Arc<RwLo
     
     let player_id = 9u32;
 }
+
+pub fn handle_connections2(stream: TcpStream, addr: SocketAddr, state: Arc<RwLock<AbstractWorld<VecGrid>>>) {
+    let sender = {
+        if let Ok(s) = state.read() {
+            s.tx.clone()
+        } else {
+            println!("Some connection failed to get a lock to the World");
+            return;
+        }
+    };
+    
+    let receiver = sender.subscribe();
+    
+    
+}
