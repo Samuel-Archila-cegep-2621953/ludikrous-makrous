@@ -1,13 +1,18 @@
 use serde::{Deserialize, Serialize};
 use serde_json::error::Category::Data;
-use tokio_tungstenite::accept_async;
 use std::{
-    fs::read, net::SocketAddr, sync::{Arc, RwLock}, time::{Duration, Instant},
-    
+    fs::read,
+    net::SocketAddr,
+    sync::{Arc, RwLock},
+    time::{Duration, Instant},
 };
 use tokio::{
-    io::AsyncReadExt, net::{TcpListener, TcpStream}, sync::{RwLock as tokio_RwLock, broadcast}, time::{interval, sleep},
+    io::AsyncReadExt,
+    net::{TcpListener, TcpStream},
+    sync::{RwLock as tokio_RwLock, broadcast},
+    time::{interval, sleep},
 };
+use tokio_tungstenite::accept_async;
 mod abstract_player;
 use abstract_player::*;
 
@@ -25,97 +30,133 @@ mod world_grid;
 mod database;
 mod login;
 use database::*;
-mod packet_types;
 mod args;
 mod config;
+mod packet_types;
+use config::Config;
 mod global_difficulty;
 
 use sha2::{self, Digest, Sha256};
 
-use crate::{args::process_args, world_grid::{WorldGrid, vec_grid::VecGrid}};
+use crate::{
+    args::process_args,
+    world_grid::{WorldGrid, vec_grid::VecGrid},
+};
 
 const TIME_BEFORE_START_OBSTACLE_GEN: Duration = Duration::from_secs(3);
+
+//static mut CONFIG: Config = process_args();
 
 #[tokio::main]
 async fn main() {
     /* */
     let hashed = &*Sha256::digest(b"\0");
     //let a = hex::encode(hashed);
-    
-    
+
+    let CONFIG: Config = process_args();
     let db = Database::open();
     let r = db.user_exists("u2");
     let p = db.password_matches("u2", hashed);
     println!("Hello, world! {r}");
     println!("Hello, world! {p}");
-    
-    let cfg = process_args();
-    println!("{}", cfg.addr());
-    
-    let addr = cfg.addr();
-    
-    let listener = TcpListener::bind(&addr).await.expect("Failed to bind TcpListener");
+
+    println!("{}", CONFIG.addr());
+
+    let addr = CONFIG.addr();
+
+    let listener = TcpListener::bind(&addr)
+        .await
+        .expect("Failed to bind TcpListener");
     println!("Listening on {addr}");
-    
+
     let (tx, _rx) = tokio::sync::broadcast::channel::<bytes::Bytes>(128);
+
+    let abstract_world = AbstractWorld::new(CONFIG.size_x, CONFIG.size_y, CONFIG.max_players, tx);
+    let players = Arc::new(abstract_world.players);
+    let world_grid = Arc::new(abstract_world.world);
+    let server_time = Arc::new(abstract_world.clock);
+    let obstacles_queue = Arc::new(abstract_world.queue_new_obstacles);
+
+    //let world = Arc::new(RwLock::new(abstract_world));
+    let tx = abstract_world.tx.clone();
     
-    let abstract_world = AbstractWorld::new(cfg.size_x, cfg.size_y, cfg.max_players, tx);
-    //let world_grid = Arc::new(abstract_world.world);
+
+    let fast_loop_players_handle = players.clone();
+    let fast_loop_obstacles_handle = world_grid.clone();
+    let fast_loop_obstacles_queue_handle = obstacles_queue.clone();
+    let fast_loop_tx_handle = tx.clone();
     
-    let world = Arc::new(RwLock::new(abstract_world));
-    
-    let loop_state_world = world.clone();
-    let obstacles_world = world.clone();
-    
+    let obstacles_loop_world = world_grid.clone();
+    let obstacles_loop_clock = server_time.clone();
+
     tokio::spawn(async move {
         let mut ticker = interval(Duration::from_millis(50));
-        
+
         loop {
             ticker.tick().await;
-            
-            let mut collected_player_states = { //for dropping lock
-                loop_state_world.read().expect("POISOM!").get_player_states()
+
+            let mut collected_player_states = {
+                //for dropping lock
+                /*
+                loop_state_world
+                    .read()
+                    .expect("POISOM!")
+                    .get_player_states()
+                */
+                fast_loop_players_handle.get_player_states()
             };
-            
+
             let should_flush = {
-                loop_state_world.read().expect("Tried getting obstacle queue len").queue_new_obstacles.len() > 0
+                /*
+                loop_state_world
+                    .read()
+                    .expect("Tried getting obstacle queue len")
+                    .queue_new_obstacles
+                    .len()
+                    > 0
+                */
+                fast_loop_obstacles_queue_handle.len() > 0
             };
             //let new_obstacles = loop_state_world.flush_new_obstacles_queue();
             //let mut new_obstacles = loop_state_world.write().await.queue_new_obstacles.clone();
             let mut new_obstacles: Vec<bytes::Bytes> = {
-                if should_flush { 
-                    loop_state_world.write().expect("POISON!!").flush_new_obstacles_queue()
-                } else { Vec::new() }
+                if should_flush {
+                    fast_loop_obstacles_queue_handle.flush_new_obstacles_queue()
+                } else {
+                    Vec::new()
+                }
             };
-            
+
             collected_player_states.append(&mut new_obstacles);
-            
+
             let collected_states_as_bytes = build_grand_packet(collected_player_states);
-            
-            
+
             if !collected_states_as_bytes.is_empty() {
-                _ = loop_state_world.read().expect("POISON!!!!").tx.send(collected_states_as_bytes)
+                _ = fast_loop_tx_handle.send(collected_states_as_bytes);
             }
         }
     });
-    
+
     // Obstacles
     tokio::spawn(async move {
         _ = sleep(TIME_BEFORE_START_OBSTACLE_GEN).await;
         let mut ticker = interval(Duration::from_secs(1));
-        
-        
+
         loop {
             ticker.tick().await;
-            let now = { 
-                obstacles_world.read().expect("Slow cycle POISON! trying to get the time 🕛").get_now()
+            let now = {
+                *obstacles_loop_clock
             };
-            
+
             {
-                obstacles_world.write().expect("Poison trying to garbage collect").world.garbage_collect(now);
+                obstacles_loop_world
+                    .garbage_collect(now);
             }
             let new_obstacles = {
-                obstacles_world.write().expect("Poison trying to generate obstacles").generate_obstacles() 
+                obstacles_world
+                    .write()
+                    .expect("Poison trying to generate obstacles")
+                    .generate_obstacles()
             };
 
             obstacles_world
@@ -126,17 +167,18 @@ async fn main() {
             println!("============================================");
         }
     });
-    
+
     while let Ok((stream, peer_addr)) = listener.accept().await {
         let connection_state = world.clone();
         tokio::spawn(handle_connections(stream, peer_addr, connection_state));
     }
-    
-    
-    
 }
 
-async fn handle_connections(stream: TcpStream, addr: SocketAddr, state: Arc<RwLock<AbstractWorld<VecGrid>>>) {
+async fn handle_connections(
+    stream: TcpStream,
+    addr: SocketAddr,
+    state: Arc<RwLock<AbstractWorld<VecGrid>>>,
+) {
     let websock_stream = match accept_async(stream).await {
         Ok(sock) => sock,
         Err(e) => {
@@ -145,13 +187,17 @@ async fn handle_connections(stream: TcpStream, addr: SocketAddr, state: Arc<RwLo
         }
     };
     let mut initial_buf: [u8; 1024] = [0; 1024];
-    
+
     println!("ADDD {}", addr.to_string());
-    
+
     let player_id = 9u32;
 }
 
-pub fn handle_connections2(stream: TcpStream, addr: SocketAddr, state: Arc<RwLock<AbstractWorld<VecGrid>>>) {
+pub fn handle_connections2(
+    stream: TcpStream,
+    addr: SocketAddr,
+    state: Arc<RwLock<AbstractWorld<VecGrid>>>,
+) {
     let sender = {
         if let Ok(s) = state.read() {
             s.tx.clone()
@@ -160,8 +206,6 @@ pub fn handle_connections2(stream: TcpStream, addr: SocketAddr, state: Arc<RwLoc
             return;
         }
     };
-    
+
     let receiver = sender.subscribe();
-    
-    
 }
