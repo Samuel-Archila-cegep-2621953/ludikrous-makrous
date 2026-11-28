@@ -73,21 +73,21 @@ async fn main() {
 
     let abstract_world = AbstractWorld::new(CONFIG.size_x, CONFIG.size_y, CONFIG.max_players, tx);
     let players = Arc::new(abstract_world.players);
-    let world_grid = Arc::new(abstract_world.world);
-    let server_time = Arc::new(abstract_world.clock);
-    let obstacles_queue = Arc::new(abstract_world.queue_new_obstacles);
+    let world_grid = Arc::new(RwLock::new(abstract_world.world));
+    //let server_time = Arc::new(abstract_world.clock);
+    let obstacles_queue = Arc::new(RwLock::new(abstract_world.new_obstacles_queue));
 
     //let world = Arc::new(RwLock::new(abstract_world));
     let tx = abstract_world.tx.clone();
-    
 
-    let fast_loop_players_handle = players.clone();
-    let fast_loop_obstacles_handle = world_grid.clone();
-    let fast_loop_obstacles_queue_handle = obstacles_queue.clone();
+    let fast_loop_players_handle = Arc::clone(&players);
+    let fast_loop_obstacles_handle = Arc::clone(&world_grid);
+    let fast_loop_obstacles_queue_handle = Arc::clone(&obstacles_queue);
     let fast_loop_tx_handle = tx.clone();
-    
-    let obstacles_loop_world = world_grid.clone();
-    let obstacles_loop_clock = server_time.clone();
+
+    let obstacles_loop_world = Arc::clone(&world_grid);
+    //let obstacles_loop_clock = Arc::clone(&server_time);
+    let obstacles_loop_new_queue = Arc::clone(&obstacles_queue);
 
     tokio::spawn(async move {
         let mut ticker = interval(Duration::from_millis(50));
@@ -107,21 +107,21 @@ async fn main() {
             };
 
             let should_flush = {
-                /*
-                loop_state_world
+                fast_loop_obstacles_queue_handle
                     .read()
                     .expect("Tried getting obstacle queue len")
-                    .queue_new_obstacles
-                    .len()
-                    > 0
-                */
-                fast_loop_obstacles_queue_handle.len() > 0
+                    .len() > 0
+                //*/
+                //fast_loop_obstacles_queue_handle.len() > 0
             };
             //let new_obstacles = loop_state_world.flush_new_obstacles_queue();
             //let mut new_obstacles = loop_state_world.write().await.queue_new_obstacles.clone();
             let mut new_obstacles: Vec<bytes::Bytes> = {
                 if should_flush {
-                    fast_loop_obstacles_queue_handle.flush_new_obstacles_queue()
+                    fast_loop_obstacles_queue_handle
+                        .write()
+                        .expect("Tried flushing queue")
+                        .flush_new_obstacles_queue()
                 } else {
                     Vec::new()
                 }
@@ -144,33 +144,43 @@ async fn main() {
 
         loop {
             ticker.tick().await;
-            let now = {
-                *obstacles_loop_clock
+            let now = { 
+                obstacles_loop_world
+                    .write()
+                    .expect("Failed getting time in obstacles")
+                    .get_now() 
             };
 
             {
                 obstacles_loop_world
-                    .garbage_collect(now);
+                    .write()
+                    .expect("Tried garbage collecting")
+                    .garbage_collect();
             }
             let new_obstacles = {
-                obstacles_world
+                obstacles_loop_world
                     .write()
                     .expect("Poison trying to generate obstacles")
                     .generate_obstacles()
             };
 
+            /*
             obstacles_world
                 .write()
                 .expect("Poison trying to add obstacles to queue")
-                .add_new_obstacles_to_queue(new_obstacles);
+            */
+            obstacles_loop_new_queue
+                .write()
+                .expect("Poison trying to add obstacles to queue")
+                .append(new_obstacles);
 
             println!("============================================");
         }
     });
 
     while let Ok((stream, peer_addr)) = listener.accept().await {
-        let connection_state = world.clone();
-        tokio::spawn(handle_connections(stream, peer_addr, connection_state));
+        let connection_state = Arc::clone(&players);
+        tokio::spawn(handle_connections2(stream, peer_addr, connection_state, tx.clone()));
     }
 }
 
@@ -193,19 +203,23 @@ async fn handle_connections(
     let player_id = 9u32;
 }
 
-pub fn handle_connections2(
+pub async fn handle_connections2(
     stream: TcpStream,
     addr: SocketAddr,
-    state: Arc<RwLock<AbstractWorld<VecGrid>>>,
+    state: Arc<AbstractPlayerStates>,
+    tx: tokio::sync::broadcast::Sender<bytes::Bytes>
 ) {
+    /*
     let sender = {
-        if let Ok(s) = state.read() {
+        if let Ok(s) = *state {
             s.tx.clone()
         } else {
             println!("Some connection failed to get a lock to the World");
             return;
         }
     };
+     */
+    let sender = tx;
 
     let receiver = sender.subscribe();
 }

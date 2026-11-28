@@ -45,7 +45,9 @@ impl ObstacleType {
         }
     } */
     
-    pub fn construct(ty: Self, server_time: Instant, grid: &mut impl WorldGrid) -> Option<(f32, ObstacleBytes)> {
+    pub fn construct<Wg>(ty: Self, server_time: Instant, grid: &mut Wg) -> Option<(f32, ObstacleBytes)> 
+        where Wg: WorldGrid + Sized
+    {
         match ty {
             Self::Nothing => TilePlaceHolder::try_spawn(server_time, grid),
             Self::Pillar => Pillar::try_spawn(server_time, grid),

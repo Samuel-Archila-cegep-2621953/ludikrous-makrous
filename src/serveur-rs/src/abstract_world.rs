@@ -23,9 +23,9 @@ const DIFFICULTY_LEVEL: u8 = 4;
 pub struct AbstractWorld<W: WorldGrid> {
     pub world: W,
     pub players: AbstractPlayerStates,
-    global_difficulty: f32,
+    //global_difficulty: f32,
     pub new_obstacles_queue: NewObstaclesQueue, // type provisoire
-    pub clock: Instant,
+    //pub clock: Instant,
     pub tx: broadcast::Sender<bytes::Bytes>,
 }
 
@@ -34,16 +34,16 @@ impl AbstractWorld<VecGrid> {
         Self {
             world: VecGrid::new_empty(x, y),
             players: AbstractPlayerStates::init(max_players),
-            global_difficulty: 0.0,
             //queue_new_obstacles: RwLock::new(Vec::new()),
             new_obstacles_queue: NewObstaclesQueue::new(),
-            clock: Instant::now(),
+            //clock: Instant::now(),
             tx,
         }
     }
 
     pub fn generate_obstacles(&mut self) -> Vec<Bytes> {
-        println!("Generatoion +++++++++++++++++");
+        /*
+        //println!("Generatoion +++++++++++++++++");
         let mut new_obstacles: Vec<Bytes> =
             Vec::with_capacity(self.world.len_x() * self.world.len_y() / 10 + 3); //random approximation
         let now = self.get_now();
@@ -76,12 +76,14 @@ impl AbstractWorld<VecGrid> {
         }
 
         new_obstacles
+         */
+        self.world.generate_obstacles()
     }
 
     #[inline]
-    pub fn add_new_obstacles_to_queue(&mut self, mut obstacles_bytes: Vec<Bytes>) {
+    pub fn add_new_obstacles_to_queue(&mut self, obstacles_bytes: Vec<Bytes>) {
         //for RwLock *self.queue_new_obstacles.write().expect("Error on writing to new obstacles queue").append(bytes);
-        self.queue_new_obstacles.append(&mut obstacles_bytes);
+        self.new_obstacles_queue.append(obstacles_bytes);
     }
 
     pub fn get_player_states(&self) -> Vec<bytes::Bytes> {
@@ -98,19 +100,22 @@ impl AbstractWorld<VecGrid> {
     }
 
     pub fn get_now(&self) -> Instant {
-        self.clock
+        self.world.get_now()
     }
 
     pub fn flush_new_obstacles_queue(&mut self) -> Vec<Bytes> {
+        /*
         let mut out: Vec<Bytes> = Vec::with_capacity(self.queue_new_obstacles.len());
         out.append(&mut self.queue_new_obstacles);
         println!("Flush");
         out
+         */
+        self.new_obstacles_queue.flush_new_obstacles_queue()
     }
 }
 
 #[derive(Debug)]
-struct NewObstaclesQueue(Vec<Bytes>);
+pub struct NewObstaclesQueue(Vec<Bytes>);
 
 impl NewObstaclesQueue {
     pub fn flush_new_obstacles_queue(&mut self) -> Vec<Bytes> {
@@ -124,5 +129,11 @@ impl NewObstaclesQueue {
         self.0.len()
     }
     
-    pub fn new() -> Self { Self(Vec::new())}
+    pub fn new() -> Self {
+        Self(Vec::new())
+    }
+    
+    pub fn append(&mut self, mut new_obstacles: Vec<Bytes>) {
+        self.0.append(&mut new_obstacles);
+    }
 }
